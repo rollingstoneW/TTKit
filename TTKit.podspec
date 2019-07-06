@@ -7,10 +7,10 @@ Pod::Spec.new do |s|
 开发中常用的基础功能库。基于YYCategory，不断扩充中...
                        DESC
 
-  s.homepage         = 'https://github.com/acct<blob>=0xE99FA6E68CAFE5AE81/TTKit'
+  s.homepage         = 'https://github.com/rollingstoneW/TTKit'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
-  s.author           = { 'acct<blob>=0xE99FA6E68CAFE5AE81' => '190268198@qq.com' }
-  s.source           = { :git => 'https://github.com/acct<blob>=0xE99FA6E68CAFE5AE81/TTKit.git', :tag => s.version.to_s }
+  s.author           = { 'rollingstoneW' => '190268198@qq.com' }
+  s.source           = { :git => 'https://github.com/rollingstoneW/TTKit.git', :tag => s.version.to_s }
 
   s.ios.deployment_target = '8.0'
 
