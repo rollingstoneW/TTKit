@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'TTRabbit'
-  s.version          = '0.0.1'
+  s.version          = '0.0.2'
   s.summary          = '你可能会用到的基础库'
 
   s.description      = <<-DESC
@@ -14,26 +14,26 @@ Pod::Spec.new do |s|
 
   s.ios.deployment_target = '8.0'
 
-  s.source_files = 'TTKit/Classes/**/*'
-  
-  s.resource_bundles = {
-    'TTKit' => ['TTKit/Assets/**/*.*']
-  }
+  s.subspec 'Core' do |ss|
+    ss.source_files = 'TTRabbit/Classes/**/*'
+    ss.public_header_files = 'TTRabbit/Classes/**/*.h'
+    ss.resource_bundles = {
+      'TTRabbit' => ['TTRabbit/Assets/**/*.*']
+    }
+    ss.frameworks = 'UIKit', 'Foundation'
+    ss.dependency 'Masonry'
+    ss.dependency 'MJRefresh'
+    ss.dependency 'SDWebImage'
+    ss.dependency 'MBProgressHUD'
+  end
 
 #如果项目中引用了YYKit，请使用此子模块, pod 'TTRabbit', :subspecs => [YYKitDependency]
   s.subspec 'YYKitDependency' do |ss|
     ss.dependency 'YYKit'
-  end
-#如果项目中引用了YYKit里的模块，例如YYCategories，请使用此子模块, pod 'TTRabbit', :subspecs => [YYModuleDependency]
-  s.subspec 'YYModuleDependency' do |ss|
-    ss.dependency 'YYCategories'
+    ss.dependency 'TTRabbit/Core'
   end
 
-  s.public_header_files = 'Pod/Classes/**/*.h'
-  s.frameworks = 'UIKit', 'Foundation'
-  s.dependency 'Masonry'
-  s.dependency 'MJRefresh'
-  s.dependency 'SDWebImage'
-  s.dependency 'MBProgressHUD'
+  s.default_subspecs = 'Core'
+
 
 end

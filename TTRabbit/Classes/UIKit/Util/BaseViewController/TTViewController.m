@@ -54,12 +54,11 @@
     [super viewDidLoad];
 
     self.view.backgroundColor = [UIColor whiteColor];
+    self.navigationController.interactivePopGestureRecognizer.delegate = self;
 
     [self loadCustomNavigationBar];
     [self loadSubviews];
-
-    [self setupDefaultBackBarItem];
-
+    
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(_orientationDidChange:)
                                                  name:UIApplicationDidChangeStatusBarOrientationNotification
@@ -160,11 +159,6 @@
 }
 
 - (void)statusBarOrientationDidChange:(UIInterfaceOrientation)orientation {}
-
-- (void)setupDefaultBackBarItem {
-    self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStyleDone target:self action:@selector(goback)];
-    self.navigationController.interactivePopGestureRecognizer.delegate = self;
-}
 
 - (void)setupDefaultLeftCloseBarItem {
     [self addLeftBarItemWithTitle:@"取消" image:nil selector:@selector(goback)];
