@@ -1,5 +1,5 @@
 Pod::Spec.new do |s|
-  s.name             = 'TTKit'
+  s.name             = 'TTRabbit'
   s.version          = '0.0.1'
   s.summary          = '你可能会用到的基础库'
 
@@ -20,12 +20,20 @@ Pod::Spec.new do |s|
     'TTKit' => ['TTKit/Assets/**/*.*']
   }
 
+#如果项目中引用了YYKit，请使用此子模块, pod 'TTRabbit', :subspecs => [YYKitDependency]
+  s.subspec 'YYKitDependency' do |ss|
+    ss.dependency 'YYKit'
+  end
+#如果项目中引用了YYKit里的模块，例如YYCategories，请使用此子模块, pod 'TTRabbit', :subspecs => [YYModuleDependency]
+  s.subspec 'YYModuleDependency' do |ss|
+    ss.dependency 'YYCategories'
+  end
+
   s.public_header_files = 'Pod/Classes/**/*.h'
   s.frameworks = 'UIKit', 'Foundation'
   s.dependency 'Masonry'
   s.dependency 'MJRefresh'
   s.dependency 'SDWebImage'
-  s.dependency 'YYCategories'
   s.dependency 'MBProgressHUD'
 
 end
