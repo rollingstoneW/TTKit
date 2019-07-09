@@ -117,6 +117,7 @@ typedef NS_ENUM(NSUInteger, TTCategoryMenuBarCategoryStyle) {
 @property (nonatomic, assign) BOOL isSelectAll; // 是否是全选
 @property (nonatomic, assign) BOOL unselectsOthersWhenSelected; // 选中自己时或者自己的子选项全选时是否取消其他选项，默认为NO，只对全选选项有效
 @property (nonatomic, assign) BOOL shouldSelectsTitleWhenChildrenAllSelected; // 如果子选项全部选中,父选项是否展示选中的标题，默认为NO
+@property (nonatomic, assign) BOOL shouldSelectsTitleWhenSelectsChild; // 当有子标题选中时就,父选项是否展示选中的标题，默认为NO
 @property (nonatomic, assign) BOOL isSelected; // 是否被选中
 
 @end
