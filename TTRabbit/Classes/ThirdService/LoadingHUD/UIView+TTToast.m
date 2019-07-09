@@ -32,7 +32,7 @@ static NSTimeInterval const TTToastDefaultHideDelay = 1.5;
 }
 - (__kindof UIView *)showErrorToast:(NSString *)toast hideAfterDelay:(NSTimeInterval)delay {
     return [self showCustomToast:toast
-                           image:[UIImage tt_imageNamed:@"icon_toast_error" bundle:[NSBundle tt_bundleWithName:@"TTKit"]]
+                           image:[UIImage tt_imageNamed:@"icon_toast_error" bundle:[NSBundle tt_bundleWithName:@"TTRabbit"]]
                   hideAfterDelay:delay];
 }
 - (__kindof UIView *)showSuccessToast:(NSString *)toast {
@@ -40,7 +40,7 @@ static NSTimeInterval const TTToastDefaultHideDelay = 1.5;
 }
 - (__kindof UIView *)showSuccessToast:(NSString *)toast hideAfterDelay:(NSTimeInterval)delay {
     return [self showCustomToast:toast
-                           image:[UIImage tt_imageNamed:@"icon_toast_success" bundle:[NSBundle tt_bundleWithName:@"TTKit"]]
+                           image:[UIImage tt_imageNamed:@"icon_toast_success" bundle:[NSBundle tt_bundleWithName:@"TTRabbit"]]
                   hideAfterDelay:delay];
 }
 - (__kindof UIView *)showWarningToast:(NSString *)toast {
@@ -48,7 +48,7 @@ static NSTimeInterval const TTToastDefaultHideDelay = 1.5;
 }
 - (__kindof UIView *)showWarningToast:(NSString *)toast hideAfterDelay:(NSTimeInterval)delay {
     return [self showCustomToast:toast
-                           image:[UIImage tt_imageNamed:@"icon_toast_warning" bundle:[NSBundle tt_bundleWithName:@"TTKit"]]
+                           image:[UIImage tt_imageNamed:@"icon_toast_warning" bundle:[NSBundle tt_bundleWithName:@"TTRabbit"]]
                   hideAfterDelay:delay];
 }
 
