@@ -175,11 +175,11 @@ static NSString *const TTCategoryMenuBarCellID = @"cell";
             make.left.right.equalTo(self).inset(option.separatorLineIndent);
         }];
     }
-    
+
     _option = option;
     self.separatorLine.backgroundColor = option.separatorLineColor;
     self.backgroundColor = option.isSelected ? option.selectBackgroundColor : option.backgroundColor;
-    
+
     BOOL shouldShowSelectedTitle = option.isSelected;
     if (!shouldShowSelectedTitle) {
         if (option.isChildrenAllSelected && option.shouldSelectsTitleWhenChildrenAllSelected) {

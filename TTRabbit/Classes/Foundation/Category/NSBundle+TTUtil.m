@@ -52,12 +52,12 @@
 + (void)tt_setAlternateIconName:(NSString *)alternateIconName completionHandler:(void (^)(NSError * _Nullable))completionHandler {
     if (@available(iOS 10.3, *)) {
         if (![UIApplication sharedApplication].supportsAlternateIcons) {
-            !completionHandler ?: completionHandler([NSError errorWithDomain:@"TTKit" code:0 userInfo:@{NSLocalizedDescriptionKey:@"不支持更换图标"}]);
+            !completionHandler ?: completionHandler([NSError errorWithDomain:@"TTRabbit" code:0 userInfo:@{NSLocalizedDescriptionKey:@"不支持更换图标"}]);
             return;
         }
         [[UIApplication sharedApplication] setAlternateIconName:alternateIconName completionHandler:completionHandler];
     } else {
-        !completionHandler ?: completionHandler([NSError errorWithDomain:@"TTKit" code:0 userInfo:@{NSLocalizedDescriptionKey:@"不支持更换图标"}]);
+        !completionHandler ?: completionHandler([NSError errorWithDomain:@"TTRabbit" code:0 userInfo:@{NSLocalizedDescriptionKey:@"不支持更换图标"}]);
     }
 }
 

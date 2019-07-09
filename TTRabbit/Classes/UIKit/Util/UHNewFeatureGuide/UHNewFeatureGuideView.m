@@ -288,7 +288,7 @@ static const CGFloat kNFMarginLeft = 18.f;
 }
 
 - (UIImage *)imageNamed:(NSString *)imageName {
-    return [UIImage tt_imageNamed:imageName bundle:[NSBundle tt_bundleWithName:@"TTKit"]];
+    return [UIImage tt_imageNamed:imageName bundle:[NSBundle tt_bundleWithName:@"TTRabbit"]];
 }
 
 @end
