@@ -78,8 +78,8 @@ typedef NS_ENUM(NSUInteger, TTCategoryMenuBarCategoryStyle) {
 @property (nonatomic, strong) NSArray<__kindof TTCategoryMenuBarOptionItem *> *childOptions; // 子选项列表
 @property (nonatomic, assign) BOOL childAllowsMultipleSelection; // 子选项是否支持多选，默认为NO。（列表样式的最后一排才会生效）
 
-@property (nonatomic, strong, nullable) NSMutableArray<__kindof TTCategoryMenuBarOptionItem *> *selectedChildOptions; // 选中的子选项，由选项列表设置，不要手动更改
-@property (nonatomic, assign) BOOL isChildrenAllSelected; // 子选项是否全部选中，由选项列表设置，不要手动更改
+@property (nonatomic, strong, nullable) NSMutableArray<__kindof TTCategoryMenuBarOptionItem *> *selectedChildOptions; // 选中的子选项
+@property (nonatomic, assign) BOOL isChildrenAllSelected; // 子选项是否全部选中
 
 @property (nonatomic, strong) id extraData; // 额外数据
 
@@ -110,12 +110,14 @@ typedef NS_ENUM(NSUInteger, TTCategoryMenuBarCategoryStyle) {
 @property (nonatomic, strong) UIColor *separatorLineColor; // 分割线颜色，默认为eeeeee，设置为nil不展示分割线
 @property (nonatomic, assign) CGFloat separatorLineIndent; // 分割线缩进，左右间距，默认为0
 
-@property (nonatomic, assign) BOOL shouldSelectsTitleWhenChildrenAllSelected; // 如果子选项全部选中是否父选项是否展示选中的标题，默认为NO
-
 @property (nonatomic, assign) CGFloat optionRowHeight; // 单个选项的高度，默认44
 @property (nonatomic, assign) CGFloat headIndent; // 头部缩进，默认为0，为0时，文字和图标居中显示
 @property (nonatomic, assign) CGFloat tailIndent; // 尾部缩进，默认为15
 
+@property (nonatomic, assign) BOOL isSelectAll; // 是否是全选
+@property (nonatomic, assign) BOOL unselectsOthersWhenSelected; // 选中自己时或者自己的子选项全选时是否取消其他选项，默认为NO，只对全选选项有效
+@property (nonatomic, assign) BOOL shouldSelectsTitleWhenChildrenAllSelected; // 如果子选项全部选中,父选项是否展示选中的标题，默认为NO
+@property (nonatomic, assign) BOOL shouldSelectsTitleWhenSelectsChild; // 当有子标题选中时就,父选项是否展示选中的标题，默认为NO
 @property (nonatomic, assign) BOOL isSelected; // 是否被选中
 
 @end
@@ -125,7 +127,7 @@ typedef NS_ENUM(NSUInteger, TTCategoryMenuBarCategoryStyle) {
  */
 @interface TTCategoryMenuBarListOptionChildItem : TTCategoryMenuBarListOptionItem
 
-@property (nonatomic, assign) BOOL isSelectAll; // 是否时全选，选中时选择所有同列选项
+//@property (nonatomic, assign) BOOL isSelectAll; // 是否是全选，选中时选择所有同排选项
 
 @end
 
@@ -182,7 +184,7 @@ typedef NS_ENUM(NSUInteger, TTCategoryMenuBarCategoryStyle) {
 @property (nonatomic, strong) UIColor *selectBackgroundColor; // 选中的背景色，默认为TTCategoryMenuBarSectionItem.selectItemBackgroundColor
 
 @property (nonatomic, assign) BOOL isSelected; // 是否被选中
-@property (nonatomic, assign) BOOL isSelectAll; // 是否时全选
+@property (nonatomic, assign) BOOL isSelectAll; // 是否是全选
 
 @end
 

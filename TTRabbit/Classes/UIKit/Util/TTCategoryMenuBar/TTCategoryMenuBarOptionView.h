@@ -72,27 +72,32 @@ NS_ASSUME_NONNULL_BEGIN
  单列选项列表
  */
 @interface TTCategoryMenuBarSingleListOptionView : TTCategoryMenuBarOptionView
+@property (nonatomic, strong) UITableView *tableView;
 @end
 
 /**
  双列选项列表
  */
 @interface TTCategoryMenuBarDoubleListOptionView : TTCategoryMenuBarOptionView
+@property (nonatomic, strong) UITableView *firstTableView;
+@property (nonatomic, strong) UITableView *secondTableView;
 @end
 
 /**
  三列选项列表
  */
 @interface TTCategoryMenuBarTripleListOptionView : TTCategoryMenuBarOptionView
+@property (nonatomic, strong) UITableView *firstTableView;
+@property (nonatomic, strong) UITableView *secondTableView;
+@property (nonatomic, strong) UITableView *thirdTableView;
 @end
 
 /**
  多列分组式列表
  */
 @interface TTCategoryMenuBarSectionListView : TTCategoryMenuBarOptionView
-
+@property (nonatomic, strong) UICollectionView *collectionView;
 @property (nonatomic, weak) id<TTCategoryMenuBarSectionListDataSource> dataSource;
-
 @end
 
 NS_ASSUME_NONNULL_END

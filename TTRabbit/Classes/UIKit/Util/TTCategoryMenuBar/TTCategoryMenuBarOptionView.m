@@ -12,6 +12,65 @@
 
 static NSString *const TTCategoryMenuBarCellID = @"cell";
 
+@interface TTCategoryMenuBarOptionItem (TTPrivate)
+@end
+@implementation TTCategoryMenuBarOptionItem (TTPrivate)
+
+- (BOOL)hasSelectedChild {
+    if (self.childOptions.count) {
+        for (TTCategoryMenuBarOptionItem *child in self.childOptions) {
+            if ([child isSelfSelected]) {
+                return YES;
+            }
+            if ([child hasSelectedChild]) {
+                return YES;
+            }
+        }
+    }
+    return NO;
+}
+
+- (BOOL)loadSelectedChild {
+    if (self.childOptions.count) {
+        for (TTCategoryMenuBarOptionItem *child in self.childOptions) {
+            if ([child loadSelectedChild]) {
+                [self.selectedChildOptions addObject:child];
+            }
+        }
+        return self.selectedChildOptions.count;
+    } else {
+        return [self isSelfSelected];
+    }
+}
+
+- (BOOL)isSelfSelected {
+    if ([self respondsToSelector:@selector(isSelected)]) {
+        return [(id)self isSelected];
+    }
+    return NO;
+}
+
+- (void)clearSelectedChildren {
+    [self.selectedChildOptions removeAllObjects];
+    self.selectedChildOptions = nil;
+    for (TTCategoryMenuBarOptionItem *child in self.childOptions) {
+        [child clearSelectedChildren];
+    }
+}
+
+- (void)reset {
+    if ([self respondsToSelector:@selector(setIsSelected:)]) {
+        [(id)self setIsSelected:NO];
+    }
+    self.isChildrenAllSelected = NO;
+    [self.selectedChildOptions removeAllObjects];
+    for (TTCategoryMenuBarOptionItem *child in self.childOptions) {
+        [child reset];
+    }
+}
+
+@end
+
 @interface TTCategoryMenuBarCell : UITableViewCell
 @property (nonatomic, strong) TTCategoryMenuBarListOptionItem *option;
 @property (nonatomic, strong) UIView *containerView;
@@ -25,12 +84,12 @@ static NSString *const TTCategoryMenuBarCellID = @"cell";
     if (self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier]) {
         self.selectionStyle = UITableViewCellSelectionStyleNone;
         self.accessoryView = [[UIImageView alloc] init];
-
+        
         [self addSubview:self.separatorLine];
         [self addSubview:self.containerView];
         [self.containerView addSubview:self.textLabel];
         [self.containerView addSubview:self.imageView];
-
+        
         [self.separatorLine mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.right.bottom.equalTo(self);
             make.height.equalTo(@(TTCategoryMenuBar1PX));
@@ -44,7 +103,7 @@ static NSString *const TTCategoryMenuBarCellID = @"cell";
         (BOOL)option.icon != (BOOL)_option.icon ||
         (BOOL)option.selectedIcon != (BOOL)_option.selectedIcon ||
         option.iconTitleSpace != _option.iconTitleSpace) {
-
+        
         if (option.icon && option.iconTitleSpace >= 0) {
             [self.imageView mas_remakeConstraints:^(MASConstraintMaker *make) {
                 make.centerY.equalTo(self.containerView);
@@ -120,7 +179,17 @@ static NSString *const TTCategoryMenuBarCellID = @"cell";
     _option = option;
     self.separatorLine.backgroundColor = option.separatorLineColor;
     self.backgroundColor = option.isSelected ? option.selectBackgroundColor : option.backgroundColor;
-    if (option.isSelected || (option.isChildrenAllSelected && option.shouldSelectsTitleWhenChildrenAllSelected)) {
+    
+    BOOL shouldShowSelectedTitle = option.isSelected;
+    if (!shouldShowSelectedTitle) {
+        if (option.isChildrenAllSelected && option.shouldSelectsTitleWhenChildrenAllSelected) {
+            shouldShowSelectedTitle = YES;
+        }
+        if (!shouldShowSelectedTitle) {
+            shouldShowSelectedTitle = [option hasSelectedChild];
+        }
+    }
+    if (shouldShowSelectedTitle) {
         self.imageView.image = option.selectedIcon ?: option.icon;
         self.textLabel.attributedText = [option.selectedAttributedTitle ?: [NSAttributedString alloc] initWithString:(option.title ?: @"")
                                                                                                           attributes:option.selectedTitleAttributes];
@@ -172,8 +241,8 @@ static NSString *const TTCategoryMenuBarCellID = @"cell";
 @property (nonatomic, strong) TTCategoryMenuBarListCategoryItem *listCategoryItem;
 @property (nonatomic, strong) TTCategoryMenuBarSectionCategoryItem *sectionCategoryItem;
 
-@property (nonatomic, strong) NSArray<TTCategoryMenuBarListOptionItem *> *listOptions;
-@property (nonatomic, strong) NSArray<TTCategoryMenuBarSectionItem *> *sectionOptions;
+@property (nonatomic,   copy) NSArray<TTCategoryMenuBarListOptionItem *> *listOptions;
+@property (nonatomic,   copy) NSArray<TTCategoryMenuBarSectionItem *> *sectionOptions;
 
 @property (nonatomic, assign) BOOL shouldInvalidateIntrnsicContentSize;
 
@@ -284,31 +353,12 @@ static NSString *const TTCategoryMenuBarCellID = @"cell";
 
 - (void)reset {
     for (TTCategoryMenuBarOptionItem *option in self.listOptions) {
-        [self resetOption:option];
+        [option reset];
     }
     [self selectedOptionsDidChange];
     [self reloadData];
     if ([self.delegate respondsToSelector:@selector(categoryBarOptionViewDidResetOptions:)]) {
         [self.delegate categoryBarOptionViewDidResetOptions:self];
-    }
-}
-
-- (void)resetOption:(TTCategoryMenuBarOptionItem *)option {
-    if ([option respondsToSelector:@selector(setIsSelected:)]) {
-        [(id)option setIsSelected:NO];
-    }
-    option.isChildrenAllSelected = NO;
-    [option.selectedChildOptions removeAllObjects];
-    for (TTCategoryMenuBarListOptionItem *child in option.childOptions) {
-        [self resetOption:child];
-    }
-}
-
-- (void)clearSelectedOption:(TTCategoryMenuBarOptionItem *)option {
-    [option.selectedChildOptions removeAllObjects];
-    option.selectedChildOptions = nil;
-    for (TTCategoryMenuBarListOptionItem *child in option.childOptions) {
-        [self clearSelectedOption:child];
     }
 }
 
@@ -353,12 +403,12 @@ static NSString *const TTCategoryMenuBarCellID = @"cell";
     }
     for (TTCategoryMenuBarOptionItem *option in options) {
         BOOL added = NO;
-        if (self.listCategoryItem.style == TTCategoryMenuBarCategoryStyleSingleList && [self isOptionSelected:option]) {
+        if (self.listCategoryItem.style == TTCategoryMenuBarCategoryStyleSingleList && [option isSelfSelected]) {
             added = YES;
             [array addObject:option];
         }
         // 如果子选项选中了，把他也包含进去
-        if ([self loadSelectedChildInOption:option] && !added) {
+        if ([option loadSelectedChild] && !added) {
             [array addObject:option];
         }
     }
@@ -369,38 +419,41 @@ static NSString *const TTCategoryMenuBarCellID = @"cell";
 - (void)clearSelectedOptions {
     // 先清除之前记录的选中列表，重新计算
     for (TTCategoryMenuBarOptionItem *option in _selectedOptions) {
-        [self clearSelectedOption:option];
+        [option clearSelectedChildren];
     }
-    self.selectedOptions = nil;
+    _selectedOptions = nil;
 }
 
-- (BOOL)loadSelectedChildInOption:(TTCategoryMenuBarOptionItem *)option {
-    if (option.childOptions.count) {
-        for (TTCategoryMenuBarOptionItem *child in option.childOptions) {
-            if ([self loadSelectedChildInOption:child]) {
-                [option.selectedChildOptions addObject:child];
-            }
-        }
-        return option.selectedChildOptions.count;
-    } else {
-        return [self isOptionSelected:option];
-    }
-}
-
-- (BOOL)isOptionSelected:(__kindof TTCategoryMenuBarOptionItem *)option {
-    if ([option respondsToSelector:@selector(isSelected)]) {
-        return [(id)option isSelected];
-    }
-    return NO;
-}
-
-- (void)selectAllOptions:(NSArray *)options isSelect:(BOOL)isSelect inTableView:(UITableView *)tableView {
+- (void)selectOption:(TTCategoryMenuBarOptionItem *)option allOptions:(NSArray *)options isSelect:(BOOL)isSelect inTableView:(UITableView *)tableView {
     [tableView reloadData];
-    for (NSInteger row = 0; row < options.count; row ++) {
-        TTCategoryMenuBarListOptionChildItem *child = options[row];
-        child.isSelected = isSelect;
-        [self refreshCellAtRow:row inTableView:tableView];
+    // 如果不支持多选
+    if (!tableView.allowsMultipleSelection) {
         if (isSelect) {
+            [tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:[options indexOfObject:option] inSection:0] animated:NO scrollPosition:UITableViewScrollPositionNone];
+        }
+        return;
+    }
+    BOOL isSelectAll = NO;
+    BOOL unselectsOthersWhenSelected = NO;
+    if ([options.firstObject respondsToSelector:@selector(isSelectAll)]) {
+        isSelectAll = [(id)options.firstObject isSelectAll];
+    }
+    if ([options.firstObject respondsToSelector:@selector(unselectsOthersWhenSelected)]) {
+        unselectsOthersWhenSelected = [(id)options.firstObject unselectsOthersWhenSelected];
+    }
+    for (NSInteger row = 0; row < options.count; row ++) {
+        TTCategoryMenuBarOptionItem *child = options[row];
+        BOOL isChildSelected = NO;
+        if (isSelect && isSelectAll && unselectsOthersWhenSelected && row != 0) {
+            isChildSelected = NO;
+        } else {
+            isChildSelected = isSelect;
+        }
+        if ([child respondsToSelector:@selector(setIsSelected:)]) {
+            [(id)child setIsSelected:isChildSelected];
+        }
+        [self refreshCellAtRow:row inTableView:tableView];
+        if (isChildSelected) {
             [tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:row inSection:0] animated:NO scrollPosition:UITableViewScrollPositionNone];
         }
     }
@@ -434,12 +487,6 @@ static NSString *const TTCategoryMenuBarCellID = @"cell";
     CGFloat containerViewHeight = superview.frame.size.height - menuBarBottom;
     return containerViewHeight <= 0 ? TTCategoryMenuBarScreenHeight : containerViewHeight;
 }
-
-@end
-
-@interface TTCategoryMenuBarSingleListOptionView ()
-
-@property (nonatomic, strong) UITableView *tableView;
 
 @end
 
@@ -521,16 +568,10 @@ static NSString *const TTCategoryMenuBarCellID = @"cell";
         listHeight += option.optionRowHeight;
     }
     UIButton *bottomButton = self.doneButton ?: self.resetButton;
+    CGFloat bottomButtonHeight = bottomButton ? TTCategoryMenuBarDoneButtonHeight : 0;
     CGFloat maxHeight = MIN(self.listCategoryItem.optionViewPreferredMaxHeight, [self maxHeight]);
-    return CGSizeMake(TTCategoryMenuBarScreenWidth, MIN(maxHeight, listHeight + bottomButton.frame.size.height));
+    return CGSizeMake(TTCategoryMenuBarScreenWidth, MIN(maxHeight, listHeight + bottomButtonHeight));
 }
-
-@end
-
-@interface TTCategoryMenuBarDoubleListOptionView ()
-
-@property (nonatomic, strong) UITableView *firstTableView;
-@property (nonatomic, strong) UITableView *secondTableView;
 
 @end
 
@@ -538,12 +579,12 @@ static NSString *const TTCategoryMenuBarCellID = @"cell";
 
 - (void)loadSubviews {
     [super loadSubviews];
-
+    
     self.firstTableView = [self loadTableView];
     self.secondTableView = [self loadTableView];
     [self addSubview:self.firstTableView];
     [self addSubview:self.secondTableView];
-
+    
     [self.firstTableView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.top.equalTo(self);
         UIButton *bottomButton = self.doneButton ?: self.resetButton;
@@ -561,7 +602,7 @@ static NSString *const TTCategoryMenuBarCellID = @"cell";
         make.left.equalTo(self.firstTableView.mas_right);
         make.right.equalTo(self);
     }];
-
+    
     [self reloadData];
 }
 
@@ -594,7 +635,9 @@ static NSString *const TTCategoryMenuBarCellID = @"cell";
                                         scrollPosition:UITableViewScrollPositionNone];
         }
     }
-    [self.secondTableView setContentOffset:CGPointZero animated:NO];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.secondTableView setContentOffset:CGPointZero animated:NO];
+    });
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -618,38 +661,42 @@ static NSString *const TTCategoryMenuBarCellID = @"cell";
         NSArray<TTCategoryMenuBarListOptionChildItem *> *childOptions = [self showingChildOptions];
         TTCategoryMenuBarListOptionChildItem *currentOption = childOptions[indexPath.row];
         currentOption.isSelected = YES;
+        [self unSelectOtherAllSelectOptionIfNeeded];
+        [self refreshCurrentOptionIfNeeded];
+        // 如果是单选
+        if (!tableView.allowsMultipleSelection) {
+            [self refreshCellAtRow:indexPath.row inTableView:tableView];
+            [self selectedOptionsDidChange];
+            if (currentOption.isSelectAll) {
+                [self selectOption:currentOption allOptions:childOptions isSelect:YES inTableView:tableView];
+            }
+            if ([self.delegate respondsToSelector:@selector(categoryBarOptionView:didCommitOptions:)]) {
+                [self.delegate categoryBarOptionView:self didCommitOptions:@[currentOption]];
+            }
+            return;
+        }
         // 点击到选择全部
         if (currentOption.isSelectAll) {
             // 全选
-            [self selectAllOptions:childOptions isSelect:YES inTableView:tableView];
+            [self selectOption:currentOption allOptions:childOptions isSelect:YES inTableView:tableView];
         } else {
-            // 如果是单选
-            if (!tableView.allowsMultipleSelection) {
-                [self selectedOptionsDidChange];
-                if ([self.delegate respondsToSelector:@selector(categoryBarOptionView:didCommitOptions:)]) {
-                    [self.delegate categoryBarOptionView:self didCommitOptions:@[currentOption]];
-                }
-                return;
-            }
             // 找到全选cell
             TTCategoryMenuBarListOptionChildItem *selectAllOption = childOptions.firstObject.isSelectAll ? childOptions.firstObject : nil;
-            if (selectAllOption) {
-                BOOL isSelectAlled = YES;
-                for (TTCategoryMenuBarListOptionChildItem *child in childOptions) {
-                    if (child != selectAllOption && !child.isSelected) {
-                        isSelectAlled = NO;
-                        break;
-                    }
+            BOOL isSelectAlled = YES;
+            for (TTCategoryMenuBarListOptionChildItem *child in childOptions) {
+                if (child != selectAllOption && !child.isSelected) {
+                    isSelectAlled = NO;
+                    break;
                 }
-                if (isSelectAlled) {
-                    // 全部选中了则选中全选的cell
+            }
+            // 全部选中了则选中全选的cell
+            if (isSelectAlled) {
+                if (selectAllOption) {
                     selectAllOption.isSelected = YES;
-                    [self selectAllOptions:childOptions isSelect:YES inTableView:tableView];
-                } else {
-                    [self refreshCellAtRow:indexPath.row inTableView:tableView];
                 }
+                [self selectOption:currentOption allOptions:childOptions isSelect:YES inTableView:tableView];
             } else {
-                [self refreshCellAtRow:indexPath.row inTableView:tableView];
+                [self unSelectAllSelectOptionIfNeed:childOptions withOption:currentOption];
             }
         }
         [self selectedOptionsDidChange];
@@ -666,7 +713,7 @@ static NSString *const TTCategoryMenuBarCellID = @"cell";
         currentOption.isSelected = NO;
         // 取消全选
         if (currentOption.isSelectAll) {
-            [self selectAllOptions:childOptions isSelect:NO inTableView:tableView];
+            [self selectOption:currentOption allOptions:childOptions isSelect:NO inTableView:tableView];
         } else {
             [self refreshCellAtRow:indexPath.row inTableView:tableView];
             // 找到全选cell
@@ -675,17 +722,63 @@ static NSString *const TTCategoryMenuBarCellID = @"cell";
                 // 取消选中全选的cell
                 selectAllOption.isSelected = NO;
                 [self deselectOptionAtRow:0 inTableView:tableView];
-                self.listOptions[self.firstTableView.indexPathForSelectedRow.row].isChildrenAllSelected = NO;
             }
+            self.listOptions[self.firstTableView.indexPathForSelectedRow.row].isChildrenAllSelected = NO;
+            [self refreshCellAtRow:self.firstTableView.indexPathForSelectedRow inTableView:self.firstTableView];
         }
         [self selectedOptionsDidChange];
     }
 }
 
-- (void)selectAllOptions:(NSArray *)options isSelect:(BOOL)isSelect inTableView:(UITableView *)tableView {
-    [super selectAllOptions:options isSelect:isSelect inTableView:tableView];
+- (void)refreshCurrentOptionIfNeeded {
+    if (self.listOptions[self.firstTableView.indexPathForSelectedRow.row].shouldSelectsTitleWhenSelectsChild) {
+        [self refreshCellAtRow:self.firstTableView.indexPathForSelectedRow.row inTableView:self.firstTableView];
+    }
+}
+
+// 取消第一排第一个选项
+- (void)unSelectOtherAllSelectOptionIfNeeded {
+    if (self.firstTableView.indexPathForSelectedRow.row == 0) {
+        return;
+    }
+    TTCategoryMenuBarListOptionItem *selectAllOption = self.listOptions.firstObject;
+    if (selectAllOption.isSelectAll && selectAllOption.unselectsOthersWhenSelected && selectAllOption.isChildrenAllSelected) {
+        [selectAllOption reset];
+        [self refreshCellAtRow:0 inTableView:self.firstTableView];
+    }
+}
+
+// 取消同排全选选项
+- (void)unSelectAllSelectOptionIfNeed:(NSArray *)childOptions withOption:(TTCategoryMenuBarListOptionItem *)option {
+    TTCategoryMenuBarListOptionItem *selectAllOption = childOptions.firstObject;
+    if (selectAllOption != option && selectAllOption.isSelected && selectAllOption.unselectsOthersWhenSelected) {
+        [selectAllOption reset];
+        [self.secondTableView reloadData];
+        [self.secondTableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:[childOptions indexOfObject:option] inSection:0] animated:NO scrollPosition:UITableViewScrollPositionNone];
+    } else {
+        [self refreshCellAtRow:[childOptions indexOfObject:option] inTableView:self.secondTableView];
+    }
+}
+
+- (void)selectOption:(TTCategoryMenuBarOptionItem *)option allOptions:(NSArray *)options isSelect:(BOOL)isSelect inTableView:(UITableView *)tableView {
+    [super selectOption:option allOptions:options isSelect:isSelect inTableView:tableView];
     // 子选项全部选中
     self.listOptions[self.firstTableView.indexPathForSelectedRow.row].isChildrenAllSelected = isSelect;
+    // 如果某个子选项列表选了
+    if (isSelect) {
+        TTCategoryMenuBarListOptionItem *currentOption = self.listOptions[self.firstTableView.indexPathForSelectedRow.row];
+        // 子选项全选后，是否取消其他选项
+        if (currentOption.isChildrenAllSelected && currentOption.isSelectAll && currentOption.unselectsOthersWhenSelected) {
+            for (TTCategoryMenuBarListOptionItem *option in self.listOptions) {
+                if (option != currentOption) {
+                    [option reset];
+                }
+            }
+        }
+        NSIndexPath *currentIndexPath = self.firstTableView.indexPathForSelectedRow;
+        [self.firstTableView reloadData];
+        [self.firstTableView selectRowAtIndexPath:currentIndexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
+    }
 }
 
 - (TTCategoryMenuBarListOptionItem *)optionAtIndexPath:(NSIndexPath *)indexPath inTableView:(UITableView *)tableView {
@@ -714,17 +807,10 @@ static NSString *const TTCategoryMenuBarCellID = @"cell";
     }
     CGFloat listHeight = MAX(firstListHeight, secondListHeight);
     UIButton *bottomButton = self.doneButton ?: self.resetButton;
+    CGFloat bottomButtonHeight = bottomButton ? TTCategoryMenuBarDoneButtonHeight : 0;
     CGFloat maxHeight = MIN(self.listCategoryItem.optionViewPreferredMaxHeight, [self maxHeight]);
-    return CGSizeMake(TTCategoryMenuBarScreenWidth, MIN(maxHeight, listHeight + bottomButton.frame.size.height));
+    return CGSizeMake(TTCategoryMenuBarScreenWidth, MIN(maxHeight, listHeight + bottomButtonHeight));
 }
-
-@end
-
-@interface TTCategoryMenuBarTripleListOptionView ()
-
-@property (nonatomic, strong) UITableView *firstTableView;
-@property (nonatomic, strong) UITableView *secondTableView;
-@property (nonatomic, strong) UITableView *thirdTableView;
 
 @end
 
@@ -732,14 +818,14 @@ static NSString *const TTCategoryMenuBarCellID = @"cell";
 
 - (void)loadSubviews {
     [super loadSubviews];
-
+    
     self.firstTableView = [self loadTableView];
     self.secondTableView = [self loadTableView];
     self.thirdTableView = [self loadTableView];
     [self addSubview:self.firstTableView];
     [self addSubview:self.secondTableView];
     [self addSubview:self.thirdTableView];
-
+    
     [self.firstTableView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.top.equalTo(self);
         UIButton *bottomButton = self.doneButton ?: self.resetButton;
@@ -768,7 +854,7 @@ static NSString *const TTCategoryMenuBarCellID = @"cell";
         make.left.equalTo(self.secondTableView.mas_right);
         make.right.equalTo(self);
     }];
-
+    
     [self reloadData];
 }
 
@@ -797,7 +883,7 @@ static NSString *const TTCategoryMenuBarCellID = @"cell";
     }
     secondShowingChildOptions.firstObject.isSelected = YES;
     [self.secondTableView reloadData];
-//    self.secondTableView.allowsMultipleSelection = self.listOptions[row].childAllowsMultipleSelection;
+    //    self.secondTableView.allowsMultipleSelection = self.listOptions[row].childAllowsMultipleSelection;
     for (NSInteger childRow = 0; childRow < secondShowingChildOptions.count; childRow ++) {
         TTCategoryMenuBarListOptionItem *option = secondShowingChildOptions[childRow];
         if (option.isSelected) {
@@ -806,7 +892,9 @@ static NSString *const TTCategoryMenuBarCellID = @"cell";
                                         scrollPosition:UITableViewScrollPositionNone];
         }
     }
-    [self.secondTableView setContentOffset:CGPointZero animated:NO];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.secondTableView setContentOffset:CGPointZero animated:NO];
+    });
     [self reloadThirdAtRow:0];
 }
 
@@ -826,7 +914,9 @@ static NSString *const TTCategoryMenuBarCellID = @"cell";
                                        scrollPosition:UITableViewScrollPositionNone];
         }
     }
-    [self.thirdTableView setContentOffset:CGPointZero animated:NO];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.thirdTableView setContentOffset:CGPointZero animated:NO];
+    });
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -850,22 +940,22 @@ static NSString *const TTCategoryMenuBarCellID = @"cell";
         [self reloadSecondAtRow:indexPath.row];
     } else if (tableView == self.secondTableView) {
         NSArray<TTCategoryMenuBarListOptionChildItem *> *childOptions = [self secondShowingChildOptions];
-//        TTCategoryMenuBarListOptionChildItem *currentOption = childOptions[indexPath.row];
-//        // 全选
-//        if (tableView.allowsMultipleSelection && currentOption.isSelectAll) {
-//            currentOption.isSelected = YES;
-//            [self selectAllOptions:childOptions isSelect:YES inTableView:tableView];
-//        } else {
-//            NSArray<TTCategoryMenuBarListOptionChildItem *> *childOptions = [self secondShowingChildOptions];
-            // 当前在选中，不做处理
-            if (childOptions[indexPath.row].isSelected) {
-                return;
-            }
-            childOptions[indexPath.row].isSelected = YES;
-            [self refreshCellAtRow:indexPath.row inTableView:tableView];
-            // 刷新第二栏，并滚动到顶部
-            [self reloadThirdAtRow:indexPath.row];
-//        }
+        //        TTCategoryMenuBarListOptionChildItem *currentOption = childOptions[indexPath.row];
+        //        // 全选
+        //        if (tableView.allowsMultipleSelection && currentOption.isSelectAll) {
+        //            currentOption.isSelected = YES;
+        //            [self selectAllOptions:childOptions isSelect:YES inTableView:tableView];
+        //        } else {
+        //            NSArray<TTCategoryMenuBarListOptionChildItem *> *childOptions = [self secondShowingChildOptions];
+        // 当前在选中，不做处理
+        if (childOptions[indexPath.row].isSelected) {
+            return;
+        }
+        childOptions[indexPath.row].isSelected = YES;
+        [self refreshCellAtRow:indexPath.row inTableView:tableView];
+        // 刷新第二栏，并滚动到顶部
+        [self reloadThirdAtRow:indexPath.row];
+        //        }
     } else {
         NSArray<TTCategoryMenuBarListOptionChildItem *> *childOptions = [self thirdShowingChildOptions];
         TTCategoryMenuBarListOptionChildItem *currentOption = childOptions[indexPath.row];
@@ -881,7 +971,7 @@ static NSString *const TTCategoryMenuBarCellID = @"cell";
         // 点击到选择全部
         if (currentOption.isSelectAll) {
             // 全选
-            [self selectAllOptions:childOptions isSelect:YES inTableView:tableView];
+            [self selectOption:currentOption allOptions:childOptions isSelect:YES inTableView:tableView];
         } else {
             // 找到全选cell
             TTCategoryMenuBarListOptionChildItem *selectAllOption = childOptions.firstObject.isSelectAll ? childOptions.firstObject : nil;
@@ -896,7 +986,7 @@ static NSString *const TTCategoryMenuBarCellID = @"cell";
                 if (isSelectAlled) {
                     // 全部选中了则选中全选的cell
                     selectAllOption.isSelected = YES;
-                    [self selectAllOptions:childOptions isSelect:YES inTableView:tableView];
+                    [self selectOption:currentOption allOptions:childOptions isSelect:YES inTableView:tableView];
                 } else {
                     [self refreshCellAtRow:indexPath.row inTableView:tableView];
                 }
@@ -922,7 +1012,7 @@ static NSString *const TTCategoryMenuBarCellID = @"cell";
         currentOption.isSelected = NO;
         // 取消全选
         if (currentOption.isSelectAll) {
-            [self selectAllOptions:childOptions isSelect:NO inTableView:tableView];
+            [self selectOption:currentOption allOptions:childOptions isSelect:NO inTableView:tableView];
         } else {
             [self refreshCellAtRow:indexPath.row inTableView:tableView];
             // 找到全选cell
@@ -938,8 +1028,8 @@ static NSString *const TTCategoryMenuBarCellID = @"cell";
     }
 }
 
-- (void)selectAllOptions:(NSArray *)options isSelect:(BOOL)isSelect inTableView:(UITableView *)tableView {
-    [super selectAllOptions:options isSelect:isSelect inTableView:tableView];
+- (void)selectOption:(TTCategoryMenuBarOptionItem *)option allOptions:(NSArray *)options isSelect:(BOOL)isSelect inTableView:(UITableView *)tableView {
+    [super selectOption:option allOptions:options isSelect:isSelect inTableView:tableView];
     // 子选项全部选中
     if (tableView == self.thirdTableView) {
         NSArray<TTCategoryMenuBarListOptionChildItem *> *secondShowingChildOptions = [self secondShowingChildOptions];
@@ -1009,8 +1099,9 @@ static NSString *const TTCategoryMenuBarCellID = @"cell";
     }
     CGFloat listHeight = MAX(MAX(firstListHeight, secondListHeight), thirdListHeight);
     UIButton *bottomButton = self.doneButton ?: self.resetButton;
+    CGFloat bottomButtonHeight = bottomButton ? TTCategoryMenuBarDoneButtonHeight : 0;
     CGFloat maxHeight = MIN([self maxHeight], self.listCategoryItem.optionViewPreferredMaxHeight);
-    return CGSizeMake(TTCategoryMenuBarScreenWidth, MIN(maxHeight, listHeight + bottomButton.frame.size.height));
+    return CGSizeMake(TTCategoryMenuBarScreenWidth, MIN(maxHeight, listHeight + bottomButtonHeight));
 }
 
 @end
@@ -1033,7 +1124,7 @@ static NSString *const TTCategoryMenuBarCellID = @"cell";
                                                  selector:@selector(didReceiveMemoryWarning)
                                                      name:UIApplicationDidReceiveMemoryWarningNotification
                                                    object:nil];
-
+        
     }
     return self;
 }
@@ -1044,14 +1135,14 @@ static NSString *const TTCategoryMenuBarCellID = @"cell";
 
 - (void)prepareLayout {
     [super prepareLayout];
-
+    
     if (self.collectionViewWidthWhenLastPrepare && self.collectionViewWidthWhenLastPrepare == self.collectionView.frame.size.width) {
         return;
     }
     self.collectionViewWidthWhenLastPrepare = self.collectionView.frame.size.width;
-
+    
     self.attributes = [[NSMutableArray alloc] init];
-
+    
     @autoreleasepool {
         CGFloat lastRight = 0, lastBottom = 0;
         for (NSInteger section = 0, number = [self numberOfSections]; section < number; section ++) {
@@ -1059,7 +1150,7 @@ static NSString *const TTCategoryMenuBarCellID = @"cell";
             CGFloat interitemSpacing = [self interitemSpacingInSection:section];
             UIEdgeInsets insets = [self edgeInsetsInSection:section];
             CGFloat layoutWidth = self.collectionView.frame.size.width - insets.left - insets.right;
-
+            
             NSIndexPath *headerIndexPath = [NSIndexPath indexPathForItem:0 inSection:section];
             CGSize headerSize = [self headerSizeForSection:section];
             headerSize.width = MIN(layoutWidth, headerSize.width);
@@ -1067,7 +1158,7 @@ static NSString *const TTCategoryMenuBarCellID = @"cell";
             headerAttributes.frame = (CGRect){.origin = CGPointMake(0, lastBottom), .size = headerSize};
             [self.attributes addObject:headerAttributes];
             lastBottom += headerSize.height;
-
+            
             for (NSInteger row = 0, rowNumber = [self numberOfRowsInSection:section]; row < rowNumber; row ++) {
                 NSIndexPath *itemIndexPath = [NSIndexPath indexPathForItem:row inSection:section];
                 CGSize itemSize = [self itemSizeForIndexPath:itemIndexPath];
@@ -1095,7 +1186,7 @@ static NSString *const TTCategoryMenuBarCellID = @"cell";
             }
         }
     }
-
+    
     UICollectionViewLayoutAttributes *lastAttributes = self.attributes.lastObject;
     self.contentHeight = CGRectGetMaxY(lastAttributes.frame);
 }
@@ -1341,7 +1432,6 @@ static NSString *const TTCategoryMenuBarCellID = @"cell";
 
 @interface TTCategoryMenuBarSectionListView () <UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 
-@property (nonatomic, strong) UICollectionView *collectionView;
 @property (nonatomic, strong) TTCategoryMenuBarSectionListCell *layoutCell;
 
 @end
@@ -1350,9 +1440,9 @@ static NSString *const TTCategoryMenuBarCellID = @"cell";
 
 - (void)loadSubviews {
     [super loadSubviews];
-
+    
     self.layoutCell = [[TTCategoryMenuBarSectionListCell alloc] init];
-
+    
     TTCategoryMenuBarSectionListLayout *layout = [[TTCategoryMenuBarSectionListLayout alloc] init];
     layout.shouldAlignmentLeft = self.sectionCategoryItem.shouldAlignmentLeft;
     UICollectionView *collectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:layout];
@@ -1366,14 +1456,14 @@ static NSString *const TTCategoryMenuBarCellID = @"cell";
     [collectionView registerClass:[TTCategoryMenuBarSectionListCell class] forCellWithReuseIdentifier:@"cell"];
     [self addSubview:collectionView];
     self.collectionView = collectionView;
-
+    
     [self addSubview:self.collectionView];
     [collectionView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.left.right.equalTo(self);
         UIButton *bottomButton = self.doneButton ?: self.resetButton;
         make.bottom.equalTo(self).offset(bottomButton ? -TTCategoryMenuBarDoneButtonHeight : 0);
     }];
-
+    
     [self reloadData];
 }
 
@@ -1563,8 +1653,9 @@ static NSString *const TTCategoryMenuBarCellID = @"cell";
     // 布局完成前提前获取collectionView的frame
     CGFloat listHeight = [self.collectionView contentSize].height;
     UIButton *bottomButton = self.doneButton ?: self.resetButton;
+    CGFloat bottomButtonHeight = bottomButton ? TTCategoryMenuBarDoneButtonHeight : 0;
     CGFloat maxHeight = MIN(self.sectionCategoryItem.optionViewPreferredMaxHeight, [self maxHeight]);
-    return CGSizeMake(TTCategoryMenuBarScreenWidth, MIN(maxHeight, listHeight + bottomButton.frame.size.height));
+    return CGSizeMake(TTCategoryMenuBarScreenWidth, MIN(maxHeight, listHeight + bottomButtonHeight));
 }
 
 @end
