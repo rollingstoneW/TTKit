@@ -74,8 +74,8 @@
 
 @implementation UIColor (TTFactory)
 
-+ (UIColor *)tt_colorWithHex:(uint32_t)hex {
-    return UIColorHex(hex);
++ (UIColor *)tt_colorWithHexString:(NSString *)hex {
+    return [UIColor colorWithHexString:hex];
 }
 
 @end
