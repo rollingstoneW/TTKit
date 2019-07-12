@@ -8,6 +8,7 @@
 
 #import "UIView+TTUtil.h"
 #import <OpenGLES/ES2/gl.h>
+#import "TTMacros.h"
 
 @implementation UIView (TTUtil)
 
@@ -123,6 +124,21 @@
         gesture.delegate = nil ;
         gesture.enabled = NO;
     }
+}
+
+- (NSString *)tt_debugHierarchy {
+    SEL selector = NSSelectorFromString([@"recursive" stringByAppendingString:@"Description"]);
+    if ([self respondsToSelector:selector]) {
+        SuppressPerformSelectorLeakWarning(return [self performSelector:selector];)
+    }
+    return nil;
+}
+
+- (UIEdgeInsets)tt_safeAreaInsets {
+    if (iOS11Later) {
+        return self.safeAreaInsets;
+    }
+    return UIEdgeInsetsZero;
 }
 
 @end

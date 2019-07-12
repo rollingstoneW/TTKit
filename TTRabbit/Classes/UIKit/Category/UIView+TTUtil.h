@@ -78,4 +78,14 @@
  */
 - (void)tt_removeAllGesture;
 
+/**
+ 所有子视图层级的描述
+ */
+- (NSString *)tt_debugHierarchy;
+
+/**
+ 安全区域，iOS11之前是UIEdgeInsetsZero
+ */
+- (UIEdgeInsets)tt_safeAreaInsets;
+
 @end

@@ -85,6 +85,11 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)tt_scrollToRightByInset;
 - (void)tt_scrollToRightByInsetAnimated:(BOOL)animated;
 
+/**
+ 调整后的缩进，iOS11之前为contentInset
+ */
+- (UIEdgeInsets)tt_adjustedContentInset;
+
 @end
 
 NS_ASSUME_NONNULL_END

@@ -9,22 +9,8 @@
 #import "TTViewController.h"
 //#import "TTNetworkTask.h"
 #import "TTUIKitFactory.h"
-#import "MJRefresh.h"
-
-@interface TTPulldownToGobackHeader : MJRefreshStateHeader
-@end
-@implementation TTPulldownToGobackHeader
-
-- (void)prepare {
-    [super prepare];
-    self.lastUpdatedTimeLabel.hidden = YES;
-
-    [self setTitle:@"下拉关闭页面" forState:MJRefreshStateIdle];
-    [self setTitle:@"松手关闭页面" forState:MJRefreshStatePulling];
-    [self setTitle:@"松手关闭页面" forState:MJRefreshStateRefreshing];
-}
-
-@end
+#import "UIView+TTUtil.h"
+#import "TTPulldownDismissHeader.h"
 
 @interface TTViewController () <UIGestureRecognizerDelegate>
 
@@ -47,6 +33,7 @@
 }
 
 - (void)commonInit {
+    self.modalPresentationStyle = UIModalPresentationFullScreen;
     self.autoCancelNetworkTasksBeforeDealloc = YES;
 }
 
@@ -170,8 +157,8 @@
 
 - (UIView *)addPulldownToGobackHeaderInScrollView:(UIScrollView *)scrollView {
     if (!scrollView) { return nil; }
-    scrollView.mj_header = [TTPulldownToGobackHeader headerWithRefreshingTarget:self refreshingAction:@selector(goback)];
-    return scrollView.mj_header;
+    TTPulldownDismissHeader *header = [TTPulldownDismissHeader headerInScrollView:scrollView target:self selector:@selector(goback)];
+    return header;
 }
 
 @end

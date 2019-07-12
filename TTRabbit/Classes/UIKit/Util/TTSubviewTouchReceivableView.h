@@ -8,5 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
+
+/**
+ 透传点击事件的view。如果子视图能接受点击，就传给子视图，否则就透传下去
+ */
 @interface TTSubviewTouchReceivableView : UIView
 @end
