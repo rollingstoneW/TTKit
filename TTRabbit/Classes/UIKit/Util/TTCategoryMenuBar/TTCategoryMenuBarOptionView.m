@@ -84,12 +84,12 @@ static NSString *const TTCategoryMenuBarCellID = @"cell";
     if (self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier]) {
         self.selectionStyle = UITableViewCellSelectionStyleNone;
         self.accessoryView = [[UIImageView alloc] init];
-
+        
         [self addSubview:self.separatorLine];
         [self addSubview:self.containerView];
         [self.containerView addSubview:self.textLabel];
         [self.containerView addSubview:self.imageView];
-
+        
         [self.separatorLine mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.right.bottom.equalTo(self);
             make.height.equalTo(@(TTCategoryMenuBar1PX));
@@ -103,7 +103,7 @@ static NSString *const TTCategoryMenuBarCellID = @"cell";
         (BOOL)option.icon != (BOOL)_option.icon ||
         (BOOL)option.selectedIcon != (BOOL)_option.selectedIcon ||
         option.iconTitleSpace != _option.iconTitleSpace) {
-
+        
         if (option.icon && option.iconTitleSpace >= 0) {
             [self.imageView mas_remakeConstraints:^(MASConstraintMaker *make) {
                 make.centerY.equalTo(self.containerView);
@@ -241,8 +241,8 @@ static NSString *const TTCategoryMenuBarCellID = @"cell";
 @property (nonatomic, strong) TTCategoryMenuBarListCategoryItem *listCategoryItem;
 @property (nonatomic, strong) TTCategoryMenuBarSectionCategoryItem *sectionCategoryItem;
 
-@property (nonatomic, strong) NSArray<TTCategoryMenuBarListOptionItem *> *listOptions;
-@property (nonatomic, strong) NSArray<TTCategoryMenuBarSectionItem *> *sectionOptions;
+@property (nonatomic,   copy) NSArray<TTCategoryMenuBarListOptionItem *> *listOptions;
+@property (nonatomic,   copy) NSArray<TTCategoryMenuBarSectionItem *> *sectionOptions;
 
 @property (nonatomic, assign) BOOL shouldInvalidateIntrnsicContentSize;
 
@@ -421,7 +421,7 @@ static NSString *const TTCategoryMenuBarCellID = @"cell";
     for (TTCategoryMenuBarOptionItem *option in _selectedOptions) {
         [option clearSelectedChildren];
     }
-    self.selectedOptions = nil;
+    _selectedOptions = nil;
 }
 
 - (void)selectOption:(TTCategoryMenuBarOptionItem *)option allOptions:(NSArray *)options isSelect:(BOOL)isSelect inTableView:(UITableView *)tableView {
@@ -487,12 +487,6 @@ static NSString *const TTCategoryMenuBarCellID = @"cell";
     CGFloat containerViewHeight = superview.frame.size.height - menuBarBottom;
     return containerViewHeight <= 0 ? TTCategoryMenuBarScreenHeight : containerViewHeight;
 }
-
-@end
-
-@interface TTCategoryMenuBarSingleListOptionView ()
-
-@property (nonatomic, strong) UITableView *tableView;
 
 @end
 
@@ -581,23 +575,16 @@ static NSString *const TTCategoryMenuBarCellID = @"cell";
 
 @end
 
-@interface TTCategoryMenuBarDoubleListOptionView ()
-
-@property (nonatomic, strong) UITableView *firstTableView;
-@property (nonatomic, strong) UITableView *secondTableView;
-
-@end
-
 @implementation TTCategoryMenuBarDoubleListOptionView
 
 - (void)loadSubviews {
     [super loadSubviews];
-
+    
     self.firstTableView = [self loadTableView];
     self.secondTableView = [self loadTableView];
     [self addSubview:self.firstTableView];
     [self addSubview:self.secondTableView];
-
+    
     [self.firstTableView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.top.equalTo(self);
         UIButton *bottomButton = self.doneButton ?: self.resetButton;
@@ -615,7 +602,7 @@ static NSString *const TTCategoryMenuBarCellID = @"cell";
         make.left.equalTo(self.firstTableView.mas_right);
         make.right.equalTo(self);
     }];
-
+    
     [self reloadData];
 }
 
@@ -648,7 +635,9 @@ static NSString *const TTCategoryMenuBarCellID = @"cell";
                                         scrollPosition:UITableViewScrollPositionNone];
         }
     }
-    [self.secondTableView setContentOffset:CGPointZero animated:NO];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.secondTableView setContentOffset:CGPointZero animated:NO];
+    });
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -825,26 +814,18 @@ static NSString *const TTCategoryMenuBarCellID = @"cell";
 
 @end
 
-@interface TTCategoryMenuBarTripleListOptionView ()
-
-@property (nonatomic, strong) UITableView *firstTableView;
-@property (nonatomic, strong) UITableView *secondTableView;
-@property (nonatomic, strong) UITableView *thirdTableView;
-
-@end
-
 @implementation TTCategoryMenuBarTripleListOptionView
 
 - (void)loadSubviews {
     [super loadSubviews];
-
+    
     self.firstTableView = [self loadTableView];
     self.secondTableView = [self loadTableView];
     self.thirdTableView = [self loadTableView];
     [self addSubview:self.firstTableView];
     [self addSubview:self.secondTableView];
     [self addSubview:self.thirdTableView];
-
+    
     [self.firstTableView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.top.equalTo(self);
         UIButton *bottomButton = self.doneButton ?: self.resetButton;
@@ -873,7 +854,7 @@ static NSString *const TTCategoryMenuBarCellID = @"cell";
         make.left.equalTo(self.secondTableView.mas_right);
         make.right.equalTo(self);
     }];
-
+    
     [self reloadData];
 }
 
@@ -911,7 +892,9 @@ static NSString *const TTCategoryMenuBarCellID = @"cell";
                                         scrollPosition:UITableViewScrollPositionNone];
         }
     }
-    [self.secondTableView setContentOffset:CGPointZero animated:NO];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.secondTableView setContentOffset:CGPointZero animated:NO];
+    });
     [self reloadThirdAtRow:0];
 }
 
@@ -931,7 +914,9 @@ static NSString *const TTCategoryMenuBarCellID = @"cell";
                                        scrollPosition:UITableViewScrollPositionNone];
         }
     }
-    [self.thirdTableView setContentOffset:CGPointZero animated:NO];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.thirdTableView setContentOffset:CGPointZero animated:NO];
+    });
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -1139,7 +1124,7 @@ static NSString *const TTCategoryMenuBarCellID = @"cell";
                                                  selector:@selector(didReceiveMemoryWarning)
                                                      name:UIApplicationDidReceiveMemoryWarningNotification
                                                    object:nil];
-
+        
     }
     return self;
 }
@@ -1150,14 +1135,14 @@ static NSString *const TTCategoryMenuBarCellID = @"cell";
 
 - (void)prepareLayout {
     [super prepareLayout];
-
+    
     if (self.collectionViewWidthWhenLastPrepare && self.collectionViewWidthWhenLastPrepare == self.collectionView.frame.size.width) {
         return;
     }
     self.collectionViewWidthWhenLastPrepare = self.collectionView.frame.size.width;
-
+    
     self.attributes = [[NSMutableArray alloc] init];
-
+    
     @autoreleasepool {
         CGFloat lastRight = 0, lastBottom = 0;
         for (NSInteger section = 0, number = [self numberOfSections]; section < number; section ++) {
@@ -1165,7 +1150,7 @@ static NSString *const TTCategoryMenuBarCellID = @"cell";
             CGFloat interitemSpacing = [self interitemSpacingInSection:section];
             UIEdgeInsets insets = [self edgeInsetsInSection:section];
             CGFloat layoutWidth = self.collectionView.frame.size.width - insets.left - insets.right;
-
+            
             NSIndexPath *headerIndexPath = [NSIndexPath indexPathForItem:0 inSection:section];
             CGSize headerSize = [self headerSizeForSection:section];
             headerSize.width = MIN(layoutWidth, headerSize.width);
@@ -1173,7 +1158,7 @@ static NSString *const TTCategoryMenuBarCellID = @"cell";
             headerAttributes.frame = (CGRect){.origin = CGPointMake(0, lastBottom), .size = headerSize};
             [self.attributes addObject:headerAttributes];
             lastBottom += headerSize.height;
-
+            
             for (NSInteger row = 0, rowNumber = [self numberOfRowsInSection:section]; row < rowNumber; row ++) {
                 NSIndexPath *itemIndexPath = [NSIndexPath indexPathForItem:row inSection:section];
                 CGSize itemSize = [self itemSizeForIndexPath:itemIndexPath];
@@ -1201,7 +1186,7 @@ static NSString *const TTCategoryMenuBarCellID = @"cell";
             }
         }
     }
-
+    
     UICollectionViewLayoutAttributes *lastAttributes = self.attributes.lastObject;
     self.contentHeight = CGRectGetMaxY(lastAttributes.frame);
 }
@@ -1447,7 +1432,6 @@ static NSString *const TTCategoryMenuBarCellID = @"cell";
 
 @interface TTCategoryMenuBarSectionListView () <UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 
-@property (nonatomic, strong) UICollectionView *collectionView;
 @property (nonatomic, strong) TTCategoryMenuBarSectionListCell *layoutCell;
 
 @end
@@ -1456,9 +1440,9 @@ static NSString *const TTCategoryMenuBarCellID = @"cell";
 
 - (void)loadSubviews {
     [super loadSubviews];
-
+    
     self.layoutCell = [[TTCategoryMenuBarSectionListCell alloc] init];
-
+    
     TTCategoryMenuBarSectionListLayout *layout = [[TTCategoryMenuBarSectionListLayout alloc] init];
     layout.shouldAlignmentLeft = self.sectionCategoryItem.shouldAlignmentLeft;
     UICollectionView *collectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:layout];
@@ -1472,14 +1456,14 @@ static NSString *const TTCategoryMenuBarCellID = @"cell";
     [collectionView registerClass:[TTCategoryMenuBarSectionListCell class] forCellWithReuseIdentifier:@"cell"];
     [self addSubview:collectionView];
     self.collectionView = collectionView;
-
+    
     [self addSubview:self.collectionView];
     [collectionView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.left.right.equalTo(self);
         UIButton *bottomButton = self.doneButton ?: self.resetButton;
         make.bottom.equalTo(self).offset(bottomButton ? -TTCategoryMenuBarDoneButtonHeight : 0);
     }];
-
+    
     [self reloadData];
 }
 
