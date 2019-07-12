@@ -75,7 +75,7 @@
 #define kTTFont_20 [UIFont systemFontOfSize:20]
 #define kTTFont_18 [UIFont systemFontOfSize:18]
 #define kTTFont_16 [UIFont systemFontOfSize:16]
-#define kTTFont_15 [UIFont systemFontOfSize:15]
+
 #define kTTFont_14 [UIFont systemFontOfSize:14]
 #define kTTFont_13 [UIFont systemFontOfSize:13]
 #define kTTFont_12 [UIFont systemFontOfSize:12]
