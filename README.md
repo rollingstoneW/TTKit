@@ -7,7 +7,7 @@
 
 ## Example
 
-TTDemo:https://github.com/rollingstoneW/TTKit
+TTDemo:https://github.com/rollingstoneW/TTDemo<br/>
 To run the example project, clone TTDemo, and run `pod install`.
 
 ## Requirements
