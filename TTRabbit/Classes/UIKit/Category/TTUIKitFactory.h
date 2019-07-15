@@ -31,6 +31,7 @@
 + (UIButton *)buttonWithTitle:(NSString *)title font:(UIFont *)font titleColor:(UIColor *)titleColor;
 + (UIButton *)buttonWithTitle:(NSString *)title font:(UIFont *)font titleColor:(UIColor *)titleColor image:(UIImage *)image;
 + (UIButton *)buttonWithImage:(UIImage *)image target:(id)target selector:(SEL)selector;
++ (UIButton *)buttonWithImage:(UIImage *)image selectedImage:(UIImage *)selected target:(id)target selector:(SEL)selector;
 + (UIButton *)buttonWithAttributedTitle:(NSAttributedString *)attributedTitle target:(id)target selector:(SEL)selector;
 @end
 
@@ -73,9 +74,11 @@
  **************************************************************/
 #define kTTFont_24 [UIFont systemFontOfSize:24]
 #define kTTFont_20 [UIFont systemFontOfSize:20]
+#define kTTFont_19 [UIFont systemFontOfSize:19]
 #define kTTFont_18 [UIFont systemFontOfSize:18]
+#define kTTFont_17 [UIFont systemFontOfSize:17]
 #define kTTFont_16 [UIFont systemFontOfSize:16]
-
+#define kTTFont_15 [UIFont systemFontOfSize:15]
 #define kTTFont_14 [UIFont systemFontOfSize:14]
 #define kTTFont_13 [UIFont systemFontOfSize:13]
 #define kTTFont_12 [UIFont systemFontOfSize:12]

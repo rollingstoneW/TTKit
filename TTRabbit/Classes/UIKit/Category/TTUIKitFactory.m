@@ -59,8 +59,12 @@
     return button;
 }
 + (UIButton *)buttonWithImage:(UIImage *)image target:(id)target selector:(SEL)selector {
+    return [self buttonWithImage:image selectedImage:nil target:target selector:selector];
+}
++ (UIButton *)buttonWithImage:(UIImage *)image selectedImage:(UIImage *)selected target:(id)target selector:(SEL)selector {
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
     [button setImage:image forState:UIControlStateNormal];
+    [button setImage:selected forState:UIControlStateSelected];
     [button addTarget:target action:selector forControlEvents:UIControlEventTouchUpInside];
     return button;
 }

@@ -141,4 +141,27 @@
     return UIEdgeInsetsZero;
 }
 
+- (CGFloat)tt_layoutConstantForAttribute:(NSLayoutAttribute)attribute {
+    for (NSLayoutConstraint *constraint in self.constraints) {
+        if (constraint.firstAttribute == attribute) {
+            return constraint.constant;
+        }
+    }
+    return 0;
+}
+
+- (CGFloat)tt_layoutConstantForAttribute:(NSLayoutAttribute)attribute relatedView:(UIView *)view {
+    return [self tt_layoutConstantForAttribute:attribute relatedView:view relatedAttribute:attribute];
+}
+
+- (CGFloat)tt_layoutConstantForAttribute:(NSLayoutAttribute)attribute relatedView:(UIView *)view relatedAttribute:(NSLayoutAttribute)related {
+    for (NSLayoutConstraint *constraint in [self.constraints arrayByAddingObjectsFromArray:view.constraints ?: @[]]) {
+        if ((constraint.firstAttribute == attribute && constraint.secondItem == view && constraint.secondAttribute == related) ||
+            (constraint.firstAttribute == related && constraint.secondItem == self && constraint.secondAttribute == attribute)) {
+            return constraint.constant;
+        }
+    }
+    return 0;
+}
+
 @end

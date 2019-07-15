@@ -88,4 +88,23 @@
  */
 - (UIEdgeInsets)tt_safeAreaInsets;
 
+
+/**
+ 找到指定约束的值
+ @param attribute 指定约束的属性
+ */
+- (CGFloat)tt_layoutConstantForAttribute:(NSLayoutAttribute)attribute;
+
+/**
+ 找到指定依赖于别的视图的约束的值
+ @param attribute 指定约束的属性
+ */
+- (CGFloat)tt_layoutConstantForAttribute:(NSLayoutAttribute)attribute relatedView:(UIView *)view;
+
+/**
+ 找到指定依赖于别的视图约束的约束的值
+ @param attribute 指定约束的属性
+ */
+- (CGFloat)tt_layoutConstantForAttribute:(NSLayoutAttribute)attribute relatedView:(UIView *)view relatedAttribute:(NSLayoutAttribute)related;
+
 @end
