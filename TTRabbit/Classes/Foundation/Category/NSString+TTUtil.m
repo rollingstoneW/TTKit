@@ -12,11 +12,11 @@
 
 @implementation NSString (TTUtil)
 
-- (NSRange)fullRange {
+- (NSRange)tt_fullRange {
     return NSMakeRange(0, self.length);
 }
 
-- (void)convertHtmlStringToNSAttributedString:(void (^)(NSAttributedString *))block {
+- (void)tt_convertHtmlStringToNSAttributedString:(void (^)(NSAttributedString *))block {
     if (!block) { return; }
     if (self.length || [self isEqualToString:@"(null)"]) {
         block([[NSAttributedString alloc] initWithString:@""]);
@@ -30,33 +30,33 @@
     });
 }
 
-- (NSString *)stringByPrependingPrefixIfNeeded:(NSString *)prefix {
+- (NSString *)tt_stringByPrependingPrefixIfNeeded:(NSString *)prefix {
     if (!prefix.length || [self hasPrefix:prefix]) { return self; }
     return [prefix stringByAppendingString:self];
 }
 
-- (NSString *)stringByAppendingSuffixIfNeeded:(NSString *)suffix {
+- (NSString *)tt_stringByAppendingSuffixIfNeeded:(NSString *)suffix {
     if (!suffix.length || [self hasSuffix:suffix]) { return self; }
     return [self stringByAppendingString:suffix];
 }
 
-- (NSString *)stringByDeletingPrefix:(NSString *)prefix {
+- (NSString *)tt_stringByDeletingPrefix:(NSString *)prefix {
     if (!prefix.length || ![self hasPrefix:prefix]) { return self; }
     return [self substringFromIndex:[self rangeOfString:prefix].length];
 }
 
-- (NSString *)stringByDeletingSuffix:(NSString *)suffix {
+- (NSString *)tt_stringByDeletingSuffix:(NSString *)suffix {
     if (!suffix.length || ![self hasSuffix:suffix]) { return self; }
     return [self substringToIndex:[self rangeOfString:suffix options:NSBackwardsSearch].location];
 }
 
-- (NSString *)stringByTrimmingWhitespaceThroughout {
+- (NSString *)tt_stringByTrimmingWhitespaceThroughout {
     NSMutableString *mtString = self.mutableCopy;
     [mtString replaceOccurrencesOfString:@" " withString:@"" options:NSCaseInsensitiveSearch range:NSMakeRange(0, mtString.length)];
     return mtString;
 }
 
-- (NSString *)stringByTruncatingToWidth:(CGFloat)width withFont:(UIFont *)font {
+- (NSString *)tt_stringByTruncatingToWidth:(CGFloat)width withFont:(UIFont *)font {
     if (!font) {
         return self;
     }
@@ -97,7 +97,7 @@
     }
 }
 
-- (NSString *)stringByTruncatingToSize:(CGSize)size withTextAttributes:(NSDictionary *)attributes lastLineTailInset:(CGFloat)lastLineTailInset {
+- (NSString *)tt_stringByTruncatingToSize:(CGSize)size withTextAttributes:(NSDictionary *)attributes lastLineTailInset:(CGFloat)lastLineTailInset {
     UIFont *font = attributes[NSFontAttributeName];
     if (self.length == 0 || !font) {
         return self;
@@ -139,7 +139,7 @@
     CGFloat singleCharWidth = [singleChar widthForFont:font];
 
     if (lastLineWidth + singleCharWidth >= lastLineMaxWidth) {
-        lastLineString = [[lastLineString stringByAppendingString:@"token"] stringByTruncatingToWidth:lastLineMaxWidth withFont:font];
+        lastLineString = [[lastLineString stringByAppendingString:@"token"] tt_stringByTruncatingToWidth:lastLineMaxWidth withFont:font];
     }
 
     CFRelease(framesetter);
@@ -149,12 +149,12 @@
     return  [previousString stringByAppendingString:lastLineString];
 }
 
-- (NSString *)urlStringByAppendingKey:(NSString *)key value:(NSString *)value {
+- (NSString *)tt_urlStringByAppendingKey:(NSString *)key value:(NSString *)value {
     if (!key.length || !value.length) { return self; }
-    return [self urlStringByAppendingQueries:@{key : value}];
+    return [self tt_urlStringByAppendingQueries:@{key : value}];
 }
 
-- (NSString *)urlStringByAppendingQueries:(NSDictionary *)queries {
+- (NSString *)tt_urlStringByAppendingQueries:(NSDictionary *)queries {
     NSString *urlString = self;
     if ([urlString rangeOfString:@"?"].location == NSNotFound) {
         urlString = [urlString stringByAppendingString:@"?"];
@@ -170,13 +170,13 @@
     return [urlString stringByAppendingString:[queriesArr componentsJoinedByString:@"&"]];
 }
 
-- (NSString *)urlStringByQueryEncode {
+- (NSString *)tt_urlStringByQueryEncode {
     NSMutableCharacterSet *charSet = [NSCharacterSet URLQueryAllowedCharacterSet].mutableCopy;
     [charSet addCharactersInString:@"#"];
     return [self stringByAddingPercentEncodingWithAllowedCharacters:charSet];
 }
 
-- (NSDictionary *)urlQueries {
+- (NSDictionary *)tt_urlQueries {
     NSRange range = [self rangeOfString:@"?"];
     if (!self.length || range.location == NSNotFound || range.location + range.length == self.length) { return nil; }
 
@@ -202,12 +202,12 @@
     return urlQueries;
 }
 
-- (BOOL)isChinese {
+- (BOOL)tt_isChinese {
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", @"^[\u4e00-\u9fa5]+$"];
     return [predicate evaluateWithObject:self];
 }
 
-- (BOOL)isValidEmail {
+- (BOOL)tt_isValidEmail {
     // Discussion http://blog.logichigh.com/2010/09/02/validating-an-e-mail-address/
     BOOL stricterFilter = YES;
     NSString *stricterFilterString = @"[A-Z0-9a-z\\._%+-]+@([A-Za-z0-9-]+\\.)+[A-Za-z]{2,4}";
@@ -218,26 +218,26 @@
     return [emailTest evaluateWithObject:self];
 }
 
-- (BOOL)isPureInteger {
+- (BOOL)tt_isPureInteger {
     NSString *pureIntegerRegex = @"^[0-9]+$";
     NSPredicate *pureIntegerTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", pureIntegerRegex];
     return [pureIntegerTest evaluateWithObject:self];
 }
 
-- (BOOL)isFloat {
+- (BOOL)tt_isFloat {
     NSString *floatRegex = @"^(\\d*\\.)?\\d+$";
     NSPredicate *floatTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", floatRegex];
     return [floatTest evaluateWithObject:self];
 }
 
-- (BOOL)isValidHttpURL {
+- (BOOL)tt_isValidHttpURL {
     NSString *urlRegEx =
     @"((http[s]{0,1}|ftp)://[a-zA-Z0-9\\.\\-]+\\.([a-zA-Z]{2,4})(:\\d+)?(/[a-zA-Z0-9\\.\\-~!@#$%^&*+?:_/=<>]*)?)|(www.[a-zA-Z0-9\\.\\-]+\\.([a-zA-Z]{2,4})(:\\d+)?(/[a-zA-Z0-9\\.\\-~!@#$%^&*+?:_/=<>]*)?)";
     NSPredicate *urlTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", urlRegEx];
     return [urlTest evaluateWithObject:self];
 }
 
-- (BOOL)isValidQQ {
+- (BOOL)tt_isValidQQ {
     NSString *urlRegEx =
     @"/^\\s*[.0-9]{5,11}\\s*$/";
     NSPredicate *urlTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", urlRegEx];
@@ -247,7 +247,7 @@
 /**
  *  弱验证，只验证开头两位和总长度是11位
 */
-- (BOOL)isValidPhoneNumber {
+- (BOOL)tt_isValidPhoneNumber {
     NSString *COMMON = @"^1[3|4|5|7|8][0-9]{9}$";
     NSPredicate *regexTestPhone = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", COMMON];
     if ([regexTestPhone evaluateWithObject:self] == YES) {
@@ -257,22 +257,22 @@
     }
 }
 
-- (BOOL)isValidWXNumber {
+- (BOOL)tt_isValidWXNumber {
     NSString *COMMON = @"^[a-zA-Z0-9]{1}[-_a-zA-Z0-9]{5,19}+$";
     NSPredicate *regex = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", COMMON];
     return  [regex evaluateWithObject:self];
 }
 
-+ (NSString *)fileSizeStringWithByteCount:(long long)byteCount {
++ (NSString *)tt_fileSizeStringWithByteCount:(long long)byteCount {
     return [NSByteCountFormatter stringFromByteCount:byteCount countStyle:NSByteCountFormatterCountStyleBinary];
 }
 
-+ (NSString *)countdownStringWithInteval:(NSTimeInterval)interval {
++ (NSString *)tt_countdownStringWithInteval:(NSTimeInterval)interval {
     NSDateComponentsFormatter *formatter = [[NSDateComponentsFormatter alloc] init];
     return [formatter stringFromTimeInterval:interval];
 }
 
-+ (NSString *)decimalFormatedStringWithNumber:(CGFloat)number {
++ (NSString *)tt_decimalFormatedStringWithNumber:(CGFloat)number {
     NSNumber *num = [NSNumber numberWithFloat:number];
     NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
     formatter.numberStyle = NSNumberFormatterDecimalStyle;
