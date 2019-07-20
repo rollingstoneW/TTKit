@@ -104,7 +104,7 @@
 
 - (__kindof UIView *)tt_showEmptyTipViewWithTapedBlock:(dispatch_block_t)block {
     return [self tt_showTipViewWithTitle:@"暂无数据"
-                                   image:[UIImage tt_imageNamed:@"tt_empty_placeholder" bundle:[NSBundle tt_bundleWithName:@"TTRabbit"]]
+                                   image:[UIImage tt_imageNamed:@"tt_empty_placeholder" bundle:[NSBundle tt_bundleWithName:@"TTRabbitBundle"]]
                               tapedBlock:block];
 }
 - (__kindof UIView *)tt_showNetErrorTipViewWithTapedBlock:(dispatch_block_t)block {
@@ -112,7 +112,7 @@
     NSMutableAttributedString *attr = [[NSMutableAttributedString alloc] initWithString:tip];
     [attr addAttributes:@{NSFontAttributeName:kTTFont_14} range:[tip rangeOfString:@"点击重试"]];
     return [self tt_showTipViewWithTitle:attr
-                                   image:[UIImage tt_imageNamed:@"tt_empty_placeholder" bundle:[NSBundle tt_bundleWithName:@"TTRabbit"]]
+                                   image:[UIImage tt_imageNamed:@"tt_empty_placeholder" bundle:[NSBundle tt_bundleWithName:@"TTRabbitBundle"]]
                               tapedBlock:block];
 }
 - (__kindof UIView *)tt_showTipViewWithTitle:(id)title image:(UIImage *)image tapedBlock:(dispatch_block_t)block {

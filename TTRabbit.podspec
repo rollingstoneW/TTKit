@@ -18,7 +18,7 @@ Pod::Spec.new do |s|
     ss.source_files = 'TTRabbit/Classes/**/*'
     ss.public_header_files = 'TTRabbit/Classes/**/*.h'
     ss.resource_bundles = {
-      'TTRabbit' => ['TTRabbit/Assets/**/*.*']
+      'TTRabbitBundle' => ['TTRabbit/Assets/**/*.*']
     }
     ss.frameworks = 'UIKit', 'Foundation'
     ss.dependency 'Masonry'
@@ -30,6 +30,10 @@ Pod::Spec.new do |s|
 #如果项目中引用了YYKit，请使用此子模块, pod 'TTRabbit', :subspecs => [YYKitDependency]
   s.subspec 'YYKitDependency' do |ss|
     ss.dependency 'YYKit'
+    ss.dependency 'TTRabbit/Core'
+  end
+  s.subspec 'YYCategoryDependency' do |ss|
+    ss.dependency 'YYCategories'
     ss.dependency 'TTRabbit/Core'
   end
 

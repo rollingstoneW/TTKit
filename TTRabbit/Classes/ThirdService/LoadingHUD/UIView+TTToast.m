@@ -15,45 +15,45 @@ static NSTimeInterval const TTToastDefaultHideDelay = 1.5;
 
 @implementation UIView (TTToast)
 
-- (__kindof UIView *)showLoadingToast:(NSString *)toast {
-    [self hideToasts];
+- (__kindof UIView *)tt_showLoadingToast:(NSString *)toast {
+    [self tt_hideToasts];
     MBProgressHUD *hud = [self customCommonHUD];
     hud.label.text = toast;
     return hud;
 }
-- (__kindof UIView *)showLoadingToast:(NSString *)toast hideAfterDelay:(NSTimeInterval)delay {
-    MBProgressHUD *hud = [self showLoadingToast:toast];
+- (__kindof UIView *)tt_showLoadingToast:(NSString *)toast hideAfterDelay:(NSTimeInterval)delay {
+    MBProgressHUD *hud = [self tt_showLoadingToast:toast];
     [hud hideAnimated:YES afterDelay:delay];
     return hud;
 }
 
-- (__kindof UIView *)showErrorToast:(NSString *)toast {
-    return [self showErrorToast:toast hideAfterDelay:TTToastDefaultHideDelay];
+- (__kindof UIView *)tt_showErrorToast:(NSString *)toast {
+    return [self tt_showErrorToast:toast hideAfterDelay:TTToastDefaultHideDelay];
 }
-- (__kindof UIView *)showErrorToast:(NSString *)toast hideAfterDelay:(NSTimeInterval)delay {
-    return [self showCustomToast:toast
-                           image:[UIImage tt_imageNamed:@"icon_toast_error" bundle:[NSBundle tt_bundleWithName:@"TTRabbit"]]
-                  hideAfterDelay:delay];
+- (__kindof UIView *)tt_showErrorToast:(NSString *)toast hideAfterDelay:(NSTimeInterval)delay {
+    return [self tt_showCustomToast:toast
+                              image:[UIImage tt_imageNamed:@"icon_toast_error" bundle:[NSBundle tt_bundleWithName:@"TTRabbitBundle"]]
+                     hideAfterDelay:delay];
 }
-- (__kindof UIView *)showSuccessToast:(NSString *)toast {
-    return [self showSuccessToast:toast hideAfterDelay:TTToastDefaultHideDelay];
+- (__kindof UIView *)tt_showSuccessToast:(NSString *)toast {
+    return [self tt_showSuccessToast:toast hideAfterDelay:TTToastDefaultHideDelay];
 }
-- (__kindof UIView *)showSuccessToast:(NSString *)toast hideAfterDelay:(NSTimeInterval)delay {
-    return [self showCustomToast:toast
-                           image:[UIImage tt_imageNamed:@"icon_toast_success" bundle:[NSBundle tt_bundleWithName:@"TTRabbit"]]
-                  hideAfterDelay:delay];
+- (__kindof UIView *)tt_showSuccessToast:(NSString *)toast hideAfterDelay:(NSTimeInterval)delay {
+    return [self tt_showCustomToast:toast
+                              image:[UIImage tt_imageNamed:@"icon_toast_success" bundle:[NSBundle tt_bundleWithName:@"TTRabbitBundle"]]
+                     hideAfterDelay:delay];
 }
-- (__kindof UIView *)showWarningToast:(NSString *)toast {
-    return [self showWarningToast:toast hideAfterDelay:TTToastDefaultHideDelay];
+- (__kindof UIView *)tt_showWarningToast:(NSString *)toast {
+    return [self tt_showWarningToast:toast hideAfterDelay:TTToastDefaultHideDelay];
 }
-- (__kindof UIView *)showWarningToast:(NSString *)toast hideAfterDelay:(NSTimeInterval)delay {
-    return [self showCustomToast:toast
-                           image:[UIImage tt_imageNamed:@"icon_toast_warning" bundle:[NSBundle tt_bundleWithName:@"TTRabbit"]]
-                  hideAfterDelay:delay];
+- (__kindof UIView *)tt_showWarningToast:(NSString *)toast hideAfterDelay:(NSTimeInterval)delay {
+    return [self tt_showCustomToast:toast
+                              image:[UIImage tt_imageNamed:@"icon_toast_warning" bundle:[NSBundle tt_bundleWithName:@"TTRabbitBundle"]]
+                     hideAfterDelay:delay];
 }
 
-- (__kindof UIView *)showCustomToast:(NSString *)toast image:(UIImage *)image hideAfterDelay:(NSTimeInterval)delay {
-    [self hideToasts];
+- (__kindof UIView *)tt_showCustomToast:(NSString *)toast image:(UIImage *)image hideAfterDelay:(NSTimeInterval)delay {
+    [self tt_hideToasts];
     MBProgressHUD *hud = [self customCommonHUD];
     if (image) {
         hud.customView = [[UIImageView alloc] initWithImage:image];
@@ -64,15 +64,15 @@ static NSTimeInterval const TTToastDefaultHideDelay = 1.5;
     return hud;
 }
 
-- (UIView *)showTextToast:(NSString *)toast {
-    return [self showTextToast:toast hideAfterDelay:TTToastDefaultHideDelay];
+- (UIView *)tt_showTextToast:(NSString *)toast {
+    return [self tt_showTextToast:toast hideAfterDelay:TTToastDefaultHideDelay];
 }
 
-- (UIView *)showTextToast:(NSString *)toast hideAfterDelay:(NSTimeInterval)delay {
-    [self hideToasts];
+- (UIView *)tt_showTextToast:(NSString *)toast hideAfterDelay:(NSTimeInterval)delay {
+    [self tt_hideToasts];
     MBProgressHUD *hud = [self customCommonHUD];
     hud.label.text = toast;
-    hud.label.numberOfLines = 2;
+    hud.label.numberOfLines = 0;
     hud.userInteractionEnabled = NO;
     hud.mode = MBProgressHUDModeText;
     [hud hideAnimated:YES afterDelay:delay];
@@ -89,7 +89,7 @@ static NSTimeInterval const TTToastDefaultHideDelay = 1.5;
     return hud;
 }
 
-- (void)hideToasts {
+- (void)tt_hideToasts {
     [MBProgressHUD hideHUDForView:self animated:YES];
 }
 

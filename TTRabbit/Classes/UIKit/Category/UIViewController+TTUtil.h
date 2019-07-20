@@ -15,69 +15,69 @@ typedef void(^TTAlertHandler)(NSInteger index);
 /**
  设置富文本标题
  */
-@property (nonatomic,   copy) NSAttributedString *attributedTitle;
+@property (nonatomic,   copy) NSAttributedString *tt_attributedTitle;
 
 /**
  获取当前显示的控制器
  */
-+ (UIViewController *)currentViewController;
++ (UIViewController *)tt_currentViewController;
 
 /**
  返回到上个页面，自动pop或者dismiss
  */
-- (void)goback;
+- (void)tt_goback;
 
 /**
  返回到window的根控制器
  */
-- (void)gobackToRoot;
+- (void)tt_gobackToRoot;
 
 /**
  将要从添加到视图层级
  */
-- (BOOL)isMovingToViewHierarchy;
+- (BOOL)tt_isMovingToViewHierarchy;
 
 /**
  将要从视图层级中移除
  */
-- (BOOL)isMovingFromViewHierarchy;
+- (BOOL)tt_isMovingFromViewHierarchy;
 
 /**
  添加下滑返回的手势
  */
-- (void)addSwipeDownGestureToDismiss;
+- (void)tt_addSwipeDownGestureToDismiss;
 
 /**
  右滑返回时禁用scrollView滚动手势
  */
-- (void)disablesScrollViewScrollWhileSwipeBack:(UIScrollView *)scrollView;
+- (void)tt_disablesScrollViewScrollWhileSwipeBack:(UIScrollView *)scrollView;
 
 /**
  禁用UIScrollView自动调整contentInset
  */
-- (void)disablesScrollViewAutoAdjustContentInset:(UIScrollView *)scrollView;
+- (void)tt_disablesScrollViewAutoAdjustContentInset:(UIScrollView *)scrollView;
 
 /**
  添加navigationBar上左边的按钮功能
  */
-- (void)addRightBarItemWithTitle:(NSString *)title image:(UIImage *)image selector:(SEL)selecor;
+- (void)tt_addRightBarItemWithTitle:(NSString *)title image:(UIImage *)image selector:(SEL)selecor;
 
 /**
  添加navigationBar上右边的按钮功能
  */
-- (void)addLeftBarItemWithTitle:(NSString *)title image:(UIImage *)image selector:(SEL)selecor;
+- (void)tt_addLeftBarItemWithTitle:(NSString *)title image:(UIImage *)image selector:(SEL)selecor;
 
 #pragma mark - Alert
 
 /**
  展示只有确定按钮的系统弹窗
-
+ 
  @param title 标题
  @param message 信息
  @param handler 点击确定的回掉
  @return 弹窗
  */
-- (UIAlertController *)showOKAlertWithTitle:(NSString *)title message:(NSString *)message handler:(dispatch_block_t)handler;
+- (UIAlertController *)tt_showOKAlertWithTitle:(NSString *)title message:(NSString *)message handler:(dispatch_block_t)handler;
 
 /**
  展示有取消和确定按钮的系统弹窗
@@ -87,7 +87,7 @@ typedef void(^TTAlertHandler)(NSInteger index);
  @param handler 点击按钮的回掉。index为0是取消，1是确定
  @return 弹窗
  */
-- (UIAlertController *)showCancelableAlertWithTitle:(NSString *)title message:(NSString *)message handler:(TTAlertHandler)handler;
+- (UIAlertController *)tt_showCancelableAlertWithTitle:(NSString *)title message:(NSString *)message handler:(TTAlertHandler)handler;
 
 /**
  展示只有确定按钮的系统弹窗
@@ -99,25 +99,25 @@ typedef void(^TTAlertHandler)(NSInteger index);
  @param handler 点击按钮的回掉。index为0是取消，1是确定
  @return 弹窗
  */
-- (UIAlertController *)showCancelableAlertWithTitle:(NSString *)title
-                                            message:(NSString *)message
-                                        cancelTitle:(NSString *)cancelTitle
-                                            OKTitle:(NSString *)OKTitle
-                                            handler:(TTAlertHandler)handler;
+- (UIAlertController *)tt_showCancelableAlertWithTitle:(NSString *)title
+                                               message:(NSString *)message
+                                           cancelTitle:(NSString *)cancelTitle
+                                               OKTitle:(NSString *)OKTitle
+                                               handler:(TTAlertHandler)handler;
 
 /**
  展示系统列表选择器
-
+ 
  @param title 标题
  @param message 信息
  @param actions 选择的title列表
  @param handler 点击按钮的回掉。index为-1是取消，其余对应在actions中的index
  @return 弹窗
  */
-- (UIAlertController *)showActionSheetWithTitle:(NSString *)title
-                                        message:(NSString *)message
-                                        actions:(NSArray *)actions
-                                        handler:(TTAlertHandler)handler;
+- (UIAlertController *)tt_showActionSheetWithTitle:(NSString *)title
+                                           message:(NSString *)message
+                                           actions:(NSArray *)actions
+                                           handler:(TTAlertHandler)handler;
 
 #pragma mark - Loading
 
@@ -125,37 +125,37 @@ typedef void(^TTAlertHandler)(NSInteger index);
  展示loading加载指示窗
  @param toast 文字内容，hideAfterDelay几秒后自动消失
  */
-- (__kindof UIView *)showLoadingToast:(NSString *)toast;
-- (__kindof UIView *)showLoadingToast:(NSString *)toast hideAfterDelay:(NSTimeInterval)delay;
+- (__kindof UIView *)tt_showLoadingToast:(NSString *)toast;
+- (__kindof UIView *)tt_showLoadingToast:(NSString *)toast hideAfterDelay:(NSTimeInterval)delay;
 
 /**
  展示错误指示窗
  @param toast 文字内容，hideAfterDelay几秒后自动消失
  */
-- (__kindof UIView *)showErrorToast:(NSString *)toast;
-- (__kindof UIView *)showErrorToast:(NSString *)toast hideAfterDelay:(NSTimeInterval)delay;
+- (__kindof UIView *)tt_showErrorToast:(NSString *)toast;
+- (__kindof UIView *)tt_showErrorToast:(NSString *)toast hideAfterDelay:(NSTimeInterval)delay;
 
 /**
  展示成功指示窗
  @param toast 文字内容，hideAfterDelay几秒后自动消失
  */
-- (__kindof UIView *)showSuccessToast:(NSString *)toast;
-- (__kindof UIView *)showSuccessToast:(NSString *)toast hideAfterDelay:(NSTimeInterval)delay;
+- (__kindof UIView *)tt_showSuccessToast:(NSString *)toast;
+- (__kindof UIView *)tt_showSuccessToast:(NSString *)toast hideAfterDelay:(NSTimeInterval)delay;
 
 /**
  展示警告指示窗
  @param toast 文字内容，hideAfterDelay几秒后自动消失
  */
-- (__kindof UIView *)showWarningToast:(NSString *)toast;
-- (__kindof UIView *)showWarningToast:(NSString *)toast hideAfterDelay:(NSTimeInterval)delay;
+- (__kindof UIView *)tt_showWarningToast:(NSString *)toast;
+- (__kindof UIView *)tt_showWarningToast:(NSString *)toast hideAfterDelay:(NSTimeInterval)delay;
 
 /**
  展示文字提示
  @param toast 文字内容，hideAfterDelay几秒后自动消失
  */
-- (__kindof UIView *)showTextToast:(NSString *)toast;
-- (__kindof UIView *)showTextToast:(NSString *)toast hideAfterDelay:(NSTimeInterval)delay;
-- (void)hideToasts;
+- (__kindof UIView *)tt_showTextToast:(NSString *)toast;
+- (__kindof UIView *)tt_showTextToast:(NSString *)toast hideAfterDelay:(NSTimeInterval)delay;
+- (void)tt_hideToasts;
 
 #pragma mark - Tip
 
