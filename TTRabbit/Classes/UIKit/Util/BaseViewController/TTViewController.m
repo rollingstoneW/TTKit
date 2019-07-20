@@ -7,9 +7,13 @@
 //
 
 #import "TTViewController.h"
-//#import "TTNetworkTask.h"
 #import "TTUIKitFactory.h"
 #import "MJRefresh.h"
+#if __has_include("TTNetworkCancellable.h")
+#import "TTNetworkCancellable.h"
+#endif
+
+NSString *const TTViewControllerDidDismissNotification = @"TTViewControllerDidDismissNotification";
 
 @interface TTPulldownToGobackHeader : MJRefreshStateHeader
 @end
@@ -47,7 +51,7 @@
 }
 
 - (void)commonInit {
-    self.autoCancelNetworkTasksBeforeDealloc = YES;
+    self.shouldCancelNetworkTasksWhenDismissed = YES;
 }
 
 - (void)viewDidLoad {
@@ -90,8 +94,10 @@
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
     
-    if (!self.parentViewController && [self autoCancelNetworkTasksBeforeDealloc]) {
-//        [self cancelNetworkTasks];
+    if (!self.parentViewController && self.shouldCancelNetworkTasksWhenDismissed) {
+#if __has_include("TTNetworkCancellable.h")
+        [self tt_cancelNetworkTasks];
+#endif
     }
 }
 
