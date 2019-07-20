@@ -15,4 +15,9 @@
  */
 @property (nonatomic, assign) UIEdgeInsets tt_hitTestEdgeInsets;
 
+/**
+ 四周的点击热区，负值为增加热区
+ */
+@property (nonatomic, assign) CGFloat tt_hitTestInset;
+
 @end

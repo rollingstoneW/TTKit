@@ -8,6 +8,7 @@
 
 #import "UIView+TTUtil.h"
 #import <OpenGLES/ES2/gl.h>
+#import "TTMacros.h"
 
 @implementation UIView (TTUtil)
 
@@ -123,6 +124,44 @@
         gesture.delegate = nil ;
         gesture.enabled = NO;
     }
+}
+
+- (NSString *)tt_debugHierarchy {
+    SEL selector = NSSelectorFromString([@"recursive" stringByAppendingString:@"Description"]);
+    if ([self respondsToSelector:selector]) {
+        SuppressPerformSelectorLeakWarning(return [self performSelector:selector];)
+    }
+    return nil;
+}
+
+- (UIEdgeInsets)tt_safeAreaInsets {
+    if (iOS11Later) {
+        return self.safeAreaInsets;
+    }
+    return UIEdgeInsetsZero;
+}
+
+- (CGFloat)tt_layoutConstantForAttribute:(NSLayoutAttribute)attribute {
+    for (NSLayoutConstraint *constraint in self.constraints) {
+        if (constraint.firstAttribute == attribute) {
+            return constraint.constant;
+        }
+    }
+    return 0;
+}
+
+- (CGFloat)tt_layoutConstantForAttribute:(NSLayoutAttribute)attribute relatedView:(UIView *)view {
+    return [self tt_layoutConstantForAttribute:attribute relatedView:view relatedAttribute:attribute];
+}
+
+- (CGFloat)tt_layoutConstantForAttribute:(NSLayoutAttribute)attribute relatedView:(UIView *)view relatedAttribute:(NSLayoutAttribute)related {
+    for (NSLayoutConstraint *constraint in [self.constraints arrayByAddingObjectsFromArray:view.constraints ?: @[]]) {
+        if ((constraint.firstAttribute == attribute && constraint.secondItem == view && constraint.secondAttribute == related) ||
+            (constraint.firstAttribute == related && constraint.secondItem == self && constraint.secondAttribute == attribute)) {
+            return constraint.constant;
+        }
+    }
+    return 0;
 }
 
 @end

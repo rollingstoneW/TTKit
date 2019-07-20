@@ -11,6 +11,14 @@
 
 @implementation UIButton (TTTouchArea)
 
+- (void)setTt_hitTestInset:(CGFloat)tt_hitTestInset {
+    self.tt_hitTestEdgeInsets = UIEdgeInsetsMake(tt_hitTestInset, tt_hitTestInset, tt_hitTestInset, tt_hitTestInset);
+}
+
+- (CGFloat)tt_hitTestInset {
+    return self.tt_hitTestEdgeInsets.top;
+}
+
 - (void)setTt_hitTestEdgeInsets:(UIEdgeInsets)tt_hitTestEdgeInsets {
     objc_setAssociatedObject(self, @selector(tt_hitTestEdgeInsets),
                              [NSValue valueWithUIEdgeInsets:tt_hitTestEdgeInsets],
