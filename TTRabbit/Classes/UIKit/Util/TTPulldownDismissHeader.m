@@ -66,7 +66,7 @@
     CGFloat visibleOffsetY = contentOffset.y + self.scrollView.tt_safeAreaInsets.top;
     if (visibleOffsetY <= self.frame.origin.y - 20) {
         if ([self.target respondsToSelector:self.selector]) {
-            SuppressPerformSelectorLeakWarning([self.target performSelector:self.selector];)
+            TTSuppressPerformSelectorLeakWarning([self.target performSelector:self.selector];)
         }
     }
 }

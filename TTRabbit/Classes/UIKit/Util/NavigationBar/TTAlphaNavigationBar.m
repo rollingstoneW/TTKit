@@ -36,7 +36,7 @@ const UIControlState TTNavigationBarClearState = UIControlStateSelected;
 }
 
 - (void)setIsBackgroundClear:(BOOL)isBackgroundClear animated:(BOOL)animated {
-    kSetterCondition(isBackgroundClear);
+    TTSetterCondition(isBackgroundClear);
 
     if (animated) {
         CATransition *transition = [CATransition animation];
@@ -69,7 +69,7 @@ const UIControlState TTNavigationBarClearState = UIControlStateSelected;
 }
 
 - (void)setAutoAdjustStatusBarStyle:(BOOL)autoAdjustStatusBarStyle {
-    kSetterCondition(autoAdjustStatusBarStyle);
+    TTSetterCondition(autoAdjustStatusBarStyle);
     [self updateStatusBarStyleIfNeeded];
 }
 

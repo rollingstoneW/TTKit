@@ -190,7 +190,7 @@
 }
 
 - (void)setLargeTitleHidden:(BOOL)largeTitleHidden animated:(BOOL)animated layoutSuperview:(BOOL)layoutSuperview{
-    kSetterCondition(largeTitleHidden)
+    TTSetterCondition(largeTitleHidden)
     self.showingPercent = largeTitleHidden ? 0 : 1;
 
     !animated ?:  [UIView animateWithDuration:.25 animations:^{
@@ -199,7 +199,7 @@
 }
 
 - (void)setShowingPercent:(CGFloat)showingPercent {
-    kSetterCondition(showingPercent)
+    TTSetterCondition(showingPercent)
 
     if (CGRectIsEmpty(self.bounds)) {
         self.shouldUpdatePercent = YES;
@@ -209,7 +209,7 @@
 }
 
 - (void)setSupplementHeight:(CGFloat)supplementHeight {
-    kSetterCondition(supplementHeight);
+    TTSetterCondition(supplementHeight);
     [self setNeedsUpdateConstraints];
     [self updatePercent];
 }
