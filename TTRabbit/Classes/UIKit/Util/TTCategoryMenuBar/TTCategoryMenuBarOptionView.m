@@ -233,9 +233,6 @@ static NSString *const TTCategoryMenuBarCellID = @"cell";
 
 @interface TTCategoryMenuBarOptionView () <UITableViewDelegate, UITableViewDataSource>
 
-@property (nonatomic, strong) UIButton *doneButton;
-@property (nonatomic, strong) UIButton *resetButton;
-
 @property (nonatomic, strong) NSArray *selectedOptions;
 
 @property (nonatomic, strong) TTCategoryMenuBarListCategoryItem *listCategoryItem;

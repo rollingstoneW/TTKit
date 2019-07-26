@@ -57,6 +57,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic,   weak) id<TTCategoryMenuBarOptionViewDelegate> delegate;
 
+@property (nonatomic, strong) UIButton *doneButton; // 完成按钮
+@property (nonatomic, strong) UIButton *resetButton; // 重置按钮
+
 - (void)reloadData; // 刷新
 - (UIButton *)loadDoneButton; // 加载完成按钮，子类可自定义
 - (UIButton *)loadResetButton; // 加载重置按钮，子类可自定义
