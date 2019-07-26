@@ -19,6 +19,7 @@
 
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
+        self.clipsToBounds = YES;
         self.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:.6];
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapedAction)];
         tap.delegate = self;
