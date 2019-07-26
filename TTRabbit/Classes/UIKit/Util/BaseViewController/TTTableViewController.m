@@ -146,6 +146,6 @@ NSInteger const TTDefaultPageSize = 20;
     return 0;
 }
 
-TTGetterObjectIMP(dataArray, [NSMutableArray array]);
+kGetterObjectIMP(dataArray, [NSMutableArray array]);
 
 @end

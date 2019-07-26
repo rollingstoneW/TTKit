@@ -49,21 +49,6 @@
 - (void)tt_setContentVerticalResistancePriority:(UILayoutPriority)priority;
 
 /**
- 设置某个方向的圆角。需要自身约束设置完整或者自身已经布局完成
- @param corners 方向
- @param cornerRadii 圆角大小
- */
-- (void)tt_setLayerRoundingCorners:(UIRectCorner)corners cornerRadii:(CGSize)cornerRadii;
-
-/**
- 设置某个方向的圆角
- @param corners 方向
- @param cornerRadii 圆角大小
- @param size 自身大小
- */
-- (void)tt_setLayerRoundingCorners:(UIRectCorner)corners cornerRadii:(CGSize)cornerRadii selfSize:(CGSize)size;
-
-/**
  通过openGL截图
  */
 - (UIImage *)tt_drawGlToImage;
@@ -81,7 +66,7 @@
 /**
  添加拖动手势
  */
-- (UIPanGestureRecognizer *)tt_addPanGestureWithTarget:(id)target selector:(SEL)selector;
+- (UITapGestureRecognizer *)tt_addPanGestureWithTarget:(id)target selector:(SEL)selector;
 
 /**
  添加长按手势

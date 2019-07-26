@@ -116,12 +116,12 @@ return image; \
     NSMutableArray *images = [NSMutableArray array];
     for (NSInteger i = from; i <= end; i++) {
         NSString *imageName = [prefix stringByAppendingFormat:suffixFormat, i];
-        TTSuppressPerformSelectorLeakWarning(
-                                             UIImage *image = [self performSelector:selector withObject:imageName];
-                                             if (image) {
-                                                 [images addObject:image];
-                                             }
-                                             )
+        SuppressPerformSelectorLeakWarning(
+                                           UIImage *image = [self performSelector:selector withObject:imageName];
+                                           if (image) {
+                                               [images addObject:image];
+                                           }
+                                           )
     }
     return images;
 }
@@ -133,12 +133,12 @@ return image; \
     }
     NSMutableArray *images = [NSMutableArray array];
     for (NSString *name in names) {
-        TTSuppressPerformSelectorLeakWarning(
-                                             UIImage *image = [self performSelector:selector withObject:name];
-                                             if (images) {
-                                                 [images addObject:image];
-                                             }
-                                             )
+        SuppressPerformSelectorLeakWarning(
+                                           UIImage *image = [self performSelector:selector withObject:name];
+                                           if (images) {
+                                               [images addObject:image];
+                                           }
+                                           )
     }
     return images;
 }

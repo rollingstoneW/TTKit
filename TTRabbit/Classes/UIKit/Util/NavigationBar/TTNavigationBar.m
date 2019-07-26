@@ -310,7 +310,7 @@ static const void *masBorderKey = &masBorderKey;
 }
 
 - (void)setTitleAttributes:(NSDictionary *)titleAttributes {
-    TTSetterCondition(titleAttributes)
+    kSetterCondition(titleAttributes)
     if (!self.title) {
         return;
     }
@@ -339,22 +339,22 @@ static const void *masBorderKey = &masBorderKey;
 }
 
 - (void)setTitleAlignment:(TTNavigationBarTitleAlignment)titleAlignment {
-    TTSetterCondition(titleAlignment)
+    kSetterCondition(titleAlignment)
     [self layoutTitleContainer];
 }
 
 - (void)setBackImage:(UIImage *)backImage {
-    TTSetterCondition(backImage);
+    kSetterCondition(backImage);
     [self.backButton setImage:backImage forState:UIControlStateNormal];
 }
 
 - (void)setBackHighlightedImage:(UIImage *)backHighlightedImage {
-    TTSetterCondition(backHighlightedImage);
+    kSetterCondition(backHighlightedImage);
     [self.backButton setBackgroundImage:backHighlightedImage forState:UIControlStateHighlighted];
 }
 
 - (void)setShowBackButton:(BOOL)showBackButton {
-    TTSetterCondition(showBackButton);
+    kSetterCondition(showBackButton);
     if (showBackButton) {
         [self.innerLeftButtons insertObject:self.backButton atIndex:0];
     } else {
@@ -364,7 +364,7 @@ static const void *masBorderKey = &masBorderKey;
 }
 
 - (void)setBackgroundImage:(UIImage *)backgroundImage {
-    TTSetterCondition(backgroundImage);
+    kSetterCondition(backgroundImage);
     self.backgroundView.layer.contents = (__bridge id _Nullable)(backgroundImage.CGImage);
 }
 
@@ -373,12 +373,12 @@ static const void *masBorderKey = &masBorderKey;
 }
 
 - (void)setHoriIndent:(CGFloat)horiIndent {
-    TTSetterCondition(horiIndent)
+    kSetterCondition(horiIndent)
     [self setNeedsUpdateConstraints];
 }
 
 - (void)setItemSpace:(CGFloat)itemSpace {
-    TTSetterCondition(itemSpace)
+    kSetterCondition(itemSpace)
     [self setNeedsUpdateConstraints];
 }
 

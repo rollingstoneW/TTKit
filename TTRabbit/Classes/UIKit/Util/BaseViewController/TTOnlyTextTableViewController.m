@@ -61,7 +61,7 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     SEL sel = NSSelectorFromString([self cellSELAtIndexPath:indexPath]);
     if ([self respondsToSelector:sel]) {
-        TTSuppressPerformSelectorLeakWarning([self performSelector:sel];)
+        SuppressPerformSelectorLeakWarning([self performSelector:sel];)
     }
 }
 

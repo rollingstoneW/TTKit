@@ -39,23 +39,6 @@
     [self setContentHuggingPriority:priority forAxis:UILayoutConstraintAxisVertical];
 }
 
-- (void)tt_setLayerRoundingCorners:(UIRectCorner)corners cornerRadii:(CGSize)cornerRadii {
-    CGSize size = self.frame.size;
-    if (CGSizeEqualToSize(size, CGSizeZero)) {
-        size = [self systemLayoutSizeFittingSize:UILayoutFittingCompressedSize];
-    }
-    [self tt_setLayerRoundingCorners:corners cornerRadii:cornerRadii selfSize:self.frame.size];
-}
-
-- (void)tt_setLayerRoundingCorners:(UIRectCorner)corners cornerRadii:(CGSize)cornerRadii selfSize:(CGSize)size {
-    CGRect frame = (CGRect){.size = size};
-    UIBezierPath *maskPath= [UIBezierPath  bezierPathWithRoundedRect:frame byRoundingCorners:corners cornerRadii:cornerRadii];
-    CAShapeLayer *maskLayer = [[CAShapeLayer alloc] init];
-    maskLayer.frame = frame;
-    maskLayer.path = maskPath.CGPath;
-    self.layer.mask = maskLayer;
-}
-
 - (UIImage *)tt_drawGlToImage {
     return [UIImage imageWithData:[self tt_GlImageData]];
 }
@@ -146,13 +129,13 @@
 - (NSString *)tt_debugHierarchy {
     SEL selector = NSSelectorFromString([@"recursive" stringByAppendingString:@"Description"]);
     if ([self respondsToSelector:selector]) {
-        TTSuppressPerformSelectorLeakWarning(return [self performSelector:selector];)
+        SuppressPerformSelectorLeakWarning(return [self performSelector:selector];)
     }
     return nil;
 }
 
 - (UIEdgeInsets)tt_safeAreaInsets {
-    if (kiOS11Later) {
+    if (iOS11Later) {
         return self.safeAreaInsets;
     }
     return UIEdgeInsetsZero;

@@ -142,11 +142,11 @@ static NSTimeInterval DoubleTapMaxInterval = 0.25;
 
 - (void)notifyViewController:(UIViewController *)viewController action:(SEL)action {
     if ([viewController respondsToSelector:action]) {
-        TTSuppressPerformSelectorLeakWarning([viewController performSelector:action];)
+        SuppressPerformSelectorLeakWarning([viewController performSelector:action];)
     } else if ([viewController isKindOfClass:[UINavigationController class]]) {
         UIViewController *rootVC = [(UINavigationController *)viewController viewControllers].firstObject;
         if ([rootVC respondsToSelector:action]) {
-            TTSuppressPerformSelectorLeakWarning([rootVC performSelector:action];)
+            SuppressPerformSelectorLeakWarning([rootVC performSelector:action];)
         }
     }
 }
