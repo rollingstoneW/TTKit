@@ -101,7 +101,7 @@
 }
 
 - (void)tt_disablesScrollViewAutoAdjustContentInset:(UIScrollView *)scrollView {
-    if (iOS11Later) {
+    if (kiOS11Later) {
         scrollView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
     } else {
         self.automaticallyAdjustsScrollViewInsets = NO;
@@ -158,7 +158,7 @@
 - (UIAlertController *)tt_showOKAlertWithTitle:(NSString *)title message:(NSString *)message handler:(dispatch_block_t)handler {
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
     [alert addAction:[UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        kSafeBlock(handler);
+        TTSafeBlock(handler);
     }]];
     [self presentViewController:alert animated:YES completion:nil];
     return alert;
@@ -175,10 +175,10 @@
                                                handler:(TTAlertHandler)handler {
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
     [alert addAction:[UIAlertAction actionWithTitle:cancel style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        kSafeBlock(handler, 0);
+        TTSafeBlock(handler, 0);
     }]];
     [alert addAction:[UIAlertAction actionWithTitle:OKTitle style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        kSafeBlock(handler, 1);
+        TTSafeBlock(handler, 1);
     }]];
     [self presentViewController:alert animated:YES completion:nil];
     return alert;
@@ -191,11 +191,11 @@
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleActionSheet];
     for (NSInteger i = 0; i < actions.count; i++) {
         [alert addAction:[UIAlertAction actionWithTitle:actions[i] style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            kSafeBlock(handler, i);
+            TTSafeBlock(handler, i);
         }]];
     }
     [alert addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-        kSafeBlock(handler, -1);
+        TTSafeBlock(handler, -1);
     }]];
     [self presentViewController:alert animated:YES completion:nil];
     return alert;

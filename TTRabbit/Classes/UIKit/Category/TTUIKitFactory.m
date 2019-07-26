@@ -27,21 +27,20 @@
     return label;
 }
 + (UILabel *)labelWithFont:(UIFont *)font textColor:(UIColor *)color {
-    return [self labelWithText:nil font:font textColor:color textAlignment:NSTextAlignmentLeft numberOfLines:1];
+    return [self labelWithText:nil font:font textColor:color alignment:NSTextAlignmentLeft numberOfLines:1];
+}
++ (UILabel *)labelWithFont:(UIFont *)font textColor:(UIColor *)color alignment:(NSTextAlignment)alignment numberOfLines:(NSInteger)lines {
+    return [self labelWithText:nil font:font textColor:color alignment:alignment numberOfLines:lines];
 }
 + (UILabel *)labelWithText:(NSString *)text font:(UIFont *)font textColor:(UIColor *)color {
-    return [self labelWithText:text font:font textColor:color textAlignment:NSTextAlignmentLeft numberOfLines:1];
+    return [self labelWithText:text font:font textColor:color alignment:NSTextAlignmentLeft numberOfLines:1];
 }
-+ (UILabel *)labelWithText:(NSString *)text
-                      font:(UIFont *)font
-                 textColor:(UIColor *)color
-             textAlignment:(NSTextAlignment)textAlignment
-             numberOfLines:(NSInteger)numberOfLines {
++ (UILabel *)labelWithText:(NSString *)text font:(UIFont *)font textColor:(UIColor *)color alignment:(NSTextAlignment)alignment numberOfLines:(NSInteger)lines {
     UILabel *label = [[self alloc] init];
     label.text = text;
     label.font = font;
     label.textColor = color;
-    label.textAlignment = textAlignment;
+    label.textAlignment = alignment;
     return label;
 }
 @end
@@ -65,6 +64,16 @@
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
     [button setImage:image forState:UIControlStateNormal];
     [button setImage:selected forState:UIControlStateSelected];
+    [button addTarget:target action:selector forControlEvents:UIControlEventTouchUpInside];
+    return button;
+}
++ (UIButton *)buttonWithBgImage:(UIImage *)image target:(id)target selector:(SEL)selector {
+    return [self buttonWithBgImage:image selectedImage:nil target:target selector:selector];
+}
++ (UIButton *)buttonWithBgImage:(UIImage *)image selectedImage:(UIImage *)selected target:(id)target selector:(SEL)selector {
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+    [button setBackgroundImage:image forState:UIControlStateNormal];
+    [button setBackgroundImage:selected forState:UIControlStateSelected];
     [button addTarget:target action:selector forControlEvents:UIControlEventTouchUpInside];
     return button;
 }

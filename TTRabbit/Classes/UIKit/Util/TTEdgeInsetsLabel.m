@@ -49,11 +49,4 @@
     [super setFrame:CGRectIntegral(frame)];
 }
 
-- (void)setText:(NSString *)text {
-    [super setText:text];
-
-    [self setNeedsLayout];
-    [self layoutIfNeeded];
-}
-
 @end

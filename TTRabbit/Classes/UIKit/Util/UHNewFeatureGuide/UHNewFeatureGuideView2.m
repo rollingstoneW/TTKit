@@ -44,7 +44,7 @@
     size.height += 5 * 2;
     label.frame = CGRectMake(0.f, 0.f, size.width, size.height);
     
-    CGFloat x = CGRectGetWidth(view.frame) - kAdaptedWidth47(46.f) - CGRectGetWidth(label.frame);
+    CGFloat x = CGRectGetWidth(view.frame) - TTAdaptedWidth47(46.f) - CGRectGetWidth(label.frame);
     CGFloat y = CGRectGetMinY(feature.targetFrame) - 16.f - CGRectGetHeight(label.frame);
     
     UHNewFeatureGuideView2 *guideView = [[UHNewFeatureGuideView2 alloc] initWithFrame:
@@ -54,7 +54,7 @@
     [guideView addSubview:label];
     
     UIView *line = [[UIView alloc] initWithFrame:
-                    CGRectMake(CGRectGetMaxX(label.frame) - kAdaptedWidth47(36.f), CGRectGetMaxY(label.frame), 1.f, lineHeight)];
+                    CGRectMake(CGRectGetMaxX(label.frame) - TTAdaptedWidth47(36.f), CGRectGetMaxY(label.frame), 1.f, lineHeight)];
     line.backgroundColor = label.backgroundColor;
     [guideView addSubview:line];
     

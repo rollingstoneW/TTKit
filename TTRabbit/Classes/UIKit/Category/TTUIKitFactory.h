@@ -19,12 +19,9 @@
 @interface UILabel (TTFactory)
 + (UILabel *)labelWithAttributedText:(NSAttributedString *)attributedText;
 + (UILabel *)labelWithFont:(UIFont *)font textColor:(UIColor *)color;
++ (UILabel *)labelWithFont:(UIFont *)font textColor:(UIColor *)color alignment:(NSTextAlignment)alignment numberOfLines:(NSInteger)lines;
 + (UILabel *)labelWithText:(NSString *)text font:(UIFont *)font textColor:(UIColor *)color;
-+ (UILabel *)labelWithText:(NSString *)text
-                      font:(UIFont *)font
-                 textColor:(UIColor *)color
-             textAlignment:(NSTextAlignment)textAlignment
-             numberOfLines:(NSInteger)numberOfLines;
++ (UILabel *)labelWithText:(NSString *)text font:(UIFont *)font textColor:(UIColor *)color alignment:(NSTextAlignment)alignment numberOfLines:(NSInteger)lines;
 @end
 
 @interface UIButton (TTFactory)
@@ -33,6 +30,8 @@
 + (UIButton *)buttonWithImage:(UIImage *)image target:(id)target selector:(SEL)selector;
 + (UIButton *)buttonWithImage:(UIImage *)image selectedImage:(UIImage *)selected target:(id)target selector:(SEL)selector;
 + (UIButton *)buttonWithAttributedTitle:(NSAttributedString *)attributedTitle target:(id)target selector:(SEL)selector;
++ (UIButton *)buttonWithBgImage:(UIImage *)image target:(id)target selector:(SEL)selector;
++ (UIButton *)buttonWithBgImage:(UIImage *)image selectedImage:(UIImage *)selected target:(id)target selector:(SEL)selector;
 @end
 
 @interface UIColor (TTFactory)
