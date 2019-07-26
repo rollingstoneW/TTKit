@@ -34,6 +34,11 @@ NS_ASSUME_NONNULL_BEGIN
                          cornerRadius:(CGFloat)cornerRadius
                             locations:(NSArray * _Nullable)locations;
 
++ (UIImage *)tt_QRCodeImageWithLink:(NSString *)link size:(CGSize)size;
++ (UIImage *)tt_QRCodeImageWithLink:(NSString *)link width:(CGFloat)width;
++ (UIImage *)tt_QRCodeImageWithLink:(NSString *)link width:(CGFloat)width watermark:(UIImage *)watermark;
+- (UIImage *)tt_addWatermark:(UIImage *)watermark inRect:(CGRect)rect;
+
 /**
  Jpeg方式压缩图片，如果图片过大，可能会卡主线程。大图片建议用tt_compressWithTargetSize:dataLength:completion:
  

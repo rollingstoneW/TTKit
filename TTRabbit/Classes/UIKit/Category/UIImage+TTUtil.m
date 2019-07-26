@@ -68,6 +68,65 @@
                                 locations:nil];
 }
 
++ (CIImage *)tt_QRCodeCIImageWithLink:(NSString *)link {
+    NSData *data = [link dataUsingEncoding:NSUTF8StringEncoding];
+    CIFilter *filter = [CIFilter filterWithName:@"CIQRCodeGenerator"];
+    [filter setValue:data forKey:@"inputMessage"];
+    [filter setValue:@"Q" forKey:@"inputCorrectionLevel"]; //设置纠错等级越高；即识别越容易，值可设置为L(Low) |  M(Medium) | Q | H(High)
+    return filter.outputImage;
+}
+
++ (UIImage *)tt_resizeQRCodeImage:(CIImage *)image withSize:(CGSize)size {
+    CGRect extent = CGRectIntegral(image.extent);
+    CGFloat scale = MIN(size.width / CGRectGetWidth(extent), size.height / CGRectGetHeight(extent));
+    size_t width = CGRectGetWidth(extent) * scale;
+    size_t height = CGRectGetHeight(extent) * scale;
+    CGColorSpaceRef colorSpaceRef = CGColorSpaceCreateDeviceGray();
+
+    CGContextRef contextRef = CGBitmapContextCreate(nil, width, height, 8, 0, colorSpaceRef, (CGBitmapInfo)kCGImageAlphaNone);
+    CIContext *context = [CIContext contextWithOptions:nil];
+    CGImageRef imageRef = [context createCGImage:image fromRect:extent];
+    CGContextSetInterpolationQuality(contextRef, kCGInterpolationNone);
+    CGContextScaleCTM(contextRef, scale, scale);
+    CGContextDrawImage(contextRef, extent, imageRef);
+
+    CGImageRef imageRefResized = CGBitmapContextCreateImage(contextRef);
+
+    //Release
+    CGContextRelease(contextRef);
+    CGImageRelease(imageRef);
+    return [UIImage imageWithCGImage:imageRefResized];
+}
+
++ (UIImage *)tt_QRCodeImageWithLink:(NSString *)link size:(CGSize)size {
+    CIImage *image = [self tt_QRCodeCIImageWithLink:link];
+    return [self tt_resizeQRCodeImage:image withSize:size];
+}
+
++ (UIImage *)tt_QRCodeImageWithLink:(NSString *)link width:(CGFloat)width {
+    return [self tt_QRCodeImageWithLink:link size:CGSizeMake(width, width)];
+}
+
++ (UIImage *)tt_QRCodeImageWithLink:(NSString *)link width:(CGFloat)width watermark:(UIImage *)watermark {
+    UIImage *QRCodeImage = [self tt_QRCodeImageWithLink:link width:width];
+    CGFloat iconWidth = watermark.size.width;
+    CGFloat iconHeight = watermark.size.height;
+    CGRect rect = CGRectMake((QRCodeImage.size.width - iconWidth) / 2,
+                             (QRCodeImage.size.height - iconHeight) / 2,
+                             iconWidth,
+                             iconHeight);
+    return [[self tt_QRCodeImageWithLink:link width:width] tt_addWatermark:watermark inRect:rect];
+}
+
+- (UIImage *)tt_addWatermark:(UIImage *)watermark inRect:(CGRect)rect {
+    UIGraphicsBeginImageContextWithOptions(self.size, NO, [UIScreen mainScreen].scale);
+    [self drawInRect:CGRectMake(0.f, 0.f, self.size.width, self.size.height)];
+    [watermark drawInRect:rect];
+    UIImage *outputImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return outputImage;
+}
+
 - (NSData *)tt_compressedDataWithTargetSize:(CGSize)targetSize dataLength:(NSUInteger)dataLength {
     UIImage *image = self;
     if (!CGSizeEqualToSize(targetSize, CGSizeZero)) {

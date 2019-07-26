@@ -8,12 +8,7 @@
 
 #import "NSObject+TTSingleton.h"
 
-#define TTSingletonLock(...) do { \
-dispatch_semaphore_wait(_TTSingletonSemophore, DISPATCH_TIME_FOREVER); \
-__VA_ARGS__; \
-dispatch_semaphore_signal(_TTSingletonSemophore); \
-} while(0);
-static dispatch_semaphore_t _TTSingletonSemophore;
+static NSLock *_TTSingletonLock;
 
 @implementation NSObject (TTSingleton)
 
@@ -22,24 +17,25 @@ static dispatch_semaphore_t _TTSingletonSemophore;
 }
 
 + (instancetype)sharedInstance {
+    NSMutableDictionary *_globleInstanceMap = [self _globleInstanceMap];
     NSString *className = NSStringFromClass(self);
+    [_TTSingletonLock lock];
     id instance = [[self _globleInstanceMap] objectForKey:className];
     if (instance) {
+        [_TTSingletonLock unlock];
         return instance;
     }
-    instance = [self getInstance];
-    if (instance) {
-        TTSingletonLock([[self _globleInstanceMap] setValue:instance forKey:className];);
-        return instance;
-    }
-    instance = [[self alloc] init];
-    TTSingletonLock([[self _globleInstanceMap] setValue:instance forKey:className];)
+    instance = [self getInstance] ?: [[self alloc] init];
+    [[self _globleInstanceMap] setValue:instance forKey:className];
+    [_TTSingletonLock unlock];
     return instance;
 }
 
 + (void)destorySharedInstance {
     NSString *className = NSStringFromClass(self);
-    TTSingletonLock([[self _globleInstanceMap] removeObjectForKey:className];)
+    [_TTSingletonLock lock];
+    [[self _globleInstanceMap] removeObjectForKey:className];
+    [_TTSingletonLock unlock];
 }
 
 + (NSMutableDictionary *)_globleInstanceMap {
@@ -47,7 +43,7 @@ static dispatch_semaphore_t _TTSingletonSemophore;
     static dispatch_once_t token;
     dispatch_once(&token, ^{
         _globleInstanceMap = [NSMutableDictionary dictionary];
-        _TTSingletonSemophore = dispatch_semaphore_create(1);
+        _TTSingletonLock = [[NSLock alloc] init];
     });
     return _globleInstanceMap;
 }

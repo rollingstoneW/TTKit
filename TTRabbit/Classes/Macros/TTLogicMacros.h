@@ -9,6 +9,13 @@
 #define TTLogicMacros_h
 
 #import <objc/runtime.h>
+#import "NSDate+TTUtil.h"
+
+#if DEBUG
+#define TTLog(format, ...) printf("\n%s %s(%d) %s\n", [[NSDate tt_nowStringFromTimestampWithMsFormat] UTF8String], __FUNCTION__, __LINE__, [[NSString stringWithFormat:format, ## __VA_ARGS__] UTF8String]);
+#else
+#define TTLog(format, ...) {}
+#endif
 
 #define TTReplaceNaN(x)                     (x = isnan(x) ? 0 : x)
 #define TTReplaceNaNWithNumber(x,aNumber)   (x = isnan(x) ? aNumber : x)

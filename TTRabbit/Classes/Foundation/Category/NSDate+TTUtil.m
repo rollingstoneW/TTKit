@@ -8,8 +8,57 @@
 
 #import "NSDate+TTUtil.h"
 #import <objc/runtime.h>
+#import "NSDateFormatter+TTUtil.h"
 
 @implementation NSDate (TTUtil)
+
++ (NSString *)tt_nowStringFromDateFormat {
+    return [[NSDateFormatter tt_dateFormatter] stringFromDate:[NSDate date]];
+}
+
++ (NSString *)tt_nowStringFromDateFormatChinese {
+    return [[NSDateFormatter tt_dateFormatterChinese] stringFromDate:[NSDate date]];
+}
+
++ (NSString *)tt_nowStringFromShortDateFormat {
+    return [[NSDateFormatter tt_shortDateFormatter] stringFromDate:[NSDate date]];
+}
+
++ (NSString *)tt_nowStringFromShortDateFormatChinese {
+    return [[NSDateFormatter tt_shortDateFormatterChinese] stringFromDate:[NSDate date]];
+}
+
++ (NSString *)tt_nowStringFromDateWithOutDashFormat{
+    return [[NSDateFormatter tt_dateWithOutDashFormatter] stringFromDate:[NSDate date]];
+}
+
++ (NSString *)tt_nowStringFromYearMonthFormat {
+    return [[NSDateFormatter tt_yearMonthFormatter] stringFromDate:[NSDate date]];
+}
+
++ (NSString *)tt_nowStringFromTimeFormat {
+    return [[NSDateFormatter tt_timeFormatter] stringFromDate:[NSDate date]];
+}
+
++ (NSString *)tt_nowStringFromHourMinuteFormat {
+    return [[NSDateFormatter tt_hourMinuteFormatter] stringFromDate:[NSDate date]];
+}
+
++ (NSString *)tt_nowStringFromTimestampFormat {
+    return [[NSDateFormatter tt_timestampFormatter] stringFromDate:[NSDate date]];
+}
+
++ (NSString *)tt_nowStringFromTimestampWithMsFormat {
+    return [[NSDateFormatter tt_timestampWithMsFormatter] stringFromDate:[NSDate date]];
+}
+
++ (NSString *)tt_nowStringFromTimestampWithoutSecondFormat {
+    return [[NSDateFormatter tt_timestampWithoutSecondFormatter] stringFromDate:[NSDate date]];
+}
+
++ (nullable NSString *)tt_nowStringFromFormat:(NSString *)format {
+    return [[NSDateFormatter tt_formatterWithFormatAtomicly:format] stringFromDate:[NSDate date]];
+}
 
 - (nullable NSDate *)tt_firstDayOfMonth {
     NSDateComponents *components = [[NSCalendar currentCalendar] components:NSCalendarUnitYear|NSCalendarUnitMonth|NSCalendarUnitDay|NSCalendarUnitHour fromDate:self];
@@ -71,6 +120,14 @@
         objc_setAssociatedObject(self, _cmd, components, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     }
     return components;
+}
+
++ (NSTimeInterval)tt_timeIntervalSince1970InCurrentZone {
+    return [[NSDate date] timeIntervalSince1970] + [[NSTimeZone systemTimeZone] secondsFromGMT];
+}
+
++ (NSTimeInterval)tt_timeIntervalSince1970InShanghaiZone {
+    return [[NSDate date] timeIntervalSince1970] + 8 * 60 * 60;
 }
 
 @end

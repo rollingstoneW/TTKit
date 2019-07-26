@@ -8,6 +8,10 @@
 
 #import "NSObject+TTUtil.h"
 #import <objc/runtime.h>
+#import "NSInvocation+TTUtil.h"
+
+static const void * TTKVOObserverAssociationKey = &TTKVOObserverAssociationKey;
+static const void * TTDeallocObserverAssociationKey = &TTDeallocObserverAssociationKey;
 
 @interface _TTWeakReference : NSObject
 @property (nonatomic, weak) id weakValue;
@@ -15,7 +19,42 @@
 @implementation _TTWeakReference
 @end
 
-static const void * TTKVOObserverAssociationKey = &TTKVOObserverAssociationKey;
+@interface _TTDeallocObserver : NSObject
+@property (nonatomic, assign) id object;
+@property (nonatomic, strong) void(^block)(id);
+@property (nonatomic, strong) NSMutableSet *blocks;
+@end
+@implementation _TTDeallocObserver
++ (void)observeDeallocOfObject:(id)object block:(void(^)(id))block {
+    if (!object || !block) { return; }
+    _TTDeallocObserver *observer = objc_getAssociatedObject(object, TTDeallocObserverAssociationKey);
+    if (!observer) {
+        observer = [[_TTDeallocObserver alloc] init];
+        observer.object = object;
+        objc_setAssociatedObject(object, TTDeallocObserverAssociationKey, observer, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    }
+    if (observer.blocks) {
+        [observer.blocks addObject:block];
+    } else {
+        if (observer.block) {
+            observer.blocks = [NSMutableSet set];
+            [observer.blocks addObject:observer.block];
+            [observer.blocks addObject:block];
+            observer.block = nil;
+        } else {
+            observer.block = block;
+        }
+    }
+}
+- (void)dealloc {
+    [self.blocks enumerateObjectsUsingBlock:^(void(^block)(id), BOOL * _Nonnull stop) {
+        block(self.object);
+    }];
+    !_block ?: _block(self.object);
+    self.blocks = nil;
+    self.block = nil;
+}
+@end
 
 @interface _TTKVOObserver : NSObject
 
@@ -110,8 +149,80 @@ static const void * TTKVOObserverAssociationKey = &TTKVOObserverAssociationKey;
     [_TTKVOObserver stopObserveObject:object forKeyPath:keyPath];
 }
 
+- (id)tt_performSelectorWithArgs:(SEL)sel, ...{
+    va_list args;
+    va_start(args, sel);
+    NSInvocation *invocation = [NSInvocation tt_invocationWithTarget:self selector:sel args:args];
+    [invocation invoke];
+    id ret = [invocation tt_returnValue];
+    va_end(args);
+    return ret;
+}
+
+- (void)tt_invokeInvocation:(NSInvocation *)invocation {
+    [invocation invoke];
+}
+
+- (id)tt_performSelectorWithArgs:(SEL)sel afterDelay:(NSTimeInterval)delay, ... {
+    va_list args;
+    va_start(args, sel);
+    NSInvocation *invocation = [NSInvocation tt_invocationWithTarget:self selector:sel args:args];
+    va_end(args);
+    if (!invocation) { return nil; }
+    [invocation retainArguments];
+    [self performSelector:@selector(tt_invokeInvocation:) withObject:invocation afterDelay:delay];
+    return invocation;
+}
+
+- (void)tt_cancelPreviousPerformRequestWithObject:(id)object {
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(tt_invokeInvocation:) object:object];
+}
+
+- (id)tt_performSelectorWithArgsOnMainThread:(SEL)sel waitUntilDone:(BOOL)wait, ...{
+    va_list args;
+    va_start(args, sel);
+    NSInvocation *invocation = [NSInvocation tt_invocationWithTarget:self selector:sel args:args];
+    if (!wait) [invocation retainArguments];
+    [invocation performSelectorOnMainThread:@selector(invoke) withObject:nil waitUntilDone:wait];
+    return wait ? [invocation tt_returnValue] : nil;
+}
+
+- (id)tt_performSelectorWithArgs:(SEL)sel onThread:(NSThread *)thr waitUntilDone:(BOOL)wait, ...{
+    va_list args;
+    va_start(args, sel);
+    NSInvocation *invocation = [NSInvocation tt_invocationWithTarget:self selector:sel args:args];
+    if (!wait) [invocation retainArguments];
+    [invocation performSelector:@selector(invoke) onThread:thr withObject:nil waitUntilDone:wait];
+    return wait ? [invocation tt_returnValue] : nil;
+}
+
+- (void)tt_performSelectorWithArgsInBackground:(SEL)sel, ...{
+    va_list args;
+    va_start(args, sel);
+    NSInvocation *invocation = [NSInvocation tt_invocationWithTarget:self selector:sel args:args];
+    [invocation performSelectorInBackground:@selector(invoke) withObject:nil];
+}
+
+- (void)tt_scheduleDeallocedBlock:(void (^)(id _Nonnull))block {
+    [_TTDeallocObserver observeDeallocOfObject:self block:block];
+}
+
 - (NSString *)tt_debugAddress {
     return [NSString stringWithFormat:@"%p", self];
+}
+
+- (NSString *)tt_classHierarchy {
+    NSMutableString *hierachy = [NSMutableString string];
+    Class class = self.class;
+    while (class) {
+        if (hierachy.length) {
+            [hierachy appendFormat:@" < %@", NSStringFromClass(class)];
+        } else {
+            [hierachy appendFormat:@"%@", NSStringFromClass(class)];
+        }
+        class = [class superclass];
+    }
+    return hierachy.copy;
 }
 
 @end

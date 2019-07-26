@@ -46,10 +46,33 @@ typedef void(^TTObserveChangedBlock)(id newData, id oldData, void * _Nullable co
  */
 - (void)tt_stopObserveObject:(id)object forKeyPath:(NSString *)keyPath;
 
+
+- (id)tt_performSelectorWithArgs:(SEL)sel, ...;
+
+- (id)tt_performSelectorWithArgs:(SEL)sel afterDelay:(NSTimeInterval)delay, ...;
+
+- (id)tt_performSelectorWithArgsOnMainThread:(SEL)sel waitUntilDone:(BOOL)wait, ...;
+
+- (id)tt_performSelectorWithArgs:(SEL)sel onThread:(NSThread *)thr waitUntilDone:(BOOL)wait, ...;
+
+- (void)tt_performSelectorWithArgsInBackground:(SEL)sel, ...;
+
+- (void)tt_cancelPreviousPerformRequestWithObject:(id)object;
+
+/**
+ 注册监听dealloc方法的block，对于同一个对象可以注册多个block
+ */
+- (void)tt_scheduleDeallocedBlock:(void(^)(id object))block;
+
 /**
  内存地址
  */
 - (NSString *)tt_debugAddress;
+
+/**
+ 类的继承链
+ */
+- (NSString *)tt_classHierarchy;
 
 @end
 
