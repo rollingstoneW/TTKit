@@ -7,10 +7,15 @@
 //
 
 #import "TTViewController.h"
-//#import "TTNetworkTask.h"
 #import "TTUIKitFactory.h"
 #import "UIView+TTUtil.h"
 #import "TTPulldownDismissHeader.h"
+
+#if __has_include("TTNetworkCancellable.h")
+#import "TTNetworkCancellable.h"
+#endif
+
+NSString *const TTViewControllerDidDismissNotification = @"TTViewControllerDidDismissNotification";
 
 @interface TTViewController () <UIGestureRecognizerDelegate>
 
@@ -33,8 +38,8 @@
 }
 
 - (void)commonInit {
+    self.shouldCancelNetworkTasksWhenDismissed = YES;
     self.modalPresentationStyle = UIModalPresentationFullScreen;
-    self.autoCancelNetworkTasksBeforeDealloc = YES;
 }
 
 - (void)viewDidLoad {
@@ -77,8 +82,10 @@
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
     
-    if (!self.parentViewController && [self autoCancelNetworkTasksBeforeDealloc]) {
-//        [self cancelNetworkTasks];
+    if (!self.parentViewController && self.shouldCancelNetworkTasksWhenDismissed) {
+#if __has_include("TTNetworkCancellable.h")
+        [self tt_cancelNetworkTasks];
+#endif
     }
 }
 
@@ -148,11 +155,11 @@
 - (void)statusBarOrientationDidChange:(UIInterfaceOrientation)orientation {}
 
 - (void)setupDefaultLeftCloseBarItem {
-    [self addLeftBarItemWithTitle:@"取消" image:nil selector:@selector(goback)];
+    [self tt_addLeftBarItemWithTitle:@"取消" image:nil selector:@selector(goback)];
 }
 
 - (void)setupDefaultRightCloseBarItem {
-    [self addRightBarItemWithTitle:@"取消" image:nil selector:@selector(goback)];
+    [self tt_addRightBarItemWithTitle:@"取消" image:nil selector:@selector(goback)];
 }
 
 - (UIView *)addPulldownToGobackHeaderInScrollView:(UIScrollView *)scrollView {

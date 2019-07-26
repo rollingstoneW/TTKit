@@ -10,6 +10,9 @@
 #import "TTViewControllerRouter.h"
 #import "UIViewController+TTUtil.h"
 
+// 页面已经消失的通知
+UIKIT_EXTERN NSString *const TTViewControllerDidDismissNotification;
+
 @interface TTViewController : UIViewController
 
 @property (nonatomic, assign) BOOL hasAppeared; // 是否已经展示过
@@ -17,7 +20,7 @@
 @property (nonatomic, assign) BOOL disablesSwipeBackGesture; // 禁用滑动返回
 @property (nonatomic, assign) BOOL needsLogin; // 是否需要登录(未实现)
 @property (nonatomic, assign) BOOL hidesBackButton; // 是否隐藏返回按钮
-@property (nonatomic, assign) BOOL autoCancelNetworkTasksBeforeDealloc; // 释放前是否自动取消网络请求, YES
+@property (nonatomic, assign) BOOL shouldCancelNetworkTasksWhenDismissed; // 消失后是否自动取消网络请求, YES
 
 @property (nonatomic, assign) BOOL tt_prefersStatusBarHidden; // 状态栏隐藏
 @property (nonatomic, assign) UIStatusBarStyle tt_prefersStatusBarStyle; // 状态栏样式

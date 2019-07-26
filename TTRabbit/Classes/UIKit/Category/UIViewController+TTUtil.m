@@ -14,43 +14,43 @@
 
 @implementation UIViewController (TTUtil)
 
-- (void)setAttributedTitle:(NSAttributedString *)attributedTitle {
-    self.navigationItem.titleView = [UILabel labelWithAttributedText:attributedTitle];
+- (void)setTt_attributedTitle:(NSAttributedString *)tt_attributedTitle {
+    self.navigationItem.titleView = [UILabel labelWithAttributedText:tt_attributedTitle];
 }
 
-- (NSAttributedString *)attributedTitle {
+- (NSAttributedString *)tt_attributedTitle {
     if ([self.navigationItem.titleView isKindOfClass:[UILabel class]]) {
         return ((UILabel *)self.navigationItem.titleView).attributedText;
     }
     return nil;
 }
 
-+ (UIViewController *)currentViewController {
-    UIViewController* viewController = [UIApplication sharedApplication].keyWindow.rootViewController;
-    return [UIViewController findBestViewController:viewController];
++ (UIViewController *)tt_currentViewController {
+    UIViewController *viewController = [UIApplication sharedApplication].keyWindow.rootViewController;
+    return [UIViewController tt_findBestViewController:viewController];
 }
 
-+ (UIViewController*)findBestViewController:(UIViewController*)vc {
++ (UIViewController *)tt_findBestViewController:(UIViewController*)vc {
     if (vc.presentedViewController) {
-        return [UIViewController findBestViewController:vc.presentedViewController];
+        return [self tt_findBestViewController:vc.presentedViewController];
     } else if ([vc isKindOfClass:[UISplitViewController class]]) {
         UISplitViewController* svc = (UISplitViewController*)vc;
         if (svc.viewControllers.count > 0) {
-            return [UIViewController findBestViewController:svc.viewControllers.lastObject];
+            return [self tt_findBestViewController:svc.viewControllers.lastObject];
         } else {
             return vc;
         }
     } else if ([vc isKindOfClass:[UINavigationController class]]) {
         UINavigationController* nvc = (UINavigationController*)vc;
         if (nvc.viewControllers.count > 0) {
-            return [UIViewController findBestViewController:nvc.topViewController];
+            return [self tt_findBestViewController:nvc.topViewController];
         } else {
             return vc;
         }
     } else if ([vc isKindOfClass:[UITabBarController class]]) {
         UITabBarController* tvc = (UITabBarController*)vc;
         if (tvc.viewControllers.count > 0) {
-            return [UIViewController findBestViewController:tvc.selectedViewController];
+            return [self tt_findBestViewController:tvc.selectedViewController];
         } else {
             return vc;
         }
@@ -59,7 +59,7 @@
     }
 }
 
-- (void)goback {
+- (void)tt_goback {
     if (self.navigationController.viewControllers.count > 1 && self == self.navigationController.topViewController) {
         [self.navigationController popViewControllerAnimated:YES];
     } else if (self.presentingViewController) {
@@ -67,30 +67,30 @@
     }
 }
 
-- (void)gobackToRoot {
-    UINavigationController *rootNavi = [self rootNavigationViewController];
+- (void)tt_gobackToRoot {
+    UINavigationController *rootNavi = [self tt_rootNavigationViewController];
     if (rootNavi.presentedViewController) {
         [rootNavi dismissViewControllerAnimated:NO completion:nil];
     }
     [rootNavi popToRootViewControllerAnimated:YES];
 }
 
-- (BOOL)isMovingToViewHierarchy {
+- (BOOL)tt_isMovingToViewHierarchy {
     return self.movingToParentViewController || self.beingPresented;
 }
 
-- (BOOL)isMovingFromViewHierarchy {
+- (BOOL)tt_isMovingFromViewHierarchy {
     return self.movingFromParentViewController || self.beingDismissed || self.navigationController.beingDismissed;
 }
 
-- (void)addSwipeDownGestureToDismiss {
+- (void)tt_addSwipeDownGestureToDismiss {
     UISwipeGestureRecognizer *gesture = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(goback)];
     gesture.direction = UISwipeGestureRecognizerDirectionDown;
     self.view.userInteractionEnabled = YES;
     [self.view addGestureRecognizer:gesture];
 }
 
-- (void)disablesScrollViewScrollWhileSwipeBack:(UIScrollView *)scrollView {
+- (void)tt_disablesScrollViewScrollWhileSwipeBack:(UIScrollView *)scrollView {
     NSArray *gestureArray = self.navigationController.view.gestureRecognizers;
     //当是侧滑手势的时候设置scrollview需要此手势失效才生效即可
     for (UIGestureRecognizer *gesture in gestureArray) {
@@ -100,7 +100,7 @@
     }
 }
 
-- (void)disablesScrollViewAutoAdjustContentInset:(UIScrollView *)scrollView {
+- (void)tt_disablesScrollViewAutoAdjustContentInset:(UIScrollView *)scrollView {
     if (iOS11Later) {
         scrollView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
     } else {
@@ -108,7 +108,7 @@
     }
 }
 
-- (UINavigationController *)rootNavigationViewController {
+- (UINavigationController *)tt_rootNavigationViewController {
     UIWindow *window = [[UIApplication sharedApplication].delegate window];
     if ([window.rootViewController isKindOfClass:[UINavigationController class]]) {
         return (UINavigationController *)window.rootViewController;
@@ -121,9 +121,9 @@
     return nil;
 }
 
-- (void)addLeftBarItemWithTitle:(NSString *)title image:(UIImage *)image selector:(SEL)selecor {
+- (void)tt_addLeftBarItemWithTitle:(NSString *)title image:(UIImage *)image selector:(SEL)selecor {
     if ((!title.length && !image) || ![self respondsToSelector:selecor]) { return; }
-
+    
     UIBarButtonItem *item;
     if (title.length) {
         item = [[UIBarButtonItem alloc] initWithTitle:title style:UIBarButtonItemStyleDone target:self action:selecor];
@@ -138,9 +138,9 @@
     self.navigationItem.leftBarButtonItems = items;
 }
 
-- (void)addRightBarItemWithTitle:(NSString *)title image:(UIImage *)image selector:(SEL)selecor {
+- (void)tt_addRightBarItemWithTitle:(NSString *)title image:(UIImage *)image selector:(SEL)selecor {
     if ((!title.length && !image) || ![self respondsToSelector:selecor]) { return; }
-
+    
     UIBarButtonItem *item;
     if (title.length) {
         item = [[UIBarButtonItem alloc] initWithTitle:title style:UIBarButtonItemStyleDone target:self action:selecor];
@@ -155,7 +155,7 @@
     self.navigationItem.rightBarButtonItems = items;
 }
 
-- (UIAlertController *)showOKAlertWithTitle:(NSString *)title message:(NSString *)message handler:(dispatch_block_t)handler {
+- (UIAlertController *)tt_showOKAlertWithTitle:(NSString *)title message:(NSString *)message handler:(dispatch_block_t)handler {
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
     [alert addAction:[UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         kSafeBlock(handler);
@@ -164,15 +164,15 @@
     return alert;
 }
 
-- (UIAlertController *)showCancelableAlertWithTitle:(NSString *)title message:(NSString *)message handler:(TTAlertHandler)handler {
-    return [self showCancelableAlertWithTitle:title message:message cancelTitle:@"取消" OKTitle:@"确定" handler:handler];
+- (UIAlertController *)tt_showCancelableAlertWithTitle:(NSString *)title message:(NSString *)message handler:(TTAlertHandler)handler {
+    return [self tt_showCancelableAlertWithTitle:title message:message cancelTitle:@"取消" OKTitle:@"确定" handler:handler];
 }
 
-- (UIAlertController *)showCancelableAlertWithTitle:(NSString *)title
-                                                      message:(NSString *)message
-                                                  cancelTitle:(NSString *)cancel
-                                                      OKTitle:(NSString *)OKTitle
-                                                      handler:(TTAlertHandler)handler {
+- (UIAlertController *)tt_showCancelableAlertWithTitle:(NSString *)title
+                                               message:(NSString *)message
+                                           cancelTitle:(NSString *)cancel
+                                               OKTitle:(NSString *)OKTitle
+                                               handler:(TTAlertHandler)handler {
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
     [alert addAction:[UIAlertAction actionWithTitle:cancel style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         kSafeBlock(handler, 0);
@@ -184,10 +184,10 @@
     return alert;
 }
 
-- (UIAlertController *)showActionSheetWithTitle:(NSString *)title
-                                        message:(NSString *)message
-                                        actions:(NSArray *)actions
-                                        handler:(TTAlertHandler)handler {
+- (UIAlertController *)tt_showActionSheetWithTitle:(NSString *)title
+                                           message:(NSString *)message
+                                           actions:(NSArray *)actions
+                                           handler:(TTAlertHandler)handler {
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleActionSheet];
     for (NSInteger i = 0; i < actions.count; i++) {
         [alert addAction:[UIAlertAction actionWithTitle:actions[i] style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
@@ -201,39 +201,39 @@
     return alert;
 }
 
-- (__kindof UIView *)showLoadingToast:(NSString *)toast {
-    return [self.view showLoadingToast:toast];
+- (__kindof UIView *)tt_showLoadingToast:(NSString *)toast {
+    return [self.view tt_showLoadingToast:toast];
 }
-- (__kindof UIView *)showLoadingToast:(NSString *)toast hideAfterDelay:(NSTimeInterval)delay {
-    return [self.view showLoadingToast:toast hideAfterDelay:delay];
+- (__kindof UIView *)tt_showLoadingToast:(NSString *)toast hideAfterDelay:(NSTimeInterval)delay {
+    return [self.view tt_showLoadingToast:toast hideAfterDelay:delay];
 }
-- (void)hideToasts {
-    [self.view hideToasts];
+- (void)tt_hideToasts {
+    [self.view tt_hideToasts];
 }
 
-- (__kindof UIView *)showErrorToast:(NSString *)toast {
-    return [self.view showErrorToast:toast];
+- (__kindof UIView *)tt_showErrorToast:(NSString *)toast {
+    return [self.view tt_showErrorToast:toast];
 }
-- (__kindof UIView *)showErrorToast:(NSString *)toast hideAfterDelay:(NSTimeInterval)delay {
-    return [self.view showErrorToast:toast hideAfterDelay:delay];
+- (__kindof UIView *)tt_showErrorToast:(NSString *)toast hideAfterDelay:(NSTimeInterval)delay {
+    return [self.view tt_showErrorToast:toast hideAfterDelay:delay];
 }
-- (__kindof UIView *)showSuccessToast:(NSString *)toast {
-    return [self.view showSuccessToast:toast];
+- (__kindof UIView *)tt_showSuccessToast:(NSString *)toast {
+    return [self.view tt_showSuccessToast:toast];
 }
-- (__kindof UIView *)showSuccessToast:(NSString *)toast hideAfterDelay:(NSTimeInterval)delay {
-    return [self.view showSuccessToast:toast hideAfterDelay:delay];
+- (__kindof UIView *)tt_showSuccessToast:(NSString *)toast hideAfterDelay:(NSTimeInterval)delay {
+    return [self.view tt_showSuccessToast:toast hideAfterDelay:delay];
 }
-- (__kindof UIView *)showWarningToast:(NSString *)toast {
-    return [self.view showWarningToast:toast];
+- (__kindof UIView *)tt_showWarningToast:(NSString *)toast {
+    return [self.view tt_showWarningToast:toast];
 }
-- (__kindof UIView *)showWarningToast:(NSString *)toast hideAfterDelay:(NSTimeInterval)delay {
-    return [self.view showWarningToast:toast hideAfterDelay:delay];
+- (__kindof UIView *)tt_showWarningToast:(NSString *)toast hideAfterDelay:(NSTimeInterval)delay {
+    return [self.view tt_showWarningToast:toast hideAfterDelay:delay];
 }
-- (__kindof UIView *)showTextToast:(NSString *)toast {
-    return [self.view showTextToast:toast];
+- (__kindof UIView *)tt_showTextToast:(NSString *)toast {
+    return [self.view tt_showTextToast:toast];
 }
-- (__kindof UIView *)showTextToast:(NSString *)toast hideAfterDelay:(NSTimeInterval)delay {
-    return [self.view showTextToast:toast hideAfterDelay:delay];
+- (__kindof UIView *)tt_showTextToast:(NSString *)toast hideAfterDelay:(NSTimeInterval)delay {
+    return [self.view tt_showTextToast:toast hideAfterDelay:delay];
 }
 
 - (__kindof UIView *)tt_showEmptyTipViewWithTapedBlock:(dispatch_block_t)block {

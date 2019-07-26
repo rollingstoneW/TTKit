@@ -8,6 +8,7 @@
 
 #import "NSBundle+TTUtil.h"
 #import "TTMacros.h"
+#import "NSString+TTUtil.h"
 
 @implementation NSBundle (TTUtil)
 
@@ -106,7 +107,12 @@ static NSString *const _HasInstalledKey = @"_HasInstalledKey";
     NSString *resource = [name stringByDeletingPathExtension];
     NSString *type = name.pathExtension.length ? name.pathExtension : @"bundle";
     NSString *path = [[NSBundle mainBundle] pathForResource:resource ofType:type];
-    if (!path) { return nil; }
+    if (!path) {
+        // look for Frameworks
+        NSString *frameworkName = [[name tt_stringByDeletingSuffix:@"Bundle"] stringByAppendingPathExtension:@"framework"];
+        path = [[NSBundle mainBundle].resourcePath stringByAppendingFormat:@"/Frameworks/%@", frameworkName];
+        path = [path stringByAppendingFormat:@"/%@.bundle", name];
+    }
     return [NSBundle bundleWithPath:path];
 }
 
