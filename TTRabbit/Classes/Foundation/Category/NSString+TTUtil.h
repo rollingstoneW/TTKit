@@ -47,6 +47,11 @@
  */
 - (NSString *)tt_stringByTrimmingWhitespaceThroughout;
 
+/**
+ 首字母大写
+ */
+- (NSString *)tt_stringByCapitalizingFirstChar;
+
 #pragma mark - Truncating
 
 /**

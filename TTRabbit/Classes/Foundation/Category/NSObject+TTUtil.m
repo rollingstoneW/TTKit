@@ -8,7 +8,9 @@
 
 #import "NSObject+TTUtil.h"
 #import <objc/runtime.h>
+#import <objc/message.h>
 #import "NSInvocation+TTUtil.h"
+#import "NSString+TTUtil.h"
 
 static const void * TTKVOObserverAssociationKey = &TTKVOObserverAssociationKey;
 static const void * TTDeallocObserverAssociationKey = &TTDeallocObserverAssociationKey;
@@ -207,11 +209,38 @@ static const void * TTDeallocObserverAssociationKey = &TTDeallocObserverAssociat
     [_TTDeallocObserver observeDeallocOfObject:self block:block];
 }
 
++ (void)autoreleaseAssignedPropertyPointer:(NSString *)propertyName {
+    if (!propertyName.length) { return; }
+    
+    NSString *setterString = [NSString stringWithFormat:@"set%@:", [propertyName tt_stringByCapitalizingFirstChar]];
+    SEL getter = NSSelectorFromString(propertyName);
+    SEL setter = NSSelectorFromString(setterString);
+    if (![self instancesRespondToSelector:getter] || ![self instancesRespondToSelector:setter]) { return; }
+    
+    Method originalMethod = class_getInstanceMethod(self, setter);
+    void(*originalIMP)(__unsafe_unretained id, SEL, id) = (void(*)(__unsafe_unretained id, SEL, id))method_getImplementation(originalMethod);
+    if (!originalMethod || !originalIMP) { return; }
+    
+    id newSetterIMP = ^(__unsafe_unretained id slf, id newValue) {
+        originalIMP(slf, setter, newValue);
+        if (!newValue) { return; }
+
+        __weak id weakSlf = slf;
+        [newValue tt_scheduleDeallocedBlock:^(id value) {
+            // 如果此处objc_msgSend报错，请将PROJECT里Build Settings里的Enable Strict Checking of objc_msgSend Calls设为NO.
+            if (weakSlf && value == ((id(*)(id, SEL))objc_msgSend)(weakSlf, getter)) {
+                ((void(*)(id, SEL, id))objc_msgSend)(weakSlf, setter, nil);
+            }
+        }];
+    };
+    class_replaceMethod(self, setter, imp_implementationWithBlock(newSetterIMP), method_getTypeEncoding(originalMethod));
+}
+
 - (NSString *)tt_debugAddress {
     return [NSString stringWithFormat:@"%p", self];
 }
 
-- (NSString *)tt_classHierarchy {
+- (NSString *)tt_debugClassHierarchy {
     NSMutableString *hierachy = [NSMutableString string];
     Class class = self.class;
     while (class) {

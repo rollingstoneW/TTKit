@@ -65,6 +65,12 @@ typedef void(^TTObserveChangedBlock)(id newData, id oldData, void * _Nullable co
 - (void)tt_scheduleDeallocedBlock:(void(^)(id object))block;
 
 /**
+ 当某个assign修饰的对象释放时自动将此属性置为nil，避免出现野指针闪退
+ @param propertyName 属性名字
+ */
++ (void)autoreleaseAssignedPropertyPointer:(NSString *)propertyName;
+
+/**
  内存地址
  */
 - (NSString *)tt_debugAddress;
@@ -72,7 +78,7 @@ typedef void(^TTObserveChangedBlock)(id newData, id oldData, void * _Nullable co
 /**
  类的继承链
  */
-- (NSString *)tt_classHierarchy;
+- (NSString *)tt_debugClassHierarchy;
 
 @end
 

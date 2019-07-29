@@ -12,6 +12,7 @@
 #import "NSDictionary+SafeKit.h"
 #import "NSString+SafeKit.h"
 #import "NSNumber+SafeKit.h"
+#import "AVFoundationSafeKit.h"
 
 @implementation TTSafeKit
 
@@ -21,6 +22,7 @@
     [NSDictionary makeSafe];
     [NSString makeSafe];
     [NSNumber makeSafe];
+    [AVFoundationSafeKit makeSafe];
 }
 
 @end

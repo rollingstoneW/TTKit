@@ -149,6 +149,13 @@
     return  [previousString stringByAppendingString:lastLineString];
 }
 
+- (NSString *)tt_stringByCapitalizingFirstChar {
+    if (!self.length) { return self; }
+    NSMutableString *string = self.mutableCopy;
+    [string replaceCharactersInRange:NSMakeRange(0, 1) withString:[[self substringToIndex:1] capitalizedString]];
+    return string.copy;
+}
+
 - (NSString *)tt_urlStringByAppendingKey:(NSString *)key value:(NSString *)value {
     if (!key.length || !value.length) { return self; }
     return [self tt_urlStringByAppendingQueries:@{key : value}];
