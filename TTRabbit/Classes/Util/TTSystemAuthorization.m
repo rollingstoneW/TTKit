@@ -237,7 +237,7 @@ TTSingleton>
 + (void)openSystemSetting {
         if (@available(iOS 10.0, *)) {
             [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]
-                                               options:nil
+                                               options:@{}
                                      completionHandler:nil];
         } else {
             [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];

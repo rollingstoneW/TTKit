@@ -165,7 +165,7 @@ static const void * TTDeallocObserverAssociationKey = &TTDeallocObserverAssociat
 
 - (id)tt_performSelectorWithArgs:(SEL)sel afterDelay:(NSTimeInterval)delay, ... {
     va_list args;
-    va_start(args, sel);
+    va_start(args, delay);
     NSInvocation *invocation = [NSInvocation tt_invocationWithTarget:self selector:sel args:args];
     va_end(args);
     if (!invocation) { return nil; }
@@ -180,7 +180,7 @@ static const void * TTDeallocObserverAssociationKey = &TTDeallocObserverAssociat
 
 - (id)tt_performSelectorWithArgsOnMainThread:(SEL)sel waitUntilDone:(BOOL)wait, ...{
     va_list args;
-    va_start(args, sel);
+    va_start(args, wait);
     NSInvocation *invocation = [NSInvocation tt_invocationWithTarget:self selector:sel args:args];
     if (!wait) [invocation retainArguments];
     [invocation performSelectorOnMainThread:@selector(invoke) withObject:nil waitUntilDone:wait];
@@ -189,7 +189,7 @@ static const void * TTDeallocObserverAssociationKey = &TTDeallocObserverAssociat
 
 - (id)tt_performSelectorWithArgs:(SEL)sel onThread:(NSThread *)thr waitUntilDone:(BOOL)wait, ...{
     va_list args;
-    va_start(args, sel);
+    va_start(args, wait);
     NSInvocation *invocation = [NSInvocation tt_invocationWithTarget:self selector:sel args:args];
     if (!wait) [invocation retainArguments];
     [invocation performSelector:@selector(invoke) onThread:thr withObject:nil waitUntilDone:wait];

@@ -12,6 +12,7 @@ typedef id<UIViewControllerAnimatedTransitioning>(^NavAnimatedTransitionBlock)(U
 
 @interface TTNavigationController : UINavigationController <UINavigationControllerDelegate, UINavigationBarDelegate>
 
+@property (nonatomic, strong) UIImage *backIndicatorImage; // 导航栏返回按钮图片
 @property (nonatomic, copy) NavAnimatedTransitionBlock animatedTransitionBlock;
 
 @end

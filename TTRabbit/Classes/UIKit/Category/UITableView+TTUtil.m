@@ -20,11 +20,16 @@
 
 - (NSIndexPath *)tt_lastIndexPath {
     NSInteger numberOfSections = self.numberOfSections;
+    return [self tt_lastIndexPathInSection:numberOfSections - 1];
+}
+
+- (NSIndexPath *)tt_lastIndexPathInSection:(NSUInteger)section {
+    NSInteger numberOfSections = self.numberOfSections;
     if (!numberOfSections) { return nil; }
+    if (section < 0 || section >= numberOfSections) { return nil; }
     NSInteger numberOfRows = [self numberOfRowsInSection:numberOfSections - 1];
     if (!numberOfRows) { return nil; }
-
-    return [NSIndexPath indexPathForRow:numberOfRows - 1 inSection:numberOfSections - 1];
+    return [NSIndexPath indexPathForRow:numberOfRows - 1 inSection:section];
 }
 
 - (void)tt_scrollToLastRowAtBottomAnimated:(BOOL)animated {

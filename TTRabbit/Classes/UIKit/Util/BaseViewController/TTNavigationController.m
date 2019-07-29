@@ -27,8 +27,10 @@
     [super viewDidLoad];
 
     // 自定义返回图片(在返回按钮旁边) 这个效果由navigationBar控制
-    [self.navigationBar setBackIndicatorImage:[[UIImage imageNamed:@"back"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
-    [self.navigationBar setBackIndicatorTransitionMaskImage:[[UIImage imageNamed:@"back"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+    UIImage *backIndicatorImage = self.backIndicatorImage ?: [UIImage imageNamed:@"back"];
+    backIndicatorImage = [backIndicatorImage imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    [self.navigationBar setBackIndicatorImage:backIndicatorImage];
+    [self.navigationBar setBackIndicatorTransitionMaskImage:backIndicatorImage];
 
     self.delegate = self;
 }

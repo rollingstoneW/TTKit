@@ -84,7 +84,7 @@
 }
 
 - (void)tt_addSwipeDownGestureToDismiss {
-    UISwipeGestureRecognizer *gesture = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(goback)];
+    UISwipeGestureRecognizer *gesture = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(tt_goback)];
     gesture.direction = UISwipeGestureRecognizerDirectionDown;
     self.view.userInteractionEnabled = YES;
     [self.view addGestureRecognizer:gesture];

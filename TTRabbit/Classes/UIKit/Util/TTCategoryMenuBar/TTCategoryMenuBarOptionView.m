@@ -742,7 +742,7 @@ static NSString *const TTCategoryMenuBarCellID = @"cell";
                 [self deselectOptionAtRow:0 inTableView:tableView];
             }
             self.listOptions[self.firstTableView.indexPathForSelectedRow.row].isChildrenAllSelected = NO;
-            [self refreshCellAtRow:self.firstTableView.indexPathForSelectedRow inTableView:self.firstTableView];
+            [self refreshCellAtRow:self.firstTableView.indexPathForSelectedRow.row inTableView:self.firstTableView];
         }
         [self selectedOptionsDidChange];
     }

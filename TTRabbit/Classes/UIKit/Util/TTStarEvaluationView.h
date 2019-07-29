@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface TTStarEvaluationView : UIView
 
 @property (nonatomic, strong, nonnull) UIImage *starImage; // 星星图片，默认为21*21的星星图片
@@ -31,3 +33,5 @@
 @property (nonatomic, strong) void(^didEvaluationBlock)(CGFloat score); // 选中星星后的回调
 
 @end
+
+NS_ASSUME_NONNULL_END

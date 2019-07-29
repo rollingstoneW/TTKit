@@ -155,16 +155,16 @@ NSString *const TTViewControllerDidDismissNotification = @"TTViewControllerDidDi
 - (void)statusBarOrientationDidChange:(UIInterfaceOrientation)orientation {}
 
 - (void)setupDefaultLeftCloseBarItem {
-    [self tt_addLeftBarItemWithTitle:@"取消" image:nil selector:@selector(goback)];
+    [self tt_addLeftBarItemWithTitle:@"取消" image:nil selector:@selector(tt_goback)];
 }
 
 - (void)setupDefaultRightCloseBarItem {
-    [self tt_addRightBarItemWithTitle:@"取消" image:nil selector:@selector(goback)];
+    [self tt_addRightBarItemWithTitle:@"取消" image:nil selector:@selector(tt_goback)];
 }
 
 - (UIView *)addPulldownToGobackHeaderInScrollView:(UIScrollView *)scrollView {
     if (!scrollView) { return nil; }
-    TTPulldownDismissHeader *header = [TTPulldownDismissHeader headerInScrollView:scrollView target:self selector:@selector(goback)];
+    TTPulldownDismissHeader *header = [TTPulldownDismissHeader headerInScrollView:scrollView target:self selector:@selector(tt_goback)];
     return header;
 }
 
