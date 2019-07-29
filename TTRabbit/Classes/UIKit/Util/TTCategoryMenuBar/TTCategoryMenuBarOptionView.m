@@ -492,7 +492,7 @@ static NSString *const TTCategoryMenuBarCellID = @"cell";
             return constraint.constant;
         }
     }
-    return TTCategoryMenuBarDoneButtonHeight;
+    return bottomButton ? TTCategoryMenuBarDoneButtonHeight : 0;
 }
 
 @end
