@@ -25,9 +25,23 @@
 #define TTNumber2ZeroIfNotFound(x)          Number2NewIfNotFound(x, 0)
 
 typedef void(^TTCompletionBlock)(__kindof id data, NSError *error);
-#define TTSafeBlock(block, ...)            (!block ?: block(__VA_ARGS__))
+#define TTSafeBlock(block, ...)             (!block ?: block(__VA_ARGS__))
 
-#define TTSafePerformSelector(target, sel, ...) ([target respondsToSelector:sel] ? [target performSelectorWithArgs:sel, __VA_ARGS__] : nil)
+#define TTSafeBlockWithReturn(block, type, default, ...)             ({ \
+type ret = default; \
+if (block) { \
+ret = block(__VA_ARGS__); \
+} \
+ret; \
+})
+
+#define TTSafePerformSelector(target, sel, ...) ({ \
+id ret = nil; \
+if ([target respondsToSelector:sel]) { \
+ret = [target tt_performSelectorWithArgs:sel, __VA_ARGS__]; \
+} \
+ret; \
+})
 
 // 退出当前大括弧作用域会调用此回掉
 #define TTOnExit \

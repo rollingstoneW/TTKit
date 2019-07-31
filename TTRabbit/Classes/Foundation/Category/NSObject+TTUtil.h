@@ -46,17 +46,37 @@ typedef void(^TTObserveChangedBlock)(id newData, id oldData, void * _Nullable co
  */
 - (void)tt_stopObserveObject:(id)object forKeyPath:(NSString *)keyPath;
 
-
+/**
+ 发送消息，参数可以是任何类型。借鉴了YYCategory里的performSelectorWithArgs，修复了类方法返回实例过度释放的问题。
+ [view performSelectorWithArgs:@selector(setCenter:), CGPointMake(0, 0)];
+ */
 - (id)tt_performSelectorWithArgs:(SEL)sel, ...;
 
+/**
+ 延时发送消息。参数可以是任何类型。
+ 
+ @return 返回值是生成的一个任务，可以通过[self tt_cancelPreviousPerformRequestWithObject:ret]取消前一次的任务。
+ */
 - (id)tt_performSelectorWithArgs:(SEL)sel afterDelay:(NSTimeInterval)delay, ...;
 
+/**
+ 在主线程发送消息，参数可以是任何类型。wait，是否需要同步执行
+ */
 - (id)tt_performSelectorWithArgsOnMainThread:(SEL)sel waitUntilDone:(BOOL)wait, ...;
 
+/**
+ 在指定线程发送消息，参数可以是任何类型。wait，是否需要同步执行
+ */
 - (id)tt_performSelectorWithArgs:(SEL)sel onThread:(NSThread *)thr waitUntilDone:(BOOL)wait, ...;
 
+/**
+ 在后台线程发送消息
+ */
 - (void)tt_performSelectorWithArgsInBackground:(SEL)sel, ...;
 
+/**
+ 取消上一次tt_performSelectorWithArgs:afterDelay:的延时执行任务。
+ */
 - (void)tt_cancelPreviousPerformRequestWithObject:(id)object;
 
 /**

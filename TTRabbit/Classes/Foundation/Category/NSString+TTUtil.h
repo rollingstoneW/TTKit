@@ -11,6 +11,8 @@
 @interface NSString (TTUtil)
 
 @property (nonatomic, assign, readonly) NSRange tt_fullRange;
+@property (nonatomic, assign, readonly) NSRange tt_firstCharRange;
+@property (nonatomic, assign, readonly) NSRange tt_lastCharRange;
 
 /**
  带html标签的文本转富文本

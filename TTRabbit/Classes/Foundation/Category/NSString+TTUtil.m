@@ -16,6 +16,17 @@
     return NSMakeRange(0, self.length);
 }
 
+- (NSRange)tt_firstCharRange {
+    return NSMakeRange(0, self.length ? 1 : 0);
+}
+
+- (NSRange)tt_lastCharRange {
+    if (self.length) {
+        return NSMakeRange(self.length - 1, 1);
+    }
+    return NSMakeRange(0, 0);
+}
+
 - (void)tt_convertHtmlStringToNSAttributedString:(void (^)(NSAttributedString *))block {
     if (!block) { return; }
     if (self.length || [self isEqualToString:@"(null)"]) {
