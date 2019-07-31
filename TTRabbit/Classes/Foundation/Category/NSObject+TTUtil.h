@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef void(^TTObserveChangedBlock)(id newData, id oldData, void * _Nullable context);
+typedef void(^TTObserveChangedBlock)(NSString *keyPath, id newData, id oldData, void * _Nullable context);
 
 @interface NSObject (TTUtil)
 
@@ -88,7 +88,12 @@ typedef void(^TTObserveChangedBlock)(id newData, id oldData, void * _Nullable co
  当某个assign修饰的对象释放时自动将此属性置为nil，避免出现野指针闪退
  @param propertyName 属性名字
  */
-+ (void)autoreleaseAssignedPropertyPointer:(NSString *)propertyName;
++ (void)tt_autoreleaseAssignedPropertyPointer:(NSString *)propertyName;
+
+/**
+ 反转BOOL类型的属性
+ */
+- (void)tt_toggleForBOOLProperty:(NSString *)propertyName;
 
 /**
  内存地址

@@ -101,7 +101,7 @@ static const void * TTDeallocObserverAssociationKey = &TTDeallocObserverAssociat
     id oldData = change[NSKeyValueChangeOldKey];
     NSMutableSet *blocks = self.keyAndBlocksMap[keyPath];
     for (TTObserveChangedBlock changed in blocks) {
-        changed(newData, oldData, context);
+        changed(keyPath, newData, oldData, context);
     }
 }
 
@@ -209,7 +209,7 @@ static const void * TTDeallocObserverAssociationKey = &TTDeallocObserverAssociat
     [_TTDeallocObserver observeDeallocOfObject:self block:block];
 }
 
-+ (void)autoreleaseAssignedPropertyPointer:(NSString *)propertyName {
++ (void)tt_autoreleaseAssignedPropertyPointer:(NSString *)propertyName {
     if (!propertyName.length) { return; }
     
     NSString *setterString = [NSString stringWithFormat:@"set%@:", [propertyName tt_stringByCapitalizingFirstChar]];
@@ -234,6 +234,17 @@ static const void * TTDeallocObserverAssociationKey = &TTDeallocObserverAssociat
         }];
     };
     class_replaceMethod(self, setter, imp_implementationWithBlock(newSetterIMP), method_getTypeEncoding(originalMethod));
+}
+
+- (void)tt_toggleForBOOLProperty:(NSString *)propertyName {
+    if (!propertyName.length) { return; }
+        
+    NSString *setterString = [NSString stringWithFormat:@"set%@:", [propertyName tt_stringByCapitalizingFirstChar]];
+    SEL getter = NSSelectorFromString(propertyName);
+    SEL setter = NSSelectorFromString(setterString);
+    if (![self respondsToSelector:getter] || ![self respondsToSelector:setter]) { return; }
+    
+    ((void(*)(id, SEL, BOOL))objc_msgSend)(self, setter, !((BOOL(*)(id, SEL))objc_msgSend)(self, getter));
 }
 
 - (NSString *)tt_debugAddress {

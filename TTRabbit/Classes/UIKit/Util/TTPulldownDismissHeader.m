@@ -47,7 +47,7 @@
     [self addSubview:self.label];
 
     __weak __typeof(self) weakSelf = self;
-    [self tt_observeObject:self.scrollView forKeyPath:@"contentOffset" context:nil changed:^(id newData, id oldData, void * _Nullable context) {
+    [self tt_observeObject:self.scrollView forKeyPath:@"contentOffset" context:nil changed:^(NSString *keyPath, id newData, id oldData, void * context) {
         __strong __typeof(weakSelf) strongSelf = weakSelf;
         [strongSelf handleContentOffset:[newData CGPointValue]];
     }];

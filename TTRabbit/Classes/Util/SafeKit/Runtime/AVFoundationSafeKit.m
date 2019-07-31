@@ -12,8 +12,8 @@
 @synthesize description;
 
 + (void)makeSafe {
-    [[AVAudioPlayer class] autoreleaseAssignedPropertyPointer:NSStringFromSelector(@selector(delegate))];
-    [[AVAudioRecorder class] autoreleaseAssignedPropertyPointer:NSStringFromSelector(@selector(delegate))];
+    [[AVAudioPlayer class] tt_autoreleaseAssignedPropertyPointer:NSStringFromSelector(@selector(delegate))];
+    [[AVAudioRecorder class] tt_autoreleaseAssignedPropertyPointer:NSStringFromSelector(@selector(delegate))];
 }
 
 @end
