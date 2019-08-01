@@ -46,6 +46,12 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)categoryMenuBar:(TTCategoryMenuBar *)menuBar configButtonItem:(UIButton *)item atCategory:(NSInteger)category;
 
+/**
+ 选项列表选中的数据发生了变化
+ @param selectedOptions 选中的数据数组
+ */
+- (void)categoryMenuBar:(TTCategoryMenuBar *)menuBar optionView:(TTCategoryMenuBarOptionView *)optionView selectedOptionsDidChange:(NSArray *)selectedOptions;
+
 @end
 
 

@@ -55,7 +55,7 @@
 @property (nonatomic, strong) UIView *optionContainerView;
 
 @property (nonatomic,   weak) TTCategoryMenuBarOptionView *currentOptionView;
-@property (nonatomic, assign) UIButton *currentItem;
+@property (nonatomic, assign) UIButton *currentButtonItem;
 
 @end
 
@@ -158,24 +158,24 @@
     TTCategoryMenuBarCategoryItem *item = self.items[button.tag];
     BOOL isDimming = self.backgroundView.alpha == 1;
     BOOL isButtonSelected = button.isSelected;
-    UIButton *currentItem = self.currentItem;
-    [self dismissOptionView:(button == self.currentItem || item.style == TTCategoryMenuBarCategoryStyleNoneData)];
+    UIButton *currentButtonItem = self.currentButtonItem;
+    [self dismissOptionView:(button == self.currentButtonItem || item.style == TTCategoryMenuBarCategoryStyleNoneData)];
 
     if (item.style == TTCategoryMenuBarCategoryStyleNoneData) {
         if (button.isSelected) {
             button.selected = item.isSelected = NO;
-            self.currentItem = nil;
+            self.currentButtonItem = nil;
         } else {
             button.selected = item.isSelected = YES;
-            self.currentItem = button;
+            self.currentButtonItem = button;
             if ([self.delegate respondsToSelector:@selector(categoryMenuBar:didSelectCategory:)]) {
                 [self.delegate categoryMenuBar:self didSelectCategory:button.tag];
             }
         }
     } else {
-        if (button != currentItem || !isButtonSelected) {
+        if (button != currentButtonItem || !isButtonSelected) {
             button.selected = item.isSelected = YES;
-            self.currentItem = button;
+            self.currentButtonItem = button;
             if ([self.delegate respondsToSelector:@selector(categoryMenuBar:didSelectCategory:)]) {
                 [self.delegate categoryMenuBar:self didSelectCategory:button.tag];
             }
@@ -189,24 +189,24 @@
 }
 
 - (void)showOptionView {
-    TTCategoryMenuBarCategoryItem *item = self.items[self.currentItem.tag];
+    TTCategoryMenuBarCategoryItem *item = self.items[self.currentButtonItem.tag];
     TTCategoryMenuBarOptionView *optionView;
     switch (item.style) {
         case TTCategoryMenuBarCategoryStyleSingleList:
-            optionView = [[TTCategoryMenuBarSingleListOptionView alloc] initWithCategory:item options:self.options[self.currentItem.tag]];
+            optionView = [[TTCategoryMenuBarSingleListOptionView alloc] initWithCategory:item options:self.options[self.currentButtonItem.tag]];
             break;
         case TTCategoryMenuBarCategoryStyleDoubleList:
-            optionView = [[TTCategoryMenuBarDoubleListOptionView alloc] initWithCategory:item options:self.options[self.currentItem.tag]];
+            optionView = [[TTCategoryMenuBarDoubleListOptionView alloc] initWithCategory:item options:self.options[self.currentButtonItem.tag]];
             break;
         case TTCategoryMenuBarCategoryStyleTripleList:
-            optionView = [[TTCategoryMenuBarTripleListOptionView alloc] initWithCategory:item options:self.options[self.currentItem.tag]];
+            optionView = [[TTCategoryMenuBarTripleListOptionView alloc] initWithCategory:item options:self.options[self.currentButtonItem.tag]];
             break;
         case TTCategoryMenuBarCategoryStyleSectionList:
-            optionView = [[TTCategoryMenuBarSectionListView alloc] initWithCategory:item options:self.options[self.currentItem.tag]];
+            optionView = [[TTCategoryMenuBarSectionListView alloc] initWithCategory:item options:self.options[self.currentButtonItem.tag]];
             break;
         case TTCategoryMenuBarCategoryStyleCustom:
             if ([self.delegate respondsToSelector:@selector(categoryMenuBar:optionViewAtIndex:)]) {
-                optionView = [self.delegate categoryMenuBar:self optionViewAtIndex:self.currentItem.tag];
+                optionView = [self.delegate categoryMenuBar:self optionViewAtIndex:self.currentButtonItem.tag];
             }
             break;
         default:
@@ -225,7 +225,7 @@
         }];
         [self layoutIfNeeded];
         if ([self.delegate respondsToSelector:@selector(categoryMenuBar:willShowOptionView:atCategory:)]) {
-            [self.delegate categoryMenuBar:self willShowOptionView:optionView atCategory:self.currentItem.tag];
+            [self.delegate categoryMenuBar:self willShowOptionView:optionView atCategory:self.currentButtonItem.tag];
         }
         
         [optionView mas_remakeConstraints:^(MASConstraintMaker *make) {
@@ -234,7 +234,7 @@
         }];
         self.userInteractionEnabled = NO;
         [UIView animateWithDuration:.25 animations:^{
-            [self rotateItemIcon:self.currentItem];
+            [self rotateItemIcon:self.currentButtonItem];
             self.backgroundView.alpha = 1;
             [self layoutIfNeeded];
         } completion:^(BOOL finished) {
@@ -247,7 +247,7 @@
     if (!self.currentOptionView) {
         return;
     }
-    self.currentItem.selected = self.currentOptionView.categoryItem.isSelected = self.currentOptionView.selectedOptions.count > 0 || self.currentOptionView.categoryItem.style == TTCategoryMenuBarCategoryStyleNoneData;
+    self.currentButtonItem.selected = self.currentOptionView.categoryItem.isSelected = self.currentOptionView.selectedOptions.count > 0 || self.currentOptionView.categoryItem.style == TTCategoryMenuBarCategoryStyleNoneData;
     [self.currentOptionView clearSelectedOptions];
     [self.currentOptionView mas_updateConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.barItemContainerView.mas_bottom).offset(-self.currentOptionView.frame.size.height);
@@ -257,17 +257,17 @@
         [UIView animateWithDuration:.25 animations:^{
             self.backgroundView.alpha = 0;
             [self layoutIfNeeded];
-            [self resetItemIcon:self.currentItem];
+            [self resetItemIcon:self.currentButtonItem];
         } completion:^(BOOL finished) {
-            self.currentItem = nil;
+            self.currentButtonItem = nil;
             self.userInteractionEnabled = YES;
             [self.currentOptionView removeFromSuperview];
         }];
     } else {
-        [self resetItemIcon:self.currentItem];
+        [self resetItemIcon:self.currentButtonItem];
         [self.currentOptionView removeFromSuperview];
         self.backgroundView.alpha = 0;
-        self.currentItem = nil;
+        self.currentButtonItem = nil;
     }
 }
 
@@ -289,16 +289,53 @@
 
 - (void)categoryBarOptionViewDidResetOptions:(__kindof TTCategoryMenuBarOptionView *)categoryBarOptionView {
     if ([self.delegate respondsToSelector:@selector(categoryMenuBar:didResetCategory:)]) {
-        [self.delegate categoryMenuBar:self didResetCategory:self.currentItem.tag];
+        [self.delegate categoryMenuBar:self didResetCategory:self.currentButtonItem.tag];
     }
 }
 
 - (void)categoryBarOptionView:(__kindof TTCategoryMenuBarOptionView *)categoryBarOptionView
              didCommitOptions:(NSArray<TTCategoryMenuBarOptionItem *> *)options {
     if ([self.delegate respondsToSelector:@selector(categoryMenuBar:didCommitCategoryOptions:atCategory:)]) {
-        [self.delegate categoryMenuBar:self didCommitCategoryOptions:options atCategory:self.currentItem.tag];
+        [self.delegate categoryMenuBar:self didCommitCategoryOptions:options atCategory:self.currentButtonItem.tag];
     }
     [self dismissOptionView:YES];
+}
+
+- (void)categoryBarOptionView:(TTCategoryMenuBarOptionView *)optionView selectedOptionsDidChange:(NSArray *)selectedOptions {
+    if ([self.delegate respondsToSelector:@selector(categoryMenuBar:optionView:selectedOptionsDidChange:)]) {
+        [self.delegate categoryMenuBar:self optionView:optionView selectedOptionsDidChange:selectedOptions];
+    }
+    if (!self.currentButtonItem) {
+        return;
+    }
+    TTCategoryMenuBarCategoryItem *item = self.items[self.currentButtonItem.tag];
+    if (item.shouldUseSelectedOptionTitle) {
+        NSAttributedString *selectedTitle = [self firstTitleInOption:selectedOptions.firstObject];
+        if (!selectedTitle) {
+            selectedTitle = item.selectedAttributedTitle ?: [[NSAttributedString alloc] initWithString:item.title ?: @"" attributes:item.selectedTitleAttributes];
+        }
+        [self.currentButtonItem setAttributedTitle:selectedTitle forState:UIControlStateSelected];
+        [self.currentButtonItem setAttributedTitle:selectedTitle forState:UIControlStateSelected | UIControlStateHighlighted];
+    }
+}
+
+- (NSAttributedString *)firstTitleInOption:(TTCategoryMenuBarOptionItem *)item {
+    BOOL(^isOptionSelected)(TTCategoryMenuBarOptionItem *) = ^BOOL(TTCategoryMenuBarOptionItem *item){
+        if ([item respondsToSelector:@selector(isSelected)]) {
+            return [(id)item isSelected];
+        }
+        return NO;
+    };
+    if (item.isChildrenAllSelected || (!item.childOptions.count && isOptionSelected(item))) {
+        return item.selectedAttributedTitle ?: [[NSAttributedString alloc] initWithString:item.title ?: @"" attributes:item.selectedTitleAttributes];
+    }
+    for (TTCategoryMenuBarOptionItem *child in item.childOptions) {
+        NSAttributedString *title = [self firstTitleInOption:child];
+        if (title) {
+            return title;
+        }
+    }
+    return nil;
 }
 
 - (void)setContentInset:(UIEdgeInsets)contentInset {
