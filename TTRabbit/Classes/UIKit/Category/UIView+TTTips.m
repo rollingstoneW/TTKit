@@ -25,6 +25,7 @@
     [view addSubview:self];
     [self mas_makeConstraints:^(MASConstraintMaker *make) {
         make.edges.equalTo(view);
+        make.size.equalTo(view);
     }];
 }
 
@@ -49,7 +50,9 @@
 
 - (void)setup {
     self.backgroundColor = [UIColor whiteColor];
-    [self tt_addTapGestureWithTarget:self selector:@selector(dismiss)];
+    if (self.tapedBlock) {
+        [self tt_addTapGestureWithTarget:self selector:@selector(dismiss)];
+    }
 }
 
 - (void)addContentView:(UIView *)contentView {

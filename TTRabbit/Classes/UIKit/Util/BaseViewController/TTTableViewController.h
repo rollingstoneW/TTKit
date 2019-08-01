@@ -16,8 +16,24 @@ FOUNDATION_EXTERN NSInteger const TTDefaultPageSize;
 
 @property (nonatomic, strong) NSMutableArray *dataArray;
 
+/**
+ 页码是否从0开始，默认为YES
+ */
+@property (nonatomic, assign) BOOL isPageNumberStartAtZero;
+
+/**
+ 当前页码，isPageNumberStartAtZero YES时默认为0，NO时默认为1
+ */
 @property (nonatomic, assign) NSInteger currentPage;
+
+/**
+ 当前最后一条数据的id
+ */
 @property (nonatomic,   copy) NSString *currentId;
+
+/**
+ 每页数据最大个数
+ */
 @property (nonatomic, assign) NSInteger pageSize;
 
 /**
@@ -27,24 +43,44 @@ FOUNDATION_EXTERN NSInteger const TTDefaultPageSize;
 
 - (instancetype)initWithStyle:(UITableViewStyle)style;
 
-// 重写这个方法自定义tableView
+/**
+ 重写这个方法自定义tableView
+ */
 - (void)loadTableView;
 
-// 默认下拉刷新方法
+/**
+ 默认下拉刷新方法
+ */
 - (void)loadNewData;
-// 默认上拉加载方法
+
+/**
+ 默认上拉加载方法
+ */
 - (void)loadMoreData;
 
-// 设置refreshHeader refreshFooter
+/**
+ 设置refreshHeader refreshFooter
+ */
 - (void)setupRefreshActions;
+/**
+ 设置refreshHeader refreshFooter，方法为空则不设置
+ */
 - (void)setupRefreshWithActionForHeader:(SEL)headerSEL footer:(SEL)footerSEL;
 
-// 自动下拉
+/**
+ 触发下拉刷新的方法
+ */
 - (void)triggerHeaderRefresh;
-// 自动上拉
+
+/**
+ 触发上拉加载更多的方法
+ */
 - (void)triggerFooterRefresh;
 
-// 自动设置footer的隐藏和展示
+/**
+ 自动设置footer的隐藏和展示
+ */
 - (void)autoHideFooterWithNewData:(NSArray *)list;
+- (void)autoHideFooterWithHasMoreData:(BOOL)hasMoreData;
 
 @end

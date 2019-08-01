@@ -26,6 +26,7 @@ NSInteger const TTDefaultPageSize = 20;
 
 - (instancetype)initWithStyle:(UITableViewStyle)style {
     if (self = [super init]) {
+        _isPageNumberStartAtZero = YES;
         _currentPage = 0;
         _pageSize = TTDefaultPageSize;
         _currentId = nil;
@@ -92,12 +93,16 @@ NSInteger const TTDefaultPageSize = 20;
 }
 
 - (void)autoHideFooterWithNewData:(NSArray *)list {
-    if (list.count == self.pageSize) {
+    [self autoHideFooterWithHasMoreData:list.count == self.pageSize];
+}
+
+- (void)autoHideFooterWithHasMoreData:(BOOL)hasMoreData {
+    if (hasMoreData) {
         self.tableView.mj_footer.hidden = NO;
         [self.tableView.mj_footer endRefreshing];
         [self.tableView.mj_footer resetNoMoreData];
     } else {
-        if (self.currentPage == 0) {
+        if (self.currentPage == (self.isPageNumberStartAtZero ? 0 : 1)) {
             [self.tableView.mj_footer endRefreshing];
             self.tableView.mj_footer.hidden = YES;
         } else {
@@ -147,5 +152,10 @@ NSInteger const TTDefaultPageSize = 20;
 }
 
 TTGetterObjectIMP(dataArray, [NSMutableArray array]);
+
+- (void)setIsPageNumberStartAtZero:(BOOL)isPageNumberStartAtZero {
+    _isPageNumberStartAtZero = isPageNumberStartAtZero;
+    self.currentPage = isPageNumberStartAtZero ? 0 : 1;
+}
 
 @end
