@@ -316,6 +316,7 @@
         }
         [self.currentButtonItem setAttributedTitle:selectedTitle forState:UIControlStateSelected];
         [self.currentButtonItem setAttributedTitle:selectedTitle forState:UIControlStateSelected | UIControlStateHighlighted];
+        [self layoutBarItem:self.currentButtonItem space:item.iconTitleSpace];
     }
 }
 
