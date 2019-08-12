@@ -74,7 +74,7 @@ NSInteger const TTDefaultPageSize = 20;
         self.tableView.mj_header = [MJRefreshStateHeader headerWithRefreshingTarget:self refreshingAction:headerSEL];;
     }
     if (footerSEL && [self respondsToSelector:footerSEL]) {
-        self.tableView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingTarget:self refreshingAction:footerSEL];
+        self.tableView.mj_footer = [MJRefreshBackNormalFooter footerWithRefreshingTarget:self refreshingAction:footerSEL];
     }
 }
 
