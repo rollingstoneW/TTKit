@@ -165,6 +165,9 @@
         if (button.isSelected) {
             button.selected = item.isSelected = NO;
             self.currentButtonItem = nil;
+            if ([self.delegate respondsToSelector:@selector(categoryMenuBar:didDeSelectCategory:)]) {
+                [self.delegate categoryMenuBar:self didDeSelectCategory:button.tag];
+            }
         } else {
             button.selected = item.isSelected = YES;
             self.currentButtonItem = button;

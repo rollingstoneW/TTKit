@@ -22,6 +22,11 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)categoryMenuBar:(TTCategoryMenuBar *)menuBar didSelectCategory:(NSInteger)category;
 
 /**
+ 取消选中了某个分类，只有分类类型为NoneData才会回掉
+ */
+- (void)categoryMenuBar:(TTCategoryMenuBar *)menuBar didDeSelectCategory:(NSInteger)category;
+
+/**
  将要展示选项列表
  */
 - (void)categoryMenuBar:(TTCategoryMenuBar *)menuBar willShowOptionView:(TTCategoryMenuBarOptionView *)optionView atCategory:(NSInteger)category;
