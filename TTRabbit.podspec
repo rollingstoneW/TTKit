@@ -23,7 +23,6 @@ Pod::Spec.new do |s|
     ss.frameworks = 'UIKit', 'Foundation'
     ss.dependency 'Masonry'
     ss.dependency 'MJRefresh'
-    ss.dependency 'SDWebImage'
     ss.dependency 'MBProgressHUD'
   end
 
