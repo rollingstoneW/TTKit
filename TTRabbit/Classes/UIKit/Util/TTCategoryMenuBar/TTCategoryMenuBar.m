@@ -55,7 +55,7 @@
 @property (nonatomic, strong) UIView *optionContainerView;
 
 @property (nonatomic,   weak) TTCategoryMenuBarOptionView *currentOptionView;
-@property (nonatomic, assign) UIButton *currentButtonItem;
+@property (nonatomic,   weak) UIButton *currentButtonItem;
 
 @end
 
