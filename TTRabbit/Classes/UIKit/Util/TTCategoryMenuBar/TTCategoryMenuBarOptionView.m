@@ -548,20 +548,54 @@ static NSString *const TTCategoryMenuBarCellID = @"cell";
         }
         return;
     }
-    // 已经选中则取消选中
-    if (self.listOptions[indexPath.row].isSelected) {
-        self.listOptions[indexPath.row].isSelected = NO;
-        [self deselectOptionAtRow:indexPath.row inTableView:tableView];
+    TTCategoryMenuBarListOptionItem *currentOption = self.listOptions[indexPath.row];
+    // 点击到选择全部
+    if (currentOption.isSelectAll) {
+        // 全选
+        [self selectOption:currentOption allOptions:self.listOptions isSelect:YES inTableView:tableView];
     } else {
-        self.listOptions[indexPath.row].isSelected = YES;
-        [self refreshCellAtRow:indexPath.row inTableView:tableView];
+        currentOption.isSelected = YES;
+        
+        // 找到全选cell
+        TTCategoryMenuBarListOptionItem *selectAllOption = self.listOptions.firstObject.isSelectAll ? self.listOptions.firstObject : nil;
+        BOOL isSelectAlled = YES;
+        for (TTCategoryMenuBarListOptionItem *child in self.listOptions) {
+            if (child != selectAllOption && !child.isSelected) {
+                isSelectAlled = NO;
+                break;
+            }
+        }
+        selectAllOption.isSelected = isSelectAlled;
+        // 全部选中了则选中全选的cell
+        if (isSelectAlled) {
+            [self selectOption:currentOption allOptions:self.listOptions isSelect:YES inTableView:tableView];
+        } else {
+            [self refreshCellAtRow:indexPath.row inTableView:tableView];
+            if (selectAllOption) {
+                [self deselectOptionAtRow:0 inTableView:tableView];
+            }
+        }
     }
     [self selectedOptionsDidChange];
 }
 
 - (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath {
-    self.listOptions[indexPath.row].isSelected = NO;
-    [self refreshCellAtRow:indexPath.row inTableView:tableView];
+    TTCategoryMenuBarListOptionItem *currentOption = self.listOptions[indexPath.row];
+    currentOption.isSelected = NO;
+    // 取消全选
+    if (currentOption.isSelectAll) {
+        [self selectOption:currentOption allOptions:self.listOptions isSelect:NO inTableView:tableView];
+    } else {
+        [self refreshCellAtRow:indexPath.row inTableView:tableView];
+        // 找到全选cell
+        TTCategoryMenuBarListOptionItem *selectAllOption = self.listOptions.firstObject.isSelectAll ? self.listOptions.firstObject : nil;
+        if (selectAllOption) {
+            // 取消选中全选的cell
+            selectAllOption.isSelected = NO;
+            [self deselectOptionAtRow:0 inTableView:tableView];
+        }
+    }
+    
     [self selectedOptionsDidChange];
 }
 
