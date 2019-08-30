@@ -247,7 +247,7 @@
 }
 
 - (void)dismissOptionView:(BOOL)animated {
-    if (!self.currentOptionView) {
+    if (!self.currentOptionView || !self.currentOptionView.superview) {
         return;
     }
     self.currentButtonItem.selected = self.currentOptionView.categoryItem.isSelected = self.currentOptionView.selectedOptions.count > 0 || self.currentOptionView.categoryItem.style == TTCategoryMenuBarCategoryStyleNoneData;
