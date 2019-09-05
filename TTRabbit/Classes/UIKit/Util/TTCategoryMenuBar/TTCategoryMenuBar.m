@@ -121,6 +121,13 @@
         [button setAttributedTitle:selected forState:UIControlStateSelected];
         [button setAttributedTitle:selected forState:UIControlStateSelected | UIControlStateHighlighted];
         button.selected = item.isSelected;
+        if (item.shouldUseSelectedOptionTitle) {
+            NSAttributedString *selectedTitle = [self firstSelectedTitleInCategory:i];
+            if (selectedTitle) {
+                [button setAttributedTitle:selectedTitle forState:UIControlStateSelected];
+                [button setAttributedTitle:selectedTitle forState:UIControlStateSelected | UIControlStateHighlighted];
+            }
+        }
         [self.barItemContainerView addSubview:button];
         if (item.icon) {
             [button setImage:item.icon forState:UIControlStateNormal];
@@ -313,7 +320,7 @@
     }
     TTCategoryMenuBarCategoryItem *item = self.items[self.currentButtonItem.tag];
     if (item.shouldUseSelectedOptionTitle) {
-        NSAttributedString *selectedTitle = [self firstTitleInOption:selectedOptions.firstObject];
+        NSAttributedString *selectedTitle = [self firstSelectedTitleInOption:selectedOptions.firstObject];
         if (!selectedTitle) {
             selectedTitle = item.selectedAttributedTitle ?: [[NSAttributedString alloc] initWithString:item.title ?: @"" attributes:item.selectedTitleAttributes];
         }
@@ -323,7 +330,20 @@
     }
 }
 
-- (NSAttributedString *)firstTitleInOption:(TTCategoryMenuBarOptionItem *)item {
+- (NSAttributedString *)firstSelectedTitleInCategory:(NSInteger)index {
+    if (index >= self.options.count) { return nil; }
+    
+    NSArray *options = self.options[index];
+    for (TTCategoryMenuBarOptionItem *child in options) {
+        NSAttributedString *title = [self firstSelectedTitleInOption:child];
+        if (title) {
+            return title;
+        }
+    }
+    return nil;
+}
+
+- (NSAttributedString *)firstSelectedTitleInOption:(TTCategoryMenuBarOptionItem *)item {
     BOOL(^isOptionSelected)(TTCategoryMenuBarOptionItem *) = ^BOOL(TTCategoryMenuBarOptionItem *item){
         if ([item respondsToSelector:@selector(isSelected)]) {
             return [(id)item isSelected];
@@ -334,7 +354,7 @@
         return item.selectedAttributedTitle ?: [[NSAttributedString alloc] initWithString:item.title ?: @"" attributes:item.selectedTitleAttributes];
     }
     for (TTCategoryMenuBarOptionItem *child in item.childOptions) {
-        NSAttributedString *title = [self firstTitleInOption:child];
+        NSAttributedString *title = [self firstSelectedTitleInOption:child];
         if (title) {
             return title;
         }
