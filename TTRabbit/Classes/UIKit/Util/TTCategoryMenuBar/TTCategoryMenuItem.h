@@ -53,6 +53,7 @@ typedef NS_ENUM(NSUInteger, TTCategoryMenuBarCategoryStyle) {
 @property (nonatomic, assign) BOOL isSelected; // 是否被选中
 
 @property (nonatomic, assign) CGFloat optionViewPreferredMaxHeight; // 选项视图的最大高度，默认屏幕高度和底部与父视图对齐的最小值
+@property (nonatomic, assign) CGFloat optionViewBottomButtonsPaddintTop; // 选项视图底部按钮距离上面的间隙，默认为0
 
 @property (nonatomic, strong) id extraData; // 额外数据
 
