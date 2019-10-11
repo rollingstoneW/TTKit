@@ -234,14 +234,16 @@
             make.left.right.equalTo(self);
         }];
         [self layoutIfNeeded];
-        if ([self.delegate respondsToSelector:@selector(categoryMenuBar:willShowOptionView:atCategory:)]) {
-            [self.delegate categoryMenuBar:self willShowOptionView:optionView atCategory:self.currentButtonItem.tag];
-        }
         
         [optionView mas_remakeConstraints:^(MASConstraintMaker *make) {
             make.top.equalTo(self.barItemContainerView.mas_bottom).offset(0);
             make.left.right.equalTo(self);
         }];
+        
+        if ([self.delegate respondsToSelector:@selector(categoryMenuBar:willShowOptionView:atCategory:)]) {
+            [self.delegate categoryMenuBar:self willShowOptionView:optionView atCategory:self.currentButtonItem.tag];
+        }
+        
         self.userInteractionEnabled = NO;
         [UIView animateWithDuration:.25 animations:^{
             [self rotateItemIcon:self.currentButtonItem];
