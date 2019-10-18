@@ -1421,6 +1421,7 @@ static NSString *const TTCategoryMenuBarCellID = @"cell";
         self.imageView = [[UIImageView alloc] init];
         [self.imageView setContentCompressionResistancePriority:UILayoutPriorityRequired forAxis:UILayoutConstraintAxisHorizontal];
         self.textLabel = [[UILabel alloc] init];
+        self.textLabel.textAlignment = NSTextAlignmentCenter;
         [self.contentView addSubview:self.containerView];
         [self.containerView addSubview:self.imageView];
         [self.containerView addSubview:self.textLabel];
