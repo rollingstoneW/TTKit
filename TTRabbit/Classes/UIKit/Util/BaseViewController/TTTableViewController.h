@@ -68,6 +68,16 @@ FOUNDATION_EXTERN NSInteger const TTDefaultPageSize;
 - (void)setupRefreshWithActionForHeader:(SEL)headerSEL footer:(SEL)footerSEL;
 
 /**
+ 设置刷新的header
+*/
+- (void)setupRefreshHeaderWithBlock:(dispatch_block_t)block;
+
+/**
+ 设置刷新的footer
+*/
+- (void)setupRefreshFooterWithBlock:(dispatch_block_t)block;
+
+/**
  触发下拉刷新的方法
  */
 - (void)triggerHeaderRefresh;

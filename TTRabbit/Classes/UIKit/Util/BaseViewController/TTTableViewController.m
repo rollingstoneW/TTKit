@@ -15,6 +15,8 @@ NSInteger const TTDefaultPageSize = 20;
 @interface TTTableViewController ()
 
 @property (nonatomic, assign) UITableViewStyle style;
+@property (nonatomic, strong) dispatch_block_t refreshHeaderBlock;
+@property (nonatomic, strong) dispatch_block_t refreshFooterBlock;
 
 @end
 
@@ -76,6 +78,24 @@ NSInteger const TTDefaultPageSize = 20;
     if (footerSEL && [self respondsToSelector:footerSEL]) {
         self.tableView.mj_footer = [MJRefreshBackNormalFooter footerWithRefreshingTarget:self refreshingAction:footerSEL];
     }
+}
+
+- (void)setupRefreshHeaderWithBlock:(dispatch_block_t)block {
+    self.refreshHeaderBlock = block;
+    [self setupRefreshWithActionForHeader:@selector(_headerRefresh) footer:NULL];
+}
+
+- (void)setupRefreshFooterWithBlock:(dispatch_block_t)block {
+    self.refreshFooterBlock = block;
+    [self setupRefreshWithActionForHeader:NULL footer:@selector(_footerRefresh)];
+}
+
+- (void)_headerRefresh {
+    TTSafeBlock(self.refreshHeaderBlock);
+}
+
+- (void)_footerRefresh {
+    TTSafeBlock(self.refreshFooterBlock);
 }
 
 - (void)triggerHeaderRefresh {
