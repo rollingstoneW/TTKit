@@ -43,6 +43,8 @@ UIKIT_EXTERN NSString *const TTViewControllerDidDismissNotification;
 - (void)reloadData; // 重新加载数据
 - (void)statusBarOrientationDidChange:(UIInterfaceOrientation)orientation; // 界面发生旋转
 
+- (void)goback; // 返回到上一级页面，内部会判断是pop还是dismiss
+
 - (void)setupDefaultLeftCloseBarItem; // 设置默认关闭按钮
 - (void)setupDefaultRightCloseBarItem; // 设置默认关闭按钮
 

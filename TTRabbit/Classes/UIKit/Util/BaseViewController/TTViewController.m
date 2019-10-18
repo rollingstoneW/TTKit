@@ -10,6 +10,7 @@
 #import "TTUIKitFactory.h"
 #import "UIView+TTUtil.h"
 #import "TTPulldownDismissHeader.h"
+#import "TTNavigationControllerChildProtocol.h"
 
 #if __has_include("TTNetworkCancellable.h")
 #import "TTNetworkCancellable.h"
@@ -17,7 +18,7 @@
 
 NSString *const TTViewControllerDidDismissNotification = @"TTViewControllerDidDismissNotification";
 
-@interface TTViewController () <UIGestureRecognizerDelegate>
+@interface TTViewController () <UIGestureRecognizerDelegate, TTNavigationControllerChildProtocol>
 
 @end
 
@@ -168,4 +169,13 @@ NSString *const TTViewControllerDidDismissNotification = @"TTViewControllerDidDi
     return header;
 }
 
+- (BOOL)navigationControllerShouldPopViewController {
+    [self goback];
+    return NO;
+}
+- (void)goback {
+    [self tt_goback];
+}
+
 @end
+    
