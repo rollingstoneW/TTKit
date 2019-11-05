@@ -108,6 +108,16 @@ NS_ASSUME_NONNULL_BEGIN
             options:(NSArray<NSArray<__kindof TTCategoryMenuBarOptionItem *> *> *)options;
 
 /**
+ 展示某个分类
+*/
+- (void)showOptionViewAtCategory:(NSInteger)category;
+
+/**
+ 隐藏当前展示的分类
+*/
+- (void)dismissCurrentOptionView;
+
+/**
  获取某个分类的按钮
  */
 - (UIButton *)menuButtonItemAtCategory:(NSInteger)category;

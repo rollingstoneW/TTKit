@@ -198,6 +198,18 @@
     }
 }
 
+- (void)showOptionViewAtCategory:(NSInteger)category {
+    if (self.items.count > category) {
+        UIButton *button = self.barItemContainerView.subviews[category];
+        button.selected = NO;
+        [self categoryClicked:button];
+    }
+}
+
+- (void)dismissCurrentOptionView {
+    [self categoryClicked:self.currentButtonItem];
+}
+
 - (void)showOptionView {
     TTCategoryMenuBarCategoryItem *item = self.items[self.currentButtonItem.tag];
     TTCategoryMenuBarOptionView *optionView;

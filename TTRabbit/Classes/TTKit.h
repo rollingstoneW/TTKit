@@ -44,6 +44,7 @@
 #import "NSDate+TTUtil.h"
 #import "NSDateFormatter+TTUtil.h"
 #import "NSThread+TTUtil.h"
+#import "NSDictionary+TTUtil.h"
 #import "NSObject+TTSingleton.h"
 #import "TTSafeKit.h"
 
