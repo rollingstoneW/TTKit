@@ -207,7 +207,9 @@
 }
 
 - (void)dismissCurrentOptionView {
-    [self categoryClicked:self.currentButtonItem];
+    if (self.currentButtonItem) {
+        [self categoryClicked:self.currentButtonItem];
+    }
 }
 
 - (void)showOptionView {

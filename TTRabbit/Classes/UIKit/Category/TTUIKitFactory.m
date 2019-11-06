@@ -41,6 +41,7 @@
     label.font = font;
     label.textColor = color;
     label.textAlignment = alignment;
+    label.numberOfLines = lines;
     return label;
 }
 @end
