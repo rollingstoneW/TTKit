@@ -2,7 +2,7 @@
 //  NSDictionary+TTUtil.m
 //  TTRabbit
 //
-//  Created by ZYB on 2019/11/1.
+//  Created by rollingstoneW on 2019/11/1.
 //
 
 #import "NSDictionary+TTUtil.h"

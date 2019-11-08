@@ -25,6 +25,7 @@
 #import "UIImage+TTUtil.h"
 #import "UIImage+TTResource.h"
 #import "UIViewController+TTUtil.h"
+#import "UINavigationController+TTUtil.h"
 #import "UITableView+TTUtil.h"
 #import "UITableViewCell+TTUtil.h"
 #import "UIResponder+TTUtil.h"

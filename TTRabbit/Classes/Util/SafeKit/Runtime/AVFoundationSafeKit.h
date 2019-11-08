@@ -2,7 +2,7 @@
 //  AVAudioPlayer+SafeKit.h
 //  TTRabbit
 //
-//  Created by weizhenning on 2019/7/29.
+//  Created by rollingstoneW on 2019/7/29.
 //
 
 #import <AVFoundation/AVFoundation.h>
