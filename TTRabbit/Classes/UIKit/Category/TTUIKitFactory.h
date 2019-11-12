@@ -12,31 +12,31 @@
  创建常用UI组件的一些便捷方法
  */
 @interface UIView (TTFactory)
-+ (UIView *)viewWithColor:(UIColor *)color;
-+ (UIView *)EFEFEFLine;
++ (instancetype)viewWithColor:(UIColor *)color;
++ (instancetype)EFEFEFLine;
 @end
 
 @interface UILabel (TTFactory)
-+ (UILabel *)labelWithAttributedText:(NSAttributedString *)attributedText;
-+ (UILabel *)labelWithFont:(UIFont *)font textColor:(UIColor *)color;
-+ (UILabel *)labelWithFont:(UIFont *)font textColor:(UIColor *)color alignment:(NSTextAlignment)alignment numberOfLines:(NSInteger)lines;
-+ (UILabel *)labelWithText:(NSString *)text font:(UIFont *)font textColor:(UIColor *)color;
-+ (UILabel *)labelWithText:(NSString *)text font:(UIFont *)font textColor:(UIColor *)color alignment:(NSTextAlignment)alignment numberOfLines:(NSInteger)lines;
++ (instancetype)labelWithAttributedText:(NSAttributedString *)attributedText;
++ (instancetype)labelWithFont:(UIFont *)font textColor:(UIColor *)color;
++ (instancetype)labelWithFont:(UIFont *)font textColor:(UIColor *)color alignment:(NSTextAlignment)alignment numberOfLines:(NSInteger)lines;
++ (instancetype)labelWithText:(NSString *)text font:(UIFont *)font textColor:(UIColor *)color;
++ (instancetype)labelWithText:(NSString *)text font:(UIFont *)font textColor:(UIColor *)color alignment:(NSTextAlignment)alignment numberOfLines:(NSInteger)lines;
 @end
 
 @interface UIButton (TTFactory)
-+ (UIButton *)buttonWithTitle:(NSString *)title font:(UIFont *)font titleColor:(UIColor *)titleColor;
-+ (UIButton *)buttonWithTitle:(NSString *)title font:(UIFont *)font titleColor:(UIColor *)titleColor image:(UIImage *)image;
-+ (UIButton *)buttonWithImage:(UIImage *)image target:(id)target selector:(SEL)selector;
-+ (UIButton *)buttonWithImage:(UIImage *)image selectedImage:(UIImage *)selected target:(id)target selector:(SEL)selector;
-+ (UIButton *)buttonWithAttributedTitle:(NSAttributedString *)attributedTitle target:(id)target selector:(SEL)selector;
-+ (UIButton *)buttonWithBgImage:(UIImage *)image target:(id)target selector:(SEL)selector;
-+ (UIButton *)buttonWithBgImage:(UIImage *)image selectedImage:(UIImage *)selected target:(id)target selector:(SEL)selector;
++ (instancetype)buttonWithTitle:(NSString *)title font:(UIFont *)font titleColor:(UIColor *)titleColor;
++ (instancetype)buttonWithTitle:(NSString *)title font:(UIFont *)font titleColor:(UIColor *)titleColor image:(UIImage *)image;
++ (instancetype)buttonWithImage:(UIImage *)image target:(id)target selector:(SEL)selector;
++ (instancetype)buttonWithImage:(UIImage *)image selectedImage:(UIImage *)selected target:(id)target selector:(SEL)selector;
++ (instancetype)buttonWithAttributedTitle:(NSAttributedString *)attributedTitle target:(id)target selector:(SEL)selector;
++ (instancetype)buttonWithBgImage:(UIImage *)image target:(id)target selector:(SEL)selector;
++ (instancetype)buttonWithBgImage:(UIImage *)image selectedImage:(UIImage *)selected target:(id)target selector:(SEL)selector;
 @end
 
 @interface UIColor (TTFactory)
 
-+ (UIColor *)tt_colorWithHexString:(NSString *)hex;
++ (instancetype)tt_colorWithHexString:(NSString *)hex;
 
 @end
 
