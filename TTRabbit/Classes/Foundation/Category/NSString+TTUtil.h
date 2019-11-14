@@ -8,6 +8,31 @@
 
 #import <UIKit/UIKit.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
+/*
+ 解析字符串。一定返回一个字符串
+ */
+static inline NSString * TTSureString(NSString *src) {
+    if ([src isKindOfClass:[NSString class]]) { return src; }
+    if ([src isKindOfClass:[NSNumber class]]) { return [((NSNumber *)src) stringValue]; }
+    return @"";
+}
+
+/*
+ 字符串是否有值。
+ */
+static inline BOOL TTStringIsInvalid(NSString *src) {
+    if (![src isKindOfClass:[NSString class]]) { return YES; }
+    if (!src.length) { return YES; }
+    static NSArray *nilValues;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        nilValues = @[@"NIL", @"Nil", @"nil", @"NULL", @"Null", @"null", @"(NULL)", @"(Null)", @"(null)", @"<NULL>", @"<Null>", @"<null>"];
+    });
+    return [nilValues containsObject:src];
+}
+
 @interface NSString (TTUtil)
 
 @property (nonatomic, assign, readonly) NSRange tt_fullRange;
@@ -159,3 +184,5 @@
 + (NSString *)tt_decimalFormatedStringWithNumber:(CGFloat)number;
 
 @end
+
+NS_ASSUME_NONNULL_END

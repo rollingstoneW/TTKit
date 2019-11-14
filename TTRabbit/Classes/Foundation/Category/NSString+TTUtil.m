@@ -29,7 +29,7 @@
 
 - (void)tt_convertHtmlStringToNSAttributedString:(void (^)(NSAttributedString *))block {
     if (!block) { return; }
-    if (self.length || [self isEqualToString:@"(null)"]) {
+    if (!self.length || [self isEqualToString:@"(null)"]) {
         block([[NSAttributedString alloc] initWithString:@""]);
         return;
     }
