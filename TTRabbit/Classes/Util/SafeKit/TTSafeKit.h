@@ -12,30 +12,6 @@
 #import "NSSet+TTSafety.h"
 #import "NSString+TTSafety.h"
 
-static inline NSString * TTSureString(NSString *src) {
-    if ([src isKindOfClass:[NSString class]]) { return src; }
-    if ([src isKindOfClass:[NSNumber class]]) { return [((NSNumber *)src) stringValue]; }
-    return @"";
-}
-static inline NSArray * TTSureArray(NSArray *src) {
-    if ([src isKindOfClass:[NSArray class]]) { return src; }
-    return @[];
-}
-static inline NSDictionary * TTSureDictionary(NSDictionary *src) {
-    if ([src isKindOfClass:[NSDictionary class]]) { return src; }
-    return @{};
-}
-static inline BOOL TTStringIsInvalid(NSString *src) {
-    if (![src isKindOfClass:[NSString class]]) { return YES; }
-    if (!src.length) { return YES; }
-    static NSArray *nilValues;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        nilValues = @[@"NIL", @"Nil", @"nil", @"NULL", @"Null", @"null", @"(NULL)", @"(Null)", @"(null)", @"<NULL>", @"<Null>", @"<null>"];
-    });
-    return [nilValues containsObject:src];
-}
-
 @interface TTSafeKit : NSObject
 
 + (void)makeSafeUseRuntime;
