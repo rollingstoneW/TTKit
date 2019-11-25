@@ -162,6 +162,10 @@
 }
 
 - (void)categoryClicked:(UIButton *)button {
+    [self categoryClicked:button fromTouch:YES];
+}
+
+- (void)categoryClicked:(UIButton *)button fromTouch:(BOOL)fromTouch {
     TTCategoryMenuBarCategoryItem *item = self.items[button.tag];
     BOOL isDimming = self.backgroundView.alpha == 1;
     BOOL isButtonSelected = button.isSelected;
@@ -172,13 +176,13 @@
         if (button.isSelected) {
             button.selected = item.isSelected = NO;
             self.currentButtonItem = nil;
-            if ([self.delegate respondsToSelector:@selector(categoryMenuBar:didDeSelectCategory:)]) {
+            if (fromTouch && [self.delegate respondsToSelector:@selector(categoryMenuBar:didDeSelectCategory:)]) {
                 [self.delegate categoryMenuBar:self didDeSelectCategory:button.tag];
             }
         } else {
             button.selected = item.isSelected = YES;
             self.currentButtonItem = button;
-            if ([self.delegate respondsToSelector:@selector(categoryMenuBar:didSelectCategory:)]) {
+            if (fromTouch && [self.delegate respondsToSelector:@selector(categoryMenuBar:didSelectCategory:)]) {
                 [self.delegate categoryMenuBar:self didSelectCategory:button.tag];
             }
         }
@@ -186,7 +190,7 @@
         if (button != currentButtonItem || !isButtonSelected) {
             button.selected = item.isSelected = YES;
             self.currentButtonItem = button;
-            if ([self.delegate respondsToSelector:@selector(categoryMenuBar:didSelectCategory:)]) {
+            if (fromTouch && [self.delegate respondsToSelector:@selector(categoryMenuBar:didSelectCategory:)]) {
                 [self.delegate categoryMenuBar:self didSelectCategory:button.tag];
             }
             if (item.style != TTCategoryMenuBarCategoryStyleNoneData) {
@@ -202,13 +206,13 @@
     if (self.items.count > category) {
         UIButton *button = self.barItemContainerView.subviews[category];
         button.selected = NO;
-        [self categoryClicked:button];
+        [self categoryClicked:button fromTouch:NO];
     }
 }
 
 - (void)dismissCurrentOptionView {
-    if (self.currentButtonItem.isSelected) {
-        [self categoryClicked:self.currentButtonItem];
+    if (self.currentButtonItem) {
+        [self categoryClicked:self.currentButtonItem fromTouch:NO];
     }
 }
 
