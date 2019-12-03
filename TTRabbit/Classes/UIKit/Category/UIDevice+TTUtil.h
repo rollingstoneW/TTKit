@@ -22,6 +22,11 @@ NS_ASSUME_NONNULL_BEGIN
  */
 + (NSInteger)tt_tabBarHeight;
 
+/**
+ 是否是全面屏
+ */
++ (BOOL)tt_isFullScreen;
+
 @end
 
 NS_ASSUME_NONNULL_END

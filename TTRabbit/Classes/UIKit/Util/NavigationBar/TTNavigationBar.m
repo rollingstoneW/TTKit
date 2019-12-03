@@ -350,7 +350,7 @@ static const void *masBorderKey = &masBorderKey;
 
 - (void)setBackHighlightedImage:(UIImage *)backHighlightedImage {
     TTSetterCondition(backHighlightedImage);
-    [self.backButton setBackgroundImage:backHighlightedImage forState:UIControlStateHighlighted];
+    [self.backButton setImage:backHighlightedImage forState:UIControlStateHighlighted];
 }
 
 - (void)setShowBackButton:(BOOL)showBackButton {

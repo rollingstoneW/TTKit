@@ -53,7 +53,7 @@ bottom; \
 //判断iPhoneXs Max
 #define TTDeviceIsIphoneXS_MAX ([UIScreen instancesRespondToSelector:@selector(currentMode)] ? CGSizeEqualToSize(CGSizeMake(1242, 2688), [[UIScreen mainScreen] currentMode].size) && TTDeviceIsPhone : NO)
 //判断是否为全面屏
-#define TTDeviceIsFullScreen (TTDeviceIsIphoneX || TTDeviceIsIphoneXR || TTDeviceIsIphoneXS || TTDeviceIsIphoneXS_MAX)
+#define TTDeviceIsFullScreen (kWindowSafeAreaBottom > 0)
 
 #define TTDeviceIsLandscape                      UIDeviceOrientationIsLandscape([UIDevice currentDevice].orientation)
 

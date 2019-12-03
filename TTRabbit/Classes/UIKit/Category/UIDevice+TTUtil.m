@@ -28,4 +28,11 @@
     return tabBarHeight;
 }
 
++ (BOOL)tt_isFullScreen {
+    if (@available(iOS 11.0, *)) { \
+        return [[UIApplication sharedApplication].delegate window].safeAreaInsets.bottom > 0;
+    }
+    return NO;
+}
+
 @end
