@@ -171,7 +171,12 @@ NSInteger const TTDefaultPageSize = 20;
     return 0;
 }
 
-TTGetterObjectIMP(dataArray, [NSMutableArray array]);
+- (NSMutableArray *)dataArray {
+    if (!_dataArray) {
+        _dataArray = [NSMutableArray array];
+    }
+    return _dataArray;
+}
 
 - (void)setIsPageNumberStartAtZero:(BOOL)isPageNumberStartAtZero {
     _isPageNumberStartAtZero = isPageNumberStartAtZero;
