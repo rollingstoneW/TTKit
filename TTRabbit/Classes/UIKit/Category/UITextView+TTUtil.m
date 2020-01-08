@@ -7,9 +7,6 @@
 
 #import "UITextView+TTUtil.h"
 
-#import <AppKit/AppKit.h>
-
-
 @implementation UITextView (TTUtil)
 
 @end
