@@ -47,7 +47,6 @@ NSString *const TTViewControllerDidDismissNotification = @"TTViewControllerDidDi
     [super viewDidLoad];
 
     self.view.backgroundColor = [UIColor whiteColor];
-    self.navigationController.interactivePopGestureRecognizer.delegate = self;
 
     [self loadCustomNavigationBar];
     [self loadSubviews];
@@ -72,6 +71,8 @@ NSString *const TTViewControllerDidDismissNotification = @"TTViewControllerDidDi
         self.hasAppeared = YES;
     });
     self.isWholeAppeared = YES;
+
+    self.navigationController.interactivePopGestureRecognizer.delegate = self;
     self.navigationController.interactivePopGestureRecognizer.enabled = !self.disablesSwipeBackGesture;
 }
 
@@ -175,6 +176,17 @@ NSString *const TTViewControllerDidDismissNotification = @"TTViewControllerDidDi
 }
 - (void)goback {
     [self tt_goback];
+}
+
+#pragma mark UIGestureRecognizerDelegate
+
+- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer {
+    if (gestureRecognizer == self.navigationController.interactivePopGestureRecognizer) {
+        if (self == self.navigationController.topViewController && self.navigationController.viewControllers.count == 1) {
+            return NO;
+        }
+    }
+    return YES;
 }
 
 @end
