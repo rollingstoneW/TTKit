@@ -8,11 +8,16 @@
 
 #import <UIKit/UIKit.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 typedef id<UIViewControllerAnimatedTransitioning>(^NavAnimatedTransitionBlock)(UINavigationControllerOperation operation, UIViewController *fromVC, UIViewController *toVC);
 
 @interface TTNavigationController : UINavigationController <UINavigationControllerDelegate, UINavigationBarDelegate>
 
 @property (nonatomic, strong) UIImage *backIndicatorImage; // 导航栏返回按钮图片
+@property (class, nonatomic, strong) UIImage *defaultBackIndicatorImage; // 导航栏默认返回按钮图片
 @property (nonatomic, copy) NavAnimatedTransitionBlock animatedTransitionBlock;
 
 @end
+
+NS_ASSUME_NONNULL_END

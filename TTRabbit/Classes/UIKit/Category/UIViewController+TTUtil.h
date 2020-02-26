@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 typedef void(^TTAlertHandler)(NSInteger index);
 
 @interface UIViewController (TTUtil)
@@ -60,12 +62,13 @@ typedef void(^TTAlertHandler)(NSInteger index);
 /**
  添加navigationBar上左边的按钮功能
  */
-- (void)tt_addRightBarItemWithTitle:(NSString *)title image:(UIImage *)image selector:(SEL)selecor;
+- (void)tt_addRightBarItemWithTitle:(NSString * _Nullable)title image:(UIImage * _Nullable)image selector:(SEL)selecor;
+- (void)tt_addRightBarItemWithTitle:(NSString *)title font:(UIFont *)font textColor:(UIColor *)color selector:(SEL)selecor;
 
 /**
  添加navigationBar上右边的按钮功能
  */
-- (void)tt_addLeftBarItemWithTitle:(NSString *)title image:(UIImage *)image selector:(SEL)selecor;
+- (void)tt_addLeftBarItemWithTitle:(NSString * _Nullable)title image:(UIImage * _Nullable)image selector:(SEL)selecor;
 
 #pragma mark - Alert
 
@@ -77,7 +80,7 @@ typedef void(^TTAlertHandler)(NSInteger index);
  @param handler 点击确定的回掉
  @return 弹窗
  */
-- (UIAlertController *)tt_showOKAlertWithTitle:(NSString *)title message:(NSString *)message handler:(dispatch_block_t)handler;
+- (UIAlertController *)tt_showOKAlertWithTitle:(NSString *)title message:(NSString *)message handler:(dispatch_block_t _Nullable)handler;
 
 /**
  展示有取消和确定按钮的系统弹窗
@@ -187,3 +190,5 @@ typedef void(^TTAlertHandler)(NSInteger index);
 - (__kindof UIView *)tt_showTipViewWithCustomView:(UIView *)customView tapedBlock:(dispatch_block_t)block;
 
 @end
+
+NS_ASSUME_NONNULL_END

@@ -10,13 +10,13 @@
 #define TTKit_h
 
 #import <objc/runtime.h>
-
 #import "TTMacros.h"
 
 #import "UIView+TTToast.h"
 #import "UIView+TTTips.h"
 #import "UIView+TTUtil.h"
 #import "UIView+TTBorder.h"
+#import "UILabel+TTUtil.h"
 #import "UIWindow+TTUtil.h"
 #import "UIButton+TTImagePosition.h"
 #import "UIButton+TTIndicator.h"
@@ -37,6 +37,8 @@
 #import "TTEdgeInsetsLabel.h"
 #import "TTViewTagGenerator.h"
 #import "TTViewController.h"
+#import "TTTableViewController.h"
+#import "TTTabBarController.h"
 #import "TTNavigationController.h"
 
 #import "NSBundle+TTUtil.h"
@@ -45,8 +47,10 @@
 #import "NSDate+TTUtil.h"
 #import "NSDateFormatter+TTUtil.h"
 #import "NSThread+TTUtil.h"
+#import "NSArray+TTUtil.h"
 #import "NSDictionary+TTUtil.h"
 #import "NSObject+TTSingleton.h"
+#import "NSURLComponents+TTUtil.h"
 #import "TTSafeKit.h"
 
 #endif /* TTKit_h */

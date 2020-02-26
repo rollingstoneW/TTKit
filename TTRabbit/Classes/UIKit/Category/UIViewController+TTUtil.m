@@ -155,7 +155,18 @@
     self.navigationItem.rightBarButtonItems = items;
 }
 
-- (UIAlertController *)tt_showOKAlertWithTitle:(NSString *)title message:(NSString *)message handler:(dispatch_block_t)handler {
+- (void)tt_addRightBarItemWithTitle:(NSString *)title font:(UIFont *)font textColor:(UIColor *)color selector:(SEL)selecor {
+    UIButton *button = [UIButton buttonWithTitle:title font:font titleColor:color];
+    button.contentEdgeInsets = UIEdgeInsetsMake(10, 10, 10, 10);
+    [button sizeToFit];
+    [button addTarget:self action:selecor forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithCustomView:button];
+    NSMutableArray *items = self.navigationItem.rightBarButtonItems ? [self.navigationItem.rightBarButtonItems mutableCopy] : [NSMutableArray array];
+    [items addObject:item];
+    self.navigationItem.rightBarButtonItems = items;
+}
+
+- (UIAlertController *)tt_showOKAlertWithTitle:(NSString *)title message:(NSString *)message handler:(dispatch_block_t _Nullable)handler {
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
     [alert addAction:[UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         TTSafeBlock(handler);

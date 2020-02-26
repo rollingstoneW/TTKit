@@ -9,12 +9,38 @@
 #import "TTNavigationController.h"
 #import "TTNavigationControllerChildProtocol.h"
 #import "NSObject+YYAdd.h"
+#import <objc/runtime.h>
 
 @interface TTNavigationController () <UINavigationControllerDelegate, UINavigationBarDelegate>
 
 @end
 
 @implementation TTNavigationController
+
+- (instancetype)initWithRootViewController:(UIViewController *)rootViewController {
+    if (self = [super initWithRootViewController:rootViewController]) {
+        [self commonInit];
+    }
+    return self;
+}
+
+- (instancetype)initWithNavigationBarClass:(Class)navigationBarClass toolbarClass:(Class)toolbarClass {
+    if (self = [super initWithNavigationBarClass:navigationBarClass toolbarClass:toolbarClass]) {
+        [self commonInit];
+    }
+    return self;
+}
+
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
+    if (self = [super initWithCoder:aDecoder]) {
+        [self commonInit];
+    }
+    return self;
+}
+
+- (void)commonInit {
+    self.modalPresentationStyle = UIModalPresentationFullScreen;
+}
 
 + (void)load {
     static dispatch_once_t token;
@@ -27,7 +53,7 @@
     [super viewDidLoad];
 
     // 自定义返回图片(在返回按钮旁边) 这个效果由navigationBar控制
-    UIImage *backIndicatorImage = self.backIndicatorImage ?: [UIImage imageNamed:@"back"];
+    UIImage *backIndicatorImage = self.backIndicatorImage ?: (TTNavigationController.defaultBackIndicatorImage ?: [UIImage imageNamed:@"icon_nav_back"]);
     backIndicatorImage = [backIndicatorImage imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     [self.navigationBar setBackIndicatorImage:backIndicatorImage];
     [self.navigationBar setBackIndicatorTransitionMaskImage:backIndicatorImage];
@@ -94,6 +120,14 @@
 
 - (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation {
     return self.topViewController.preferredInterfaceOrientationForPresentation;
+}
+
++ (UIImage *)defaultBackIndicatorImage {
+    return objc_getAssociatedObject(self, _cmd);
+}
+
++ (void)setDefaultBackIndicatorImage:(UIImage *)defaultBackIndicatorImage {
+    objc_setAssociatedObject(self, @selector(defaultBackIndicatorImage), defaultBackIndicatorImage, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 @end

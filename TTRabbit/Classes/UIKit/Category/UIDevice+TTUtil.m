@@ -10,22 +10,38 @@
 
 @implementation UIDevice (TTUtil)
 
-+ (NSInteger)tt_navigationBarHeight {
-    static NSInteger navigationBarHeight = 0;
++ (CGFloat)tt_statusBarHeight {
+    CGFloat height = [UIApplication sharedApplication].statusBarFrame.size.height;
+    return height ?: ([self tt_isFullScreen] ? 44 : 20);
+}
+
++ (CGFloat)tt_navigationBarHeight {
+    static CGFloat navigationBarHeight = 0;
     static dispatch_once_t token;
     dispatch_once(&token, ^{
-        navigationBarHeight = (NSInteger)[[UINavigationBar new] sizeThatFits:CGSizeZero].height;
+        navigationBarHeight = [[UINavigationBar new] sizeThatFits:CGSizeZero].height;
     });
     return navigationBarHeight;
 }
 
-+ (NSInteger)tt_tabBarHeight {
-    static NSInteger tabBarHeight = 0;
++ (CGFloat)tt_navigationBarBottom {
+    return [self tt_statusBarHeight] + [self tt_navigationBarHeight];
+}
+
++ (CGFloat)tt_tabBarHeight {
+    static CGFloat tabBarHeight = 0;
     static dispatch_once_t token;
     dispatch_once(&token, ^{
-        tabBarHeight = (NSInteger)[[UITabBar new] sizeThatFits:CGSizeZero].height;
+        tabBarHeight = [[UITabBar new] sizeThatFits:CGSizeZero].height;
     });
-    return tabBarHeight;
+    return tabBarHeight + [self tt_safeAreaBottom];
+}
+
++ (CGFloat)tt_safeAreaBottom {
+    if (@available(iOS 11.0, *)) {
+        return [[UIApplication sharedApplication].delegate window].safeAreaInsets.bottom;
+    }
+    return 0;
 }
 
 + (BOOL)tt_isFullScreen {

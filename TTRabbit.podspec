@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
 
   s.subspec 'Core' do |ss|
     ss.source_files = 'TTRabbit/Classes/**/*'
-    ss.public_header_files = 'TTRabbit/Classes/**/*.h'
+    ss.public_header_files = 'TTRabbit/Classes/TTKit.h', 'TTRabbit/Classes/**/*.h'
     ss.resource_bundles = {
       'TTRabbitBundle' => ['TTRabbit/Assets/**/*.*']
     }

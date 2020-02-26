@@ -136,6 +136,9 @@ NSString *const TTViewControllerDidDismissNotification = @"TTViewControllerDidDi
 }
 
 - (UIEdgeInsets)subviewInsets {
+    if (!self.navigationController.navigationBar.isHidden && !self.navigationController.navigationBar.isTranslucent) {
+        return UIEdgeInsetsZero;
+    }
     return UIEdgeInsetsMake([self navigationBarHeight], 0, 0, 0);
 }
 

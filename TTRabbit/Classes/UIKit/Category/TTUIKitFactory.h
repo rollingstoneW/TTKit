@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 /**
  创建常用UI组件的一些便捷方法
  */
@@ -28,10 +30,11 @@
 + (instancetype)buttonWithTitle:(NSString *)title font:(UIFont *)font titleColor:(UIColor *)titleColor;
 + (instancetype)buttonWithTitle:(NSString *)title font:(UIFont *)font titleColor:(UIColor *)titleColor image:(UIImage *)image;
 + (instancetype)buttonWithImage:(UIImage *)image target:(id)target selector:(SEL)selector;
-+ (instancetype)buttonWithImage:(UIImage *)image selectedImage:(UIImage *)selected target:(id)target selector:(SEL)selector;
++ (instancetype)buttonWithImage:(UIImage *)image selectedImage:(UIImage * _Nullable)selected target:(id)target selector:(SEL)selector;
 + (instancetype)buttonWithAttributedTitle:(NSAttributedString *)attributedTitle target:(id)target selector:(SEL)selector;
 + (instancetype)buttonWithBgImage:(UIImage *)image target:(id)target selector:(SEL)selector;
 + (instancetype)buttonWithBgImage:(UIImage *)image selectedImage:(UIImage *)selected target:(id)target selector:(SEL)selector;
+- (void)setTitle:(NSString *)title font:(UIFont *)font titleColor:(UIColor *)titleColor;
 @end
 
 @interface UIColor (TTFactory)
@@ -86,3 +89,5 @@
 #define kTTFont_09 [UIFont systemFontOfSize:9]
 #define kTTFont_08 [UIFont systemFontOfSize:8]
 #define kTTFont(size) [UIFont systemFontOfSize:size]
+
+NS_ASSUME_NONNULL_END

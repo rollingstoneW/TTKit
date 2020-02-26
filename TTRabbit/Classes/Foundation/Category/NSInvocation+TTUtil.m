@@ -106,7 +106,7 @@
 
             case '@': // id
             {
-                __autoreleasing id arg = va_arg(args, id);
+                id arg = va_arg(args, id);
                 [self setArgument:&arg atIndex:index];
             } break;
 
@@ -249,7 +249,7 @@ return @(ret); \
         };
 
         case '@': { // id
-            id ret = nil;
+            __unsafe_unretained id ret = nil;
             [self getReturnValue:&ret];
             return ret;
         };
@@ -309,7 +309,7 @@ return @(ret); \
         };
 
         case '@': { // id
-            id ret = nil;
+            __unsafe_unretained id ret = nil;
             [self getArgument:&ret atIndex:index];
             return ret;
         };

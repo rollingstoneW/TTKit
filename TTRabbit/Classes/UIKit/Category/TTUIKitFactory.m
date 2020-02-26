@@ -11,7 +11,7 @@
 
 @implementation UIView (TTFactory)
 + (instancetype)viewWithColor:(UIColor *)color {
-    UIView *view = [[UIView alloc] init];
+    UIView *view = [[self alloc] init];
     view.backgroundColor = color;
     return view;
 }
@@ -27,10 +27,10 @@
     return label;
 }
 + (instancetype)labelWithFont:(UIFont *)font textColor:(UIColor *)color {
-    return [self labelWithText:nil font:font textColor:color alignment:NSTextAlignmentLeft numberOfLines:1];
+    return [self labelWithText:@"" font:font textColor:color alignment:NSTextAlignmentLeft numberOfLines:1];
 }
 + (instancetype)labelWithFont:(UIFont *)font textColor:(UIColor *)color alignment:(NSTextAlignment)alignment numberOfLines:(NSInteger)lines {
-    return [self labelWithText:nil font:font textColor:color alignment:alignment numberOfLines:lines];
+    return [self labelWithText:@"" font:font textColor:color alignment:alignment numberOfLines:lines];
 }
 + (instancetype)labelWithText:(NSString *)text font:(UIFont *)font textColor:(UIColor *)color {
     return [self labelWithText:text font:font textColor:color alignment:NSTextAlignmentLeft numberOfLines:1];
@@ -51,10 +51,8 @@
     return [self buttonWithTitle:title font:font titleColor:titleColor image:nil];
 }
 + (instancetype)buttonWithTitle:(NSString *)title font:(UIFont *)font titleColor:(UIColor *)titleColor image:(UIImage *)image {
-    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-    button.titleLabel.font = font;
-    [button setTitle:title forState:UIControlStateNormal];
-    [button setTitleColor:titleColor forState:UIControlStateNormal];
+    UIButton *button = [self buttonWithType:UIButtonTypeCustom];
+    [button setTitle:title font:font titleColor:titleColor];
     [button setImage:image forState:UIControlStateNormal];
     return button;
 }
@@ -62,7 +60,7 @@
     return [self buttonWithImage:image selectedImage:nil target:target selector:selector];
 }
 + (instancetype)buttonWithImage:(UIImage *)image selectedImage:(UIImage *)selected target:(id)target selector:(SEL)selector {
-    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+    UIButton *button = [self buttonWithType:UIButtonTypeCustom];
     [button setImage:image forState:UIControlStateNormal];
     [button setImage:selected forState:UIControlStateSelected];
     [button addTarget:target action:selector forControlEvents:UIControlEventTouchUpInside];
@@ -72,17 +70,22 @@
     return [self buttonWithBgImage:image selectedImage:nil target:target selector:selector];
 }
 + (instancetype)buttonWithBgImage:(UIImage *)image selectedImage:(UIImage *)selected target:(id)target selector:(SEL)selector {
-    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+    UIButton *button = [self buttonWithType:UIButtonTypeCustom];
     [button setBackgroundImage:image forState:UIControlStateNormal];
     [button setBackgroundImage:selected forState:UIControlStateSelected];
     [button addTarget:target action:selector forControlEvents:UIControlEventTouchUpInside];
     return button;
 }
 + (instancetype)buttonWithAttributedTitle:(NSAttributedString *)attributedTitle target:(id)target selector:(SEL)selector {
-    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+    UIButton *button = [self buttonWithType:UIButtonTypeCustom];
     [button setAttributedTitle:attributedTitle forState:UIControlStateNormal];
     [button addTarget:target action:selector forControlEvents:UIControlEventTouchUpInside];
     return button;
+}
+- (void)setTitle:(NSString *)title font:(UIFont *)font titleColor:(UIColor *)titleColor {
+    self.titleLabel.font = font;
+    [self setTitle:title forState:UIControlStateNormal];
+    [self setTitleColor:titleColor forState:UIControlStateNormal];
 }
 @end
 

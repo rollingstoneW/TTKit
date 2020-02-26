@@ -13,14 +13,29 @@ NS_ASSUME_NONNULL_BEGIN
 @interface UIDevice (TTUtil)
 
 /**
+ 状态栏高度
+*/
++ (CGFloat)tt_statusBarHeight;
+
+/**
  获取系统导航栏高度
  */
-+ (NSInteger)tt_navigationBarHeight;
++ (CGFloat)tt_navigationBarHeight;
+
+/**
+ 获取系统导航栏底部
+ */
++ (CGFloat)tt_navigationBarBottom;
 
 /**
  获取系统tabBar高度
  */
-+ (NSInteger)tt_tabBarHeight;
++ (CGFloat)tt_tabBarHeight;
+
+/**
+ 安全区域下面的高度
+ */
++ (CGFloat)tt_safeAreaBottom;
 
 /**
  是否是全面屏
