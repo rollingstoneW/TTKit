@@ -10,6 +10,15 @@
 #import <OpenGLES/ES2/gl.h>
 #import "TTMacros.h"
 
+#if __has_include (<YYKit/YYKit.h>)
+#import <YYKit/YYKit.h>
+#elif __has_include (<YYCategories/YYCategories.h>)
+#import <YYCategories/YYCategories.h>
+#endif
+
+@interface UIView (TTPrivate) <UIGestureRecognizerDelegate>
+@end
+
 @implementation UIView (TTUtil)
 
 - (void)tt_setLayerBorder:(CGFloat)width color:(UIColor *)color cornerRadius:(CGFloat)cornerRadius {
@@ -123,8 +132,19 @@
     if (![target respondsToSelector:selector]) { return nil; }
     self.userInteractionEnabled = YES;
     UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:target action:selector];
+    pan.delegate = self;
     [self addGestureRecognizer:pan];
     return pan;
+}
+
+- (UISwipeGestureRecognizer *)tt_addSwipeGestureWithDirection:(UISwipeGestureRecognizerDirection)direction Target:(id)target selector:(SEL)selector {
+    if (![target respondsToSelector:selector]) { return nil; }
+    self.userInteractionEnabled = YES;
+    UISwipeGestureRecognizer *swipe = [[UISwipeGestureRecognizer alloc] initWithTarget:target action:selector];
+    swipe.direction = direction;
+    swipe.delegate = self;
+    [self addGestureRecognizer:swipe];
+    return swipe;
 }
 
 - (UILongPressGestureRecognizer *)tt_addLongPressGestureWithTarget:(id)target selector:(SEL)selector {
@@ -134,6 +154,51 @@
     press.delegate = target;
     [self addGestureRecognizer:press];
     return press;
+}
+
+- (UITapGestureRecognizer *)tt_addTapGestureWithBlock:(void (^)(UITapGestureRecognizer *))block {
+    if (!block) { return nil; }
+    self.userInteractionEnabled = YES;
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithActionBlock:^(id  _Nonnull sender) {
+        block(sender);
+    }];
+    tap.delegate = self;
+    [self addGestureRecognizer:tap];
+    return tap;
+}
+
+- (UIPanGestureRecognizer *)tt_addPanGestureWithBlock:(void (^)(UIPanGestureRecognizer *))block {
+    if (!block) { return nil; }
+    self.userInteractionEnabled = YES;
+    UIPanGestureRecognizer *tap = [[UIPanGestureRecognizer alloc] initWithActionBlock:^(id  _Nonnull sender) {
+        block(sender);
+    }];
+    tap.delegate = self;
+    [self addGestureRecognizer:tap];
+    return tap;
+}
+
+- (UISwipeGestureRecognizer *)tt_addSwipeGestureWithDirection:(UISwipeGestureRecognizerDirection)direction block:(void (^)(UISwipeGestureRecognizer *))block {
+    if (!block) { return nil; }
+    self.userInteractionEnabled = YES;
+    UISwipeGestureRecognizer *swipe = [[UISwipeGestureRecognizer alloc] initWithActionBlock:^(id  _Nonnull sender) {
+        block(sender);
+    }];
+    swipe.direction = direction;
+    swipe.delegate = self;
+    [self addGestureRecognizer:swipe];
+    return swipe;
+}
+
+- (UILongPressGestureRecognizer *)tt_addLongPressGestureWithBlock:(void (^)(UILongPressGestureRecognizer *))block {
+    if (!block) { return nil; }
+    self.userInteractionEnabled = YES;
+    UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithActionBlock:^(id  _Nonnull sender) {
+        block(sender);
+    }];
+    longPress.delegate = self;
+    [self addGestureRecognizer:longPress];
+    return longPress;
 }
 
 - (void)tt_removeAllGesture{

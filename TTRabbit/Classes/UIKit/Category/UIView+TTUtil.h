@@ -84,9 +84,34 @@
 - (UIPanGestureRecognizer *)tt_addPanGestureWithTarget:(id)target selector:(SEL)selector;
 
 /**
+ 添加滑动手势
+ */
+- (UISwipeGestureRecognizer *)tt_addSwipeGestureWithDirection:(UISwipeGestureRecognizerDirection)direction Target:(id)target selector:(SEL)selector;
+
+/**
  添加长按手势
  */
 - (UILongPressGestureRecognizer *)tt_addLongPressGestureWithTarget:(id)target selector:(SEL)selector;
+
+/**
+ 添加点击手势
+ */
+- (UITapGestureRecognizer *)tt_addTapGestureWithBlock:(void(^)(UITapGestureRecognizer *tap))block;
+
+/**
+ 添加拖动手势
+ */
+- (UIPanGestureRecognizer *)tt_addPanGestureWithBlock:(void(^)(UIPanGestureRecognizer *pan))block;
+
+/**
+ 添加滑动手势
+ */
+- (UISwipeGestureRecognizer *)tt_addSwipeGestureWithDirection:(UISwipeGestureRecognizerDirection)direction block:(void(^)(UISwipeGestureRecognizer *swipe))block;
+
+/**
+ 添加长按手势
+ */
+- (UILongPressGestureRecognizer *)tt_addLongPressGestureWithBlock:(void(^)(UILongPressGestureRecognizer *longPress))block;
 
 /**
  移除所有手势
