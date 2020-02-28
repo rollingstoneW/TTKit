@@ -35,6 +35,7 @@
 #import "TTUIKitFactory.h"
 
 #import "TTEdgeInsetsLabel.h"
+#import "TTRadioButton.h"
 #import "TTViewTagGenerator.h"
 #import "TTViewController.h"
 #import "TTTableViewController.h"
@@ -50,7 +51,7 @@
 #import "NSArray+TTUtil.h"
 #import "NSDictionary+TTUtil.h"
 #import "NSObject+TTSingleton.h"
-#import "NSURLComponents+TTUtil.h"
+//#import "NSURLComponents+TTUtil.h"
 #import "TTSafeKit.h"
 
 #endif /* TTKit_h */

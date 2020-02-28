@@ -43,7 +43,7 @@ const TTPopupShowingPriority TTPopupShowingPriorityDefaultLow = 0;
 
 - (void)_showInView:(UIView *)view animated:(BOOL)animated {
     [view addSubview:self];
-    self.containerView.frame = self.containerFrame;
+//    self.containerView.frame = self.containerFrame;
     self.frame = view.bounds;
     self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [self willShow:animated];
