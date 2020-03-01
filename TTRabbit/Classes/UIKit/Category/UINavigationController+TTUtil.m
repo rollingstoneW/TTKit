@@ -50,4 +50,10 @@
     return [self tt_popToNeareastViewControllerIn:classes animated:animated];
 }
 
+- (NSArray<UIViewController *> *)tt_popViewControllerWithLevel:(NSInteger)level animated:(BOOL)animated {
+    NSInteger index = self.viewControllers.count - 1 - level;
+    UIViewController *vc = self.viewControllers[MAX(index, 0)];
+    return [self popToViewController:vc animated:animated];
+}
+
 @end

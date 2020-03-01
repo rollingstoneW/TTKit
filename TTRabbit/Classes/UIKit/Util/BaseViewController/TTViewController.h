@@ -10,6 +10,8 @@
 #import "TTViewControllerRouter.h"
 #import "UIViewController+TTUtil.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 // 页面已经消失的通知
 UIKIT_EXTERN NSString *const TTViewControllerDidDismissNotification;
 
@@ -51,3 +53,5 @@ UIKIT_EXTERN NSString *const TTViewControllerDidDismissNotification;
 - (UIView *)addPulldownToGobackHeaderInScrollView:(UIScrollView *)scrollView;
 
 @end
+
+NS_ASSUME_NONNULL_END

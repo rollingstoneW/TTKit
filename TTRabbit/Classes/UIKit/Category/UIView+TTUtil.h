@@ -8,8 +8,14 @@
 
 #import <UIKit/UIKit.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface UIView (TTUtil)
 
+/**
+ 获取自身所在的控制器
+*/
+- (UIViewController * _Nullable)viewController;
 
 /**
  设置layer边框
@@ -148,3 +154,5 @@
 - (CGFloat)tt_layoutConstantForAttribute:(NSLayoutAttribute)attribute relatedView:(UIView *)view relatedAttribute:(NSLayoutAttribute)related;
 
 @end
+
+NS_ASSUME_NONNULL_END

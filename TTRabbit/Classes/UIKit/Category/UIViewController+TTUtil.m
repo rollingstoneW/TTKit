@@ -59,6 +59,16 @@
     }
 }
 
+- (UIViewController *)tt_belowViewController {
+    if (self.navigationController && self.navigationController.viewControllers.firstObject != self) {
+        NSInteger currentIndex = [self.navigationController.viewControllers indexOfObject:self];
+        if (self.navigationController.viewControllers.count > currentIndex - 1) {
+            return self.navigationController.viewControllers[currentIndex - 1];
+        }
+    }
+    return self.presentingViewController;
+}
+
 - (void)tt_goback {
     if (self.navigationController.viewControllers.count > 1 && self == self.navigationController.topViewController) {
         [self.navigationController popViewControllerAnimated:YES];
@@ -164,6 +174,10 @@
     NSMutableArray *items = self.navigationItem.rightBarButtonItems ? [self.navigationItem.rightBarButtonItems mutableCopy] : [NSMutableArray array];
     [items addObject:item];
     self.navigationItem.rightBarButtonItems = items;
+}
+
+- (id)tt_postMessageToBelow:(NSString *)message object:(id)object userInfo:(NSDictionary *)userInfo {
+    return [self.tt_belowViewController tt_postMessageToBelow:message object:object userInfo:userInfo];
 }
 
 - (UIAlertController *)tt_showOKAlertWithTitle:(NSString *)title message:(NSString *)message handler:(dispatch_block_t _Nullable)handler {

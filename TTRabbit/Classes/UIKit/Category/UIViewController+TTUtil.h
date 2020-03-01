@@ -17,12 +17,17 @@ typedef void(^TTAlertHandler)(NSInteger index);
 /**
  设置富文本标题
  */
-@property (nonatomic,   copy) NSAttributedString *tt_attributedTitle;
+@property (nonatomic, copy) NSAttributedString *tt_attributedTitle;
 
 /**
  获取当前显示的控制器
  */
 + (UIViewController *)tt_currentViewController;
+
+/**
+ 获取自身下面的页面，可能是导航栈的上一个页面，或者presentingViewController
+*/
+- (UIViewController *)tt_belowViewController;
 
 /**
  返回到上个页面，自动pop或者dismiss
@@ -69,6 +74,18 @@ typedef void(^TTAlertHandler)(NSInteger index);
  添加navigationBar上右边的按钮功能
  */
 - (void)tt_addLeftBarItemWithTitle:(NSString * _Nullable)title image:(UIImage * _Nullable)image selector:(SEL)selecor;
+
+/**
+ 向自身下面的页面发送消息
+
+ @param message 消息
+ @param object 对象
+ @param userInfo 自定义消息
+ @return 结果
+*/
+- (id _Nullable)tt_postMessageToBelow:(NSString *)message
+                               object:(id _Nullable)object
+                             userInfo:(NSDictionary * _Nullable)userInfo;
 
 #pragma mark - Alert
 

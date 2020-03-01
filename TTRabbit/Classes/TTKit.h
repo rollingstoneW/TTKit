@@ -38,6 +38,8 @@
 #import "TTRadioButton.h"
 #import "TTViewTagGenerator.h"
 #import "TTViewController.h"
+#import "TTScrollViewController.h"
+#import "TTViewControllerEntryPolicy.h"
 #import "TTTableViewController.h"
 #import "TTTabBarController.h"
 #import "TTNavigationController.h"

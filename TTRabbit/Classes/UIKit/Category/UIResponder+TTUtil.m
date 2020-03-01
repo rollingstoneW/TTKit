@@ -10,7 +10,9 @@
 
 @implementation UIResponder (TTUtil)
 
-- (id)tt_nextResponderPerform:(NSString *)action object:(id)object userInfo:(NSDictionary *)userInfo {
+- (id _Nullable)tt_nextResponderPerform:(NSString *)action
+                                 object:(id _Nullable)object
+                               userInfo:(NSDictionary * _Nullable)userInfo {
     return [self.nextResponder tt_nextResponderPerform:action object:object userInfo:userInfo];
 }
 
