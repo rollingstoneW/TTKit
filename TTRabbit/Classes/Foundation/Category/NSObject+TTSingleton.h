@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
+NS_ASSUME_NONNULL_BEGIN
 
 /**
  遵守这个协议的类会自动生成单例方法，线程安全
@@ -36,3 +37,5 @@
 @interface NSObject (TTSingleton)
 
 @end
+
+NS_ASSUME_NONNULL_END

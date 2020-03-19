@@ -1621,6 +1621,23 @@ static NSString *const TTCategoryMenuBarCellID = @"cell";
     TTCategoryMenuBarSectionItem *sectionItem = self.sectionOptions[indexPath.section];
     NSArray<TTCategoryMenuBarSectionOptionItem *> *childOptions = (NSArray<TTCategoryMenuBarSectionOptionItem *> *)sectionItem.childOptions;
     TTCategoryMenuBarSectionOptionItem *item = sectionItem.childOptions[indexPath.row];
+    
+    if (!sectionItem.childAllowsMultipleSelection) {
+        for (NSInteger i = 0; i < sectionItem.childOptions.count; i ++) {
+            TTCategoryMenuBarSectionOptionItem *child = sectionItem.childOptions[i];
+            if (child.isSelected) {
+                child.isSelected = NO;
+                NSIndexPath *selectedIndexPath = [NSIndexPath indexPathForRow:i inSection:indexPath.section];
+                [collectionView deselectItemAtIndexPath:selectedIndexPath animated:NO];
+                [self refreshItemAtIndexPath:selectedIndexPath];
+            }
+        }
+        item.isSelected = YES;
+        [self refreshItemAtIndexPath:indexPath];
+        [self selectedOptionsDidChange];
+        return;
+    }
+    
     item.isSelected = YES;
     // 点击到选择全部
     if (item.isSelectAll) {
@@ -1643,8 +1660,9 @@ static NSString *const TTCategoryMenuBarCellID = @"cell";
                 [self selectAllOptions:sectionItem.childOptions isSelect:YES inSection:indexPath.section];
             } else {
                 selectAllOption.isSelected = NO;
-                [collectionView deselectItemAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] animated:NO];
-                [self refreshItemAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
+                NSIndexPath *selectAllIndexPath = [NSIndexPath indexPathForRow:0 inSection:indexPath.section];
+                [collectionView deselectItemAtIndexPath:selectAllIndexPath animated:NO];
+                [self refreshItemAtIndexPath:selectAllIndexPath];
                 [self refreshItemAtIndexPath:indexPath];
             }
         } else {
@@ -1669,8 +1687,9 @@ static NSString *const TTCategoryMenuBarCellID = @"cell";
         if (selectAllOption) {
             // 取消选中全选的cell
             selectAllOption.isSelected = NO;
-            [collectionView deselectItemAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] animated:NO];
-            [self refreshItemAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
+            NSIndexPath *selectAllIndexPath = [NSIndexPath indexPathForRow:0 inSection:indexPath.section];
+            [collectionView deselectItemAtIndexPath:selectAllIndexPath animated:NO];
+            [self refreshItemAtIndexPath:selectAllIndexPath];
         }
         self.sectionOptions[indexPath.section].isChildrenAllSelected = NO;
     }
