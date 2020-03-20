@@ -17,6 +17,16 @@ typedef NS_ENUM(NSUInteger, TTButtonImagePosition) {
 
 @interface UIButton (TTIcon)
 
+/*
+ 图片位置，默认在左
+ */
+@property (nonatomic, assign, readonly) TTButtonImagePosition tt_imagePosition;
+
+/*
+ 图片与文字间距，默认0
+*/
+@property (nonatomic, assign, readonly) CGFloat tt_spacing;
+
 /**
  创建没有点击事件的icon
 

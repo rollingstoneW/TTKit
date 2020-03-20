@@ -78,7 +78,7 @@ typedef NS_ENUM(NSUInteger, TTCategoryMenuBarCategoryStyle) {
 @property (nonatomic, strong) UIImage *selectedAccessoryIcon; // 右边的附件选中图标
 
 @property (nonatomic, strong) NSArray<__kindof TTCategoryMenuBarOptionItem *> *childOptions; // 子选项列表
-@property (nonatomic, assign) BOOL childAllowsMultipleSelection; // 子选项是否支持多选，默认为NO。（列表样式的最后一排才会生效）
+@property (nonatomic, assign) BOOL childAllowsMultipleSelection; // 子选项是否支持多选，默认为NO。（分组样式生效，列表样式的最后一排才会生效）
 
 @property (nonatomic, strong, nullable) NSMutableArray<__kindof TTCategoryMenuBarOptionItem *> *selectedChildOptions; // 选中的子选项
 @property (nonatomic, assign) BOOL isChildrenAllSelected; // 子选项是否全部选中

@@ -32,7 +32,7 @@
     return button;
 }
 
-- (void)tt_layoutWithImagePosition:(TTButtonImagePosition)style space:(CGFloat)space {
+- (void)tt_layoutWithImagePosition:(TTButtonImagePosition)position space:(CGFloat)space {
     if (!UIEdgeInsetsEqualToEdgeInsets(self.contentEdgeInsets, self.tt_lastAdjustedContentInsets)) {
         self.tt_lastContentInsets = self.contentEdgeInsets;
     }
@@ -54,8 +54,7 @@
     CGFloat insetHorizental = (MAX(titleSize.width, imageSize.width) - (titleSize.width + imageSize.width)) / 2;
     CGFloat insetVertical = (MIN(titleSize.height, imageSize.height) + space) / 2;
 
-    switch (style)
-    {
+    switch (position) {
         case TTButtonImagePositionLeft : {
             self.imageEdgeInsets = UIEdgeInsetsMake(0, -insetAmount, 0, insetAmount);
             self.titleEdgeInsets = UIEdgeInsetsMake(0, insetAmount, 0, -insetAmount);
@@ -81,6 +80,8 @@
         }
     }
     self.tt_lastAdjustedContentInsets = self.contentEdgeInsets;
+    self.tt_imagePosition = position;
+    self.tt_spacing = space;
 }
 
 - (void)tt_resetEdgeInsets {
@@ -102,5 +103,22 @@
 - (void)setTt_lastAdjustedContentInsets:(UIEdgeInsets)tt_lastAdjustedContentInsets {
     objc_setAssociatedObject(self, @selector(tt_lastAdjustedContentInsets), [NSValue valueWithUIEdgeInsets:tt_lastAdjustedContentInsets], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
+
+- (TTButtonImagePosition)tt_imagePosition {
+    return [objc_getAssociatedObject(self, _cmd) integerValue];
+}
+
+- (void)setTt_imagePosition:(TTButtonImagePosition)tt_imagePosition {
+    objc_setAssociatedObject(self, @selector(tt_imagePosition), @(tt_imagePosition), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (CGFloat)tt_spacing {
+    return [objc_getAssociatedObject(self, _cmd) floatValue];
+}
+
+- (void)setTt_spacing:(CGFloat)tt_spacing {
+    objc_setAssociatedObject(self, @selector(tt_spacing), @(tt_spacing), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
 
 @end
