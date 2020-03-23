@@ -1224,7 +1224,7 @@ static NSString *const TTCategoryMenuBarCellID = @"cell";
                 if (!row) {
                     itemAttributes.frame = (CGRect){.origin = CGPointMake(insets.left, lastBottom), .size = itemSize};
                     lastRight = insets.left + itemSize.width;
-                } else if (lastRight + interitemSpacing + itemSize.width > layoutWidth) {
+                } else if (lastRight + interitemSpacing + itemSize.width > layoutWidth + insets.left) {
                     // 下一行
                     lastBottom += itemSize.height + lineSpacing;
                     lastRight = insets.left;
