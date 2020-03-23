@@ -127,6 +127,7 @@
     if (self) {
         _backgroundColor = [UIColor whiteColor];
         _selectBackgroundColor = TTCategoryMenuBarBgColor();
+        _enabled = YES;
     }
     return self;
 }

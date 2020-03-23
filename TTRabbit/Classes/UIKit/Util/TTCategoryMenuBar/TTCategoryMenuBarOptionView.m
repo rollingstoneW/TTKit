@@ -1622,6 +1622,17 @@ static NSString *const TTCategoryMenuBarCellID = @"cell";
     NSArray<TTCategoryMenuBarSectionOptionItem *> *childOptions = (NSArray<TTCategoryMenuBarSectionOptionItem *> *)sectionItem.childOptions;
     TTCategoryMenuBarSectionOptionItem *item = sectionItem.childOptions[indexPath.row];
     
+    // 如果不支持多选，直接消失
+    if (!self.sectionCategoryItem.childAllowsMultipleSelection) {
+        item.isSelected = YES;
+        [self refreshItemAtIndexPath:indexPath];
+        [self selectedOptionsDidChange];
+        if ([self.delegate respondsToSelector:@selector(categoryBarOptionView:didCommitOptions:)]) {
+            [self.delegate categoryBarOptionView:self didCommitOptions:@[sectionItem]];
+        }
+        return;
+    }
+    
     if (!sectionItem.childAllowsMultipleSelection) {
         for (NSInteger i = 0; i < sectionItem.childOptions.count; i ++) {
             TTCategoryMenuBarSectionOptionItem *child = sectionItem.childOptions[i];
@@ -1694,6 +1705,21 @@ static NSString *const TTCategoryMenuBarCellID = @"cell";
         self.sectionOptions[indexPath.section].isChildrenAllSelected = NO;
     }
     [self selectedOptionsDidChange];
+}
+
+- (BOOL)collectionView:(UICollectionView *)collectionView shouldSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    TTCategoryMenuBarSectionItem *sectionItem = self.sectionOptions[indexPath.section];
+    NSArray<TTCategoryMenuBarSectionOptionItem *> *childOptions = (NSArray<TTCategoryMenuBarSectionOptionItem *> *)sectionItem.childOptions;
+    TTCategoryMenuBarSectionOptionItem *currentOption = childOptions[indexPath.row];
+    return currentOption.enabled;
+}
+
+- (BOOL)collectionView:(UICollectionView *)collectionView shouldDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
+    TTCategoryMenuBarSectionItem *sectionItem = self.sectionOptions[indexPath.section];
+    if (sectionItem.atLeastOneSelected && sectionItem.selectedChildOptions.count <= 1) {
+        return NO;
+    }
+    return YES;
 }
 
 - (void)selectAllOptions:(NSArray *)options isSelect:(BOOL)isSelect inSection:(NSInteger)section {
