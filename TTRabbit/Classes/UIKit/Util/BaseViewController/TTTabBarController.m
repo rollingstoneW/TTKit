@@ -73,12 +73,13 @@ static NSTimeInterval DoubleTapMaxInterval = 0.25;
 @implementation TTTabBarController
 
 - (void)viewDidLoad {
-    [self loadChildViewControllers];
-    [super viewDidLoad];
-
     if (self.customTabBarClass) {
         [self setValue:[self.customTabBarClass new] forKey:@"tabBar"];
     }
+    
+    [self loadChildViewControllers];
+    
+    [super viewDidLoad];
 
     self.selectedIndex = 0;
     self.delegate = self;
