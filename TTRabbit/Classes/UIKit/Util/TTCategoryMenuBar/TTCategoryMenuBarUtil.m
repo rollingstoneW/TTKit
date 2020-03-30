@@ -28,7 +28,7 @@ TTCategoryMenuBarColorFunc(TTCategoryMenuBarBgColor, 0xf5f5f5)
 TTCategoryMenuBarColorFunc(TTCategoryMenuBarLineColor, 0xeeeeee)
 TTCategoryMenuBarColorFunc(TTCategoryMenuBarBlackColor, 0x333333)
 TTCategoryMenuBarColorFunc(TTCategoryMenuBarGrayColor, 0x666666)
-TTCategoryMenuBarColorFunc(TTCategoryMenuBarBlueColor, 0x0094FE)
+TTCategoryMenuBarColorFunc(TTCategoryMenuBarBlueColor, 0x2684ff)
 
 #undef TTCategoryMenuBarColorFunc
 

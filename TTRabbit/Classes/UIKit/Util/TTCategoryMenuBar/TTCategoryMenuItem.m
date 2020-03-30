@@ -23,6 +23,7 @@
         _separatorLineIndent = 10;
         _shouldIconAutoRotate = YES;
         _optionViewPreferredMaxHeight = TTCategoryMenuBarScreenHeight;
+//        _scrollToFirstSelectedOptionPotisionWhenShow = UITableViewScrollPositionMiddle;
     }
     return self;
 }

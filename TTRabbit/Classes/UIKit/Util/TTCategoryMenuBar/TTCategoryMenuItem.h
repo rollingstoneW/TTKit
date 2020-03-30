@@ -36,7 +36,7 @@ typedef NS_ENUM(NSUInteger, TTCategoryMenuBarCategoryStyle) {
 
 @property (nonatomic,   copy) NSString *title; // 标题
 @property (nonatomic,   copy) NSDictionary *titleAttributes; // 标题富文本样式，默认字体14，颜色333333
-@property (nonatomic,   copy) NSDictionary *selectedTitleAttributes; //标题选中的富文本样式，默认字体14，颜色0094FE
+@property (nonatomic,   copy) NSDictionary *selectedTitleAttributes; //标题选中的富文本样式，默认字体14，颜色2684ff
 @property (nonatomic,   copy) NSAttributedString *attributedTitle; // 富文本标题，如果设置这个会忽略titleAttributes
 @property (nonatomic,   copy) NSAttributedString *selectedAttributedTitle; // 选中的富文本标题，如果设置这个会忽略selectedTitleAttributes
 @property (nonatomic, assign) BOOL shouldUseSelectedOptionTitle; // 是否使用选中选项的标题作为标题，默认NO
@@ -51,6 +51,7 @@ typedef NS_ENUM(NSUInteger, TTCategoryMenuBarCategoryStyle) {
 @property (nonatomic, assign) BOOL showSeparatorAtLast; // 最后一个是否展示分割线，默认NO
 
 @property (nonatomic, assign) BOOL isSelected; // 是否被选中
+@property (nonatomic, assign) UITableViewScrollPosition scrollToFirstSelectedOptionPotisionWhenShow; // 展示选项列表的时候自动滚动到第一个选中的选项的位置，默认是UITableViewScrollPositionMiddle，展示在中间
 
 @property (nonatomic, assign) CGFloat optionViewPreferredMaxHeight; // 选项视图的最大高度，默认屏幕高度和底部与父视图对齐的最小值
 @property (nonatomic, assign) CGFloat optionViewBottomButtonsPaddintTop; // 选项视图底部按钮距离上面的间隙，默认为0
@@ -66,7 +67,7 @@ typedef NS_ENUM(NSUInteger, TTCategoryMenuBarCategoryStyle) {
 
 @property (nonatomic,   copy) NSString *title; // 标题
 @property (nonatomic,   copy) NSDictionary *titleAttributes; // 标题富文本样式，默认字体15，颜色333333
-@property (nonatomic,   copy) NSDictionary *selectedTitleAttributes; //标题选中的富文本样式，默认字体15，颜色0094FE
+@property (nonatomic,   copy) NSDictionary *selectedTitleAttributes; //标题选中的富文本样式，默认字体15，颜色2684ff
 @property (nonatomic,   copy) NSAttributedString *attributedTitle; // 富文本标题，如果设置这个会忽略titleAttributes
 @property (nonatomic,   copy) NSAttributedString *selectedAttributedTitle; // 选中的富文本标题，如果设置这个会忽略selectedTitleAttributes
 
