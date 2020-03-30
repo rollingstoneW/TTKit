@@ -57,6 +57,12 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)categoryMenuBar:(TTCategoryMenuBar *)menuBar optionView:(TTCategoryMenuBarOptionView *)optionView selectedOptionsDidChange:(NSArray *)selectedOptions;
 
+/**
+ 为选项列表选中的内容设置分类的标题，可以是NSString、NSAttributedString
+@param options 选中的数据数组
+*/
+- (id _Nullable)categoryMenuBar:(TTCategoryMenuBar *)menuBar titleForSelectedOptions:(NSArray<TTCategoryMenuBarOptionItem *> *)options atCategory:(NSInteger)category;
+
 @end
 
 
@@ -106,6 +112,11 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)reloadItems:(NSArray<__kindof TTCategoryMenuBarCategoryItem *> *)items
             options:(NSArray<NSArray<__kindof TTCategoryMenuBarOptionItem *> *> *)options;
+
+/**
+ 刷新某个分类的item
+*/
+- (void)updateItem:(__kindof TTCategoryMenuBarCategoryItem *)item atCategory:(NSInteger)category;
 
 /**
  展示某个分类

@@ -23,6 +23,7 @@
         _separatorLineIndent = 10;
         _shouldIconAutoRotate = YES;
         _optionViewPreferredMaxHeight = TTCategoryMenuBarScreenHeight;
+//        _scrollToFirstSelectedOptionPotisionWhenShow = UITableViewScrollPositionMiddle;
     }
     return self;
 }
@@ -127,6 +128,7 @@
     if (self) {
         _backgroundColor = [UIColor whiteColor];
         _selectBackgroundColor = TTCategoryMenuBarBgColor();
+        _enabled = YES;
     }
     return self;
 }

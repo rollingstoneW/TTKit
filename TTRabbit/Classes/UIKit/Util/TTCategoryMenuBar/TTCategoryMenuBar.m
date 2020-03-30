@@ -10,6 +10,7 @@
 #import "TTCategoryMenuBarUtil.h"
 #import "TTCategoryMenuBarOptionView.h"
 #import "Masonry.h"
+#import "TTCategoryMenuBarOptionItem+TTPrivate.h"
 
 @interface  TTCategoryMenuBarBackgroundView : UIView <UIGestureRecognizerDelegate>
 @property (nonatomic, strong) dispatch_block_t tapedBlock;
@@ -99,6 +100,64 @@
     [self reloadItems];
 }
 
+- (void)updateItem:(__kindof TTCategoryMenuBarCategoryItem *)item atCategory:(NSInteger)category {
+    if (!item || category >= self.items.count) {
+        return;
+    }
+    
+    NSMutableArray *array;
+    if ([self.delegate respondsToSelector:@selector(categoryMenuBar:titleForSelectedOptions:atCategory:)]) {
+        array = [NSMutableArray array];
+        NSArray *options = self.options[category];
+        for (TTCategoryMenuBarOptionItem *option in options) {
+            BOOL added = NO;
+            if (item.style == TTCategoryMenuBarCategoryStyleSingleList && [option isSelfSelected]) {
+                added = YES;
+                [array addObject:option];
+            }
+            // 如果子选项选中了，把他也包含进去
+            if ([option loadSelectedChild] && !added) {
+                [array addObject:option];
+            }
+        }
+    }
+    [self updateItem:item atCategory:category selectedOptions:array];
+}
+
+- (void)updateItem:(__kindof TTCategoryMenuBarCategoryItem *)item atCategory:(NSInteger)category selectedOptions:(NSArray *)options {
+    UIButton *button = [self menuButtonItemAtCategory:category];
+    NSAttributedString *normal = item.attributedTitle ?: [[NSAttributedString alloc] initWithString:item.title ?: @""
+                                                                                        attributes:item.titleAttributes];
+    NSAttributedString *selected = item.selectedAttributedTitle ?:
+    [[NSAttributedString alloc] initWithString:item.title ?: @"" attributes:item.selectedTitleAttributes];
+    [button setAttributedTitle:normal forState:UIControlStateNormal];
+    [button setAttributedTitle:selected forState:UIControlStateSelected];
+    [button setAttributedTitle:selected forState:UIControlStateSelected | UIControlStateHighlighted];
+    button.selected = item.isSelected;
+    if (item.shouldUseSelectedOptionTitle) {
+        NSAttributedString *selectedTitle;
+        if ([self.delegate respondsToSelector:@selector(categoryMenuBar:titleForSelectedOptions:atCategory:)]) {
+            id title = [self.delegate categoryMenuBar:self titleForSelectedOptions:options atCategory:category];
+            if ([title isKindOfClass:[NSString class]]) {
+                selectedTitle = [[NSAttributedString alloc] initWithString:title attributes:item.titleAttributes];
+            } else if ([title isKindOfClass:[NSAttributedString class]]) {
+                selectedTitle = title;
+            }
+        } else {
+            selectedTitle = [self firstSelectedTitleInCategory:category];
+        }
+        if (selectedTitle) {
+            [button setAttributedTitle:selectedTitle forState:UIControlStateSelected];
+            [button setAttributedTitle:selectedTitle forState:UIControlStateSelected | UIControlStateHighlighted];
+        }
+    }
+    if (item.icon) {
+        [button setImage:item.icon forState:UIControlStateNormal];
+        [button setImage:item.selectedIcon forState:UIControlStateSelected];
+        [self layoutBarItem:button space:item.iconTitleSpace];
+    }
+}
+
 - (void)reloadItems {
     if (self.items.count != self.options.count) {
         NSAssert(NO, @"items数量要和options数量保持一致");
@@ -113,27 +172,8 @@
         UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
         button.tag = i;
         [button addTarget:self action:@selector(categoryClicked:) forControlEvents:UIControlEventTouchUpInside];
-        NSAttributedString *normal = item.attributedTitle ?: [[NSAttributedString alloc] initWithString:item.title ?: @""
-                                                                                            attributes:item.titleAttributes];
-        NSAttributedString *selected = item.selectedAttributedTitle ?:
-        [[NSAttributedString alloc] initWithString:item.title ?: @"" attributes:item.selectedTitleAttributes];
-        [button setAttributedTitle:normal forState:UIControlStateNormal];
-        [button setAttributedTitle:selected forState:UIControlStateSelected];
-        [button setAttributedTitle:selected forState:UIControlStateSelected | UIControlStateHighlighted];
-        button.selected = item.isSelected;
-        if (item.shouldUseSelectedOptionTitle) {
-            NSAttributedString *selectedTitle = [self firstSelectedTitleInCategory:i];
-            if (selectedTitle) {
-                [button setAttributedTitle:selectedTitle forState:UIControlStateSelected];
-                [button setAttributedTitle:selectedTitle forState:UIControlStateSelected | UIControlStateHighlighted];
-            }
-        }
         [self.barItemContainerView addSubview:button];
-        if (item.icon) {
-            [button setImage:item.icon forState:UIControlStateNormal];
-            [button setImage:item.selectedIcon forState:UIControlStateSelected];
-            [self layoutBarItem:button space:item.iconTitleSpace];
-        }
+        [self updateItem:item atCategory:i];
         if (i != self.items.count - 1) {
             UIView *line = [[UIView alloc] init];
             line.backgroundColor = item.separatorLineColor;
@@ -302,7 +342,10 @@
 }
 
 - (UIButton *)menuButtonItemAtCategory:(NSInteger)category {
-    return [self.barItemContainerView viewWithTag:category];
+    if (self.barItemContainerView.subviews.count > category) {
+        return self.barItemContainerView.subviews[category];
+    }
+    return nil;
 }
 
 - (void)resetItemIcon:(UIButton *)button {
@@ -332,21 +375,13 @@
 }
 
 - (void)categoryBarOptionView:(TTCategoryMenuBarOptionView *)optionView selectedOptionsDidChange:(NSArray *)selectedOptions {
+    if (self.currentButtonItem) {
+        TTCategoryMenuBarCategoryItem *item = self.items[self.currentButtonItem.tag];
+        [self updateItem:item atCategory:self.currentButtonItem.tag selectedOptions:selectedOptions];
+    }
+   
     if ([self.delegate respondsToSelector:@selector(categoryMenuBar:optionView:selectedOptionsDidChange:)]) {
         [self.delegate categoryMenuBar:self optionView:optionView selectedOptionsDidChange:selectedOptions];
-    }
-    if (!self.currentButtonItem) {
-        return;
-    }
-    TTCategoryMenuBarCategoryItem *item = self.items[self.currentButtonItem.tag];
-    if (item.shouldUseSelectedOptionTitle) {
-        NSAttributedString *selectedTitle = [self firstSelectedTitleInOption:selectedOptions.firstObject];
-        if (!selectedTitle) {
-            selectedTitle = item.selectedAttributedTitle ?: [[NSAttributedString alloc] initWithString:item.title ?: @"" attributes:item.selectedTitleAttributes];
-        }
-        [self.currentButtonItem setAttributedTitle:selectedTitle forState:UIControlStateSelected];
-        [self.currentButtonItem setAttributedTitle:selectedTitle forState:UIControlStateSelected | UIControlStateHighlighted];
-        [self layoutBarItem:self.currentButtonItem space:item.iconTitleSpace];
     }
 }
 
