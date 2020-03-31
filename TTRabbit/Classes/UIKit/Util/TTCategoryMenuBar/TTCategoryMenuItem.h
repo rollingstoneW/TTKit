@@ -70,6 +70,7 @@ typedef NS_ENUM(NSUInteger, TTCategoryMenuBarCategoryStyle) {
 @property (nonatomic,   copy) NSDictionary *selectedTitleAttributes; //标题选中的富文本样式，默认字体15，颜色2684ff
 @property (nonatomic,   copy) NSAttributedString *attributedTitle; // 富文本标题，如果设置这个会忽略titleAttributes
 @property (nonatomic,   copy) NSAttributedString *selectedAttributedTitle; // 选中的富文本标题，如果设置这个会忽略selectedTitleAttributes
+@property (nonatomic, assign) CGFloat titleSpace; // section标题上下偏移量，默认为0
 
 @property (nonatomic, strong) UIImage *icon; // 选项图标
 @property (nonatomic, strong) UIImage *selectedIcon; // 选中的选项图标
@@ -85,6 +86,8 @@ typedef NS_ENUM(NSUInteger, TTCategoryMenuBarCategoryStyle) {
 @property (nonatomic, assign) BOOL isChildrenAllSelected; // 子选项是否全部选中
 
 @property (nonatomic, strong) id extraData; // 额外数据
+
+@property (nonatomic, weak) TTCategoryMenuBarOptionItem *relatedItem; // 和他是同一个id，但是分布在不同的组里
 
 @end
 

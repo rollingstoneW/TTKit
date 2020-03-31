@@ -40,6 +40,7 @@
         _selectedTitleAttributes = @{NSFontAttributeName:[UIFont systemFontOfSize:15],
                                      NSForegroundColorAttributeName:TTCategoryMenuBarBlueColor()};
         _iconTitleSpace = 10;
+        _titleSpace = 0;
     }
     return self;
 }

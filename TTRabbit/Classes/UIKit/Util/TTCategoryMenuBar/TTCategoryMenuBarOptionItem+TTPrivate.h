@@ -17,7 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 // 是否被选中了
 - (BOOL)isSelfSelected;
 
-// 加载selectedChildOptions
+// 加载selectedChildOptions，在TTCategoryMenuBarOptionView外部调用此方法，后面一定要调用clearSelectedChildren
 - (BOOL)loadSelectedChild;
 
 // 清理selectedChildOptions
@@ -25,6 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 // 重置
 - (void)reset;
+- (void)resetFrom:(TTCategoryMenuBarOptionItem *)item;
 
 @end
 

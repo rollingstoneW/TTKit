@@ -106,7 +106,7 @@
     }
     
     NSMutableArray *array;
-    if ([self.delegate respondsToSelector:@selector(categoryMenuBar:titleForSelectedOptions:atCategory:)]) {
+    if (item.shouldUseSelectedOptionTitle && [self.delegate respondsToSelector:@selector(categoryMenuBar:titleForSelectedOptions:atCategory:)]) {
         array = [NSMutableArray array];
         NSArray *options = self.options[category];
         for (TTCategoryMenuBarOptionItem *option in options) {
@@ -122,6 +122,10 @@
         }
     }
     [self updateItem:item atCategory:category selectedOptions:array];
+    for (TTCategoryMenuBarOptionItem *option in array) {
+        //调用完selectedChildOptions，调用clearSelectedChildren清理selectedChildOptions数组
+        [option clearSelectedChildren];
+    }
 }
 
 - (void)updateItem:(__kindof TTCategoryMenuBarCategoryItem *)item atCategory:(NSInteger)category selectedOptions:(NSArray *)options {

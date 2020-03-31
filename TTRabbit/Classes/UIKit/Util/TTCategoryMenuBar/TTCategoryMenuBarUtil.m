@@ -10,7 +10,7 @@
 
 const CGFloat TTCategoryMenuBarHeight = 44;
 const CGFloat TTCategoryMenuBarOptionTailIndent = 10;
-const CGFloat TTCategoryMenuBarDoneButtonHeight = 40;
+const CGFloat TTCategoryMenuBarDoneButtonHeight = 44;
 
 @interface UIColor (TTCategoryMenuBar)
 + (UIColor *)TTCategoryMenuBar_colorWithHex:(uint32_t)hex;
