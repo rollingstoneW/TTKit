@@ -169,13 +169,18 @@ const TTPopupShowingPriority TTPopupShowingPriorityDefaultLow = 0;
     self.backgroundColor = dimBackground ? [[UIColor blackColor] colorWithAlphaComponent:.6] : [UIColor clearColor];
 }
 
-- (CGRect)containerFrame {
-    if (CGRectIsEmpty(_containerFrame)) {
-        CGFloat left = 20;
-        CGFloat height = 100;
-        return CGRectMake(left, (CGRectGetHeight(self.superview.bounds) - height) / 2, CGRectGetWidth(self.superview.bounds) - left * 2, height);
-    }
-    return _containerFrame;
+//- (CGRect)containerFrame {
+//    if (CGRectIsEmpty(_containerFrame)) {
+//        CGFloat left = 20;
+//        CGFloat height = 100;
+//        return CGRectMake(left, (CGRectGetHeight(self.superview.bounds) - height) / 2, CGRectGetWidth(self.superview.bounds) - left * 2, height);
+//    }
+//    return _containerFrame;
+//}
+
+- (void)setContainerFrame:(CGRect)containerFrame {
+    _containerFrame = containerFrame;
+    self.containerView.frame = containerFrame;
 }
 
 - (UIView *)containerView {
