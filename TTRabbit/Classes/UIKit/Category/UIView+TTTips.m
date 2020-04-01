@@ -59,17 +59,17 @@
     [self addSubview:contentView];
     [contentView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.center.equalTo(self);
+        make.width.lessThanOrEqualTo(self);
     }];
 }
 
 - (UIView *)contentViewWithImage:(UIImage *)image tips:(id)tips {
     UIView *contentView = [[UIView alloc] init];
-
     UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
     [contentView addSubview:imageView];
     [imageView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.centerX.equalTo(contentView);
-        make.width.lessThanOrEqualTo(contentView);
+        make.width.lessThanOrEqualTo(contentView).multipliedBy(0.8);
     }];
 
     UILabel *label = [UILabel labelWithFont:kTTFont_16 textColor:kTTColor_33];
@@ -77,15 +77,17 @@
     label.textAlignment = NSTextAlignmentCenter;
     [contentView addSubview:label];
     [label mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(imageView.mas_bottom).offset(10);
+        make.top.equalTo(imageView.mas_bottom).offset(15);
         make.bottom.centerX.equalTo(contentView);
-        make.width.lessThanOrEqualTo(contentView);
+        make.width.lessThanOrEqualTo(contentView).multipliedBy(0.8);
     }];
 
     if ([tips isKindOfClass:[NSString class]]) {
         label.text = tips;
     } else if ([tips isKindOfClass:[NSAttributedString class]]) {
+//        [tips setLineSpacing:5];
         label.attributedText = tips;
+//        label.textAlignment = NSTextAlignmentCenter;
     }
 
     return contentView;

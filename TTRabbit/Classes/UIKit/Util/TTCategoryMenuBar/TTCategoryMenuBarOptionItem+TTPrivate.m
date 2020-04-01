@@ -52,13 +52,21 @@
 }
 
 - (void)reset {
+    [self resetFrom:nil];
+}
+
+- (void)resetFrom:(TTCategoryMenuBarOptionItem *)item {
+    // 如果选中的数据和自己相同，则不取消自己的选中状态
+    if ((item.relatedItem && item.relatedItem == self) || (self.relatedItem && self.relatedItem == item)) {
+        return;
+    }
     if ([self respondsToSelector:@selector(setIsSelected:)]) {
         [(id)self setIsSelected:NO];
     }
     self.isChildrenAllSelected = NO;
     [self.selectedChildOptions removeAllObjects];
     for (TTCategoryMenuBarOptionItem *child in self.childOptions) {
-        [child reset];
+        [child resetFrom:item];
     }
 }
 

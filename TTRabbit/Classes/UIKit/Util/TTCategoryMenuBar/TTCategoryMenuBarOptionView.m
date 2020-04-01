@@ -775,7 +775,7 @@ static NSString *const TTCategoryMenuBarCellID = @"cell";
         if (isSelect && currentOption.isSelectAll && currentOption.unselectsOthersWhenSelected) {
             for (TTCategoryMenuBarListOptionItem *option in self.listOptions) {
                 if (option != currentOption) {
-                    [option reset];
+                    [option resetFrom:currentOption];
                 }
             }
         }
@@ -1343,8 +1343,12 @@ static NSString *const TTCategoryMenuBarCellID = @"cell";
                 }
             }];
         } else {
+//            [self.textLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
+//                make.edges.equalTo(self.containerView);
+//            }];
             [self.textLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
-                make.edges.equalTo(self.containerView);
+                make.centerY.equalTo(self.containerView).offset(section.titleSpace);
+                make.left.equalTo(self.containerView);
             }];
         }
     }
