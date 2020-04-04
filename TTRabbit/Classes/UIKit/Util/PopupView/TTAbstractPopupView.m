@@ -57,10 +57,17 @@ const TTPopupShowingPriority TTPopupShowingPriorityDefaultLow = 0;
 }
 
 - (void)dismissWithCompletion:(dispatch_block_t)completion animated:(BOOL)animated {
+    [self dismissWithCompletion:completion animated:animated isCancel:NO];
+}
+
+- (void)dismissWithCompletion:(dispatch_block_t)completion animated:(BOOL)animated isCancel:(BOOL)isCancel {
     [self willDismiss:animated];
     dispatch_block_t block = ^{
         [self removeFromSuperview];
 
+        if (isCancel && self.cancelledBlock) {
+            self.cancelledBlock();
+        }
         !self.dismissedBlock ?: self.dismissedBlock();
         [self didDismiss:animated];
         !completion ?: completion();
