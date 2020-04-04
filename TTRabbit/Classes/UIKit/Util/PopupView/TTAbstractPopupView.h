@@ -54,7 +54,8 @@ typedef NS_ENUM(NSUInteger, TTPopupDismissOthersPolicy) {
 - (void)showInView:(UIView *)view animated:(BOOL)animated;
 - (void)showInMainWindow;
 - (void)showInKeyWindow;
-- (void)dismissWithCompletion:(nullable dispatch_block_t)completion animated:(BOOL)animated; // 消失
+- (void)dismissWithCompletion:(nullable dispatch_block_t)completion animated:(BOOL)animated; // 消失，isCancel:NO
+- (void)dismissWithCompletion:(nullable dispatch_block_t)completion animated:(BOOL)animated isCancel:(BOOL)isCancel; // 消失
 - (void)dismiss; // 消失
 
 - (void)willShow:(BOOL)animated;

@@ -287,6 +287,8 @@
 
 + (NSString *)tt_countdownStringWithInteval:(NSTimeInterval)interval {
     NSDateComponentsFormatter *formatter = [[NSDateComponentsFormatter alloc] init];
+    formatter.zeroFormattingBehavior = NSDateComponentsFormatterZeroFormattingBehaviorPad;
+    formatter.allowedUnits = NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitSecond;
     return [formatter stringFromTimeInterval:interval];
 }
 
@@ -295,6 +297,48 @@
     NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
     formatter.numberStyle = NSNumberFormatterDecimalStyle;
     return [formatter stringFromNumber:num];
+}
+
++ (NSString *)tt_MSDateStringFromSeconds:(NSInteger)seconds {
+    NSInteger minutePart = seconds / 60;
+    NSInteger secondPart = seconds % 60;
+    return [NSString stringWithFormat:@"%02zd:%02zd", minutePart, secondPart];
+}
+
++ (NSString *)tt_HMSDateStringFromSeconds:(NSInteger)seconds {
+    return [self tt_HMSDateStringFromSeconds:seconds alwaysShowHour:YES paddingZero:YES usingChineseFormat:NO];
+}
+
++ (NSString *)tt_HMSDateStringFromSeconds:(NSInteger)seconds alwaysShowHour:(BOOL)showHour paddingZero:(BOOL)paddingZero usingChineseFormat:(BOOL)usingChineseFormat {
+    NSInteger minutes = seconds / 60;
+    NSInteger hourPart = minutes / 60;
+    NSInteger minutePart = minutes % 60;
+    NSInteger secondPart = seconds % 60;
+    static NSString *twoCharatorFormat = @"%02zd";
+    static NSString *oneCharatorFormat = @"%01zd";
+    static NSString *chineseHour = @"小时";
+    static NSString *chineseMinute = @"分钟";
+    static NSString *chineseSecond = @"秒";
+    NSString *hourFormat = (hourPart > 10 || paddingZero) ? twoCharatorFormat : oneCharatorFormat;
+    NSString *minuteFormat = (minutePart > 10 || paddingZero) ? twoCharatorFormat : oneCharatorFormat;
+    NSString *secondFormat = (secondPart > 10 || paddingZero) ? twoCharatorFormat : oneCharatorFormat;
+    if (hourPart > 0 || showHour) {
+        NSString *format;
+        if (usingChineseFormat) {
+            format = [NSString stringWithFormat:@"%@%@%@%@%@%@", hourFormat, chineseHour, minuteFormat, chineseMinute, secondFormat, chineseSecond];
+        } else {
+            format = [NSString stringWithFormat:@"%@:%@:%@", hourFormat, minuteFormat, secondFormat];
+        }
+        return [NSString stringWithFormat:format, hourPart, minutePart, secondPart];
+    } else {
+        NSString *format;
+        if (usingChineseFormat) {
+            format = [NSString stringWithFormat:@"%@%@%@%@", minuteFormat, chineseMinute, secondFormat, chineseSecond];
+        } else {
+            format = [NSString stringWithFormat:@"%@:%@", minuteFormat, secondFormat];
+        }
+        return [NSString stringWithFormat:format, minutePart, secondPart];
+    }
 }
 
 @end
