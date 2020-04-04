@@ -174,14 +174,32 @@ static inline BOOL TTStringIsInvalid(NSString *src) {
 + (NSString *)tt_fileSizeStringWithByteCount:(long long)byteCount;
 
 /**
- 把剩余时间转换为倒计时格式的字符串，例如1:03:54
- */
-+ (NSString *)tt_countdownStringWithInteval:(NSTimeInterval)interval;
-
-/**
  把浮点数转换为字符串，不会丢失精度
  */
 + (NSString *)tt_decimalFormatedStringWithNumber:(CGFloat)number;
+
+/**
+ 把秒转换为分秒的格式，10:20
+*/
++ (NSString *)tt_MSDateStringFromSeconds:(NSInteger)seconds;
+
+/**
+ tt_HMSDateStringFromSeconds:seconds alwaysShowHour:YES paddingZero:YES usingChineseFormat:NO
+*/
++ (NSString *)tt_HMSDateStringFromSeconds:(NSInteger)seconds;
+
+/**
+把秒转换为时分秒的格式，例如，02:10:20。
+
+@param alwaysShowHour 如果不满一小时，是否显示小时。NO: 10:20，YES: 00:10:20
+@param paddingZero 如果位数不满2位，前面是否添加0。NO: 1:2:20，YES: 01:02:20
+@param usingChineseFormat 是否使用中文样式。NO: 1:2:20，YES: 1小时2分钟20秒
+@return 格式之后的字符串
+*/
++ (NSString *)tt_HMSDateStringFromSeconds:(NSInteger)seconds
+                           alwaysShowHour:(BOOL)showHour
+                              paddingZero:(BOOL)paddingZero
+                       usingChineseFormat:(BOOL)usingChineseFormat;
 
 @end
 
