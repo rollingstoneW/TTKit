@@ -1167,6 +1167,7 @@ static NSString *const TTCategoryMenuBarCellID = @"cell";
             headerAttributes.frame = (CGRect){.origin = CGPointMake(0, lastBottom), .size = headerSize};
             [self.attributes addObject:headerAttributes];
             lastBottom += headerSize.height;
+            lastBottom += insets.top;
             
             for (NSInteger row = 0, rowNumber = [self numberOfRowsInSection:section]; row < rowNumber; row ++) {
                 NSIndexPath *itemIndexPath = [NSIndexPath indexPathForItem:row inSection:section];
@@ -1295,7 +1296,7 @@ static NSString *const TTCategoryMenuBarCellID = @"cell";
     BOOL accessoryChanged = NO;
     if (!_section || !UIEdgeInsetsEqualToEdgeInsets(section.sectionInset, _section.sectionInset)) {
         [self.containerView mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.edges.equalTo(self).insets(section.sectionInset);
+            make.edges.equalTo(self).insets(section.itemInset);
         }];
     }
     if (!self.accessoryImageView && (section.accessoryIcon || section.selectedAccessoryIcon)) {
@@ -1343,12 +1344,8 @@ static NSString *const TTCategoryMenuBarCellID = @"cell";
                 }
             }];
         } else {
-//            [self.textLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
-//                make.edges.equalTo(self.containerView);
-//            }];
             [self.textLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
-                make.centerY.equalTo(self.containerView).offset(section.titleSpace);
-                make.left.equalTo(self.containerView);
+                make.edges.equalTo(self.containerView);
             }];
         }
     }
@@ -1512,7 +1509,7 @@ static NSString *const TTCategoryMenuBarCellID = @"cell";
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section {
     TTCategoryMenuBarSectionItem *sectionItem = self.sectionOptions[section];
-    return CGSizeMake(TTCategoryMenuBarScreenWidth - 20, sectionItem.sectionHeaderHeight);
+    return CGSizeMake(TTCategoryMenuBarScreenWidth, sectionItem.sectionHeaderHeight);
 }
 
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section {

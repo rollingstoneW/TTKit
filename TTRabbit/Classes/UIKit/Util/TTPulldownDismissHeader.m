@@ -43,7 +43,6 @@
 
     self.label = [UILabel labelWithText:@"下拉关闭页面" font:kTTFont_16 textColor:kTTColor_66];
     [self.label sizeToFit];
-    self.label.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [self addSubview:self.label];
 
     __weak __typeof(self) weakSelf = self;
@@ -56,6 +55,7 @@
 - (void)layoutSubviews {
     [super layoutSubviews];
     self.top = -self.scrollView.contentInset.top - self.height;
+    self.width = self.scrollView.width;
     self.label.center = CGPointMake(self.width / 2, self.height / 2);
 }
 
