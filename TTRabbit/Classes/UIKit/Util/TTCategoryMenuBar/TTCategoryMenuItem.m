@@ -40,7 +40,6 @@
         _selectedTitleAttributes = @{NSFontAttributeName:[UIFont systemFontOfSize:15],
                                      NSForegroundColorAttributeName:TTCategoryMenuBarBlueColor()};
         _iconTitleSpace = 10;
-        _titleSpace = 0;
     }
     return self;
 }
@@ -109,6 +108,7 @@
     if (self) {
         _sectionHeaderHeight = 40;
         _sectionInset = UIEdgeInsetsMake(0, 15, 0 ,15);
+        _headerInset = _sectionInset;
         _lineSpacing = 10;
         _interitemSpacing = 10;
         _itemInset = UIEdgeInsetsMake(5, 10, 5, 10);

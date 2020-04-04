@@ -1152,9 +1152,9 @@ static NSString *const TTCategoryMenuBarCellID = @"cell";
     
     self.attributes = [[NSMutableArray alloc] init];
     
-    @autoreleasepool {
-        CGFloat lastRight = 0, lastBottom = 0;
-        for (NSInteger section = 0, number = [self numberOfSections]; section < number; section ++) {
+    CGFloat lastRight = 0, lastBottom = 0;
+    for (NSInteger section = 0, number = [self numberOfSections]; section < number; section ++) {
+        @autoreleasepool {
             CGFloat lineSpacing = [self lineSpacingInSection:section];
             CGFloat interitemSpacing = [self interitemSpacingInSection:section];
             UIEdgeInsets insets = [self edgeInsetsInSection:section];
@@ -1162,7 +1162,6 @@ static NSString *const TTCategoryMenuBarCellID = @"cell";
             
             NSIndexPath *headerIndexPath = [NSIndexPath indexPathForItem:0 inSection:section];
             CGSize headerSize = [self headerSizeForSection:section];
-            headerSize.width = MIN(layoutWidth, headerSize.width);
             UICollectionViewLayoutAttributes *headerAttributes = [UICollectionViewLayoutAttributes layoutAttributesForSupplementaryViewOfKind:UICollectionElementKindSectionHeader withIndexPath:headerIndexPath];
             headerAttributes.frame = (CGRect){.origin = CGPointMake(0, lastBottom), .size = headerSize};
             [self.attributes addObject:headerAttributes];
@@ -1296,7 +1295,7 @@ static NSString *const TTCategoryMenuBarCellID = @"cell";
     BOOL accessoryChanged = NO;
     if (!_section || !UIEdgeInsetsEqualToEdgeInsets(section.sectionInset, _section.sectionInset)) {
         [self.containerView mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.edges.equalTo(self).insets(section.itemInset);
+            make.edges.equalTo(self).insets(section.headerInset);
         }];
     }
     if (!self.accessoryImageView && (section.accessoryIcon || section.selectedAccessoryIcon)) {
