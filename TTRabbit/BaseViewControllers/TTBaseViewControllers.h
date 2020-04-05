@@ -20,6 +20,7 @@
 #import <TTBaseViewControllers/TTNavigationControllerChildProtocol.h>
 #import <TTBaseViewControllers/TTTabBarControllerChildProtocol.h>
 #import <TTBaseViewControllers/TTWebViewController.h>
+#import <TTBaseViewControllers/TTViewControllerEntryPolicy.h>
 
 #else
 
@@ -32,6 +33,7 @@
 #import "TTNavigationControllerChildProtocol.h"
 #import "TTTabBarControllerChildProtocol.h"
 #import "TTWebViewController.h"
+#import "TTViewControllerEntryPolicy.h"
 
 #endif
 

@@ -27,4 +27,8 @@
 #import "TTSafeKit.h"
 #endif
 
+#if __has_include ("TTUIKit.h")
+#import "TTUIKit.h"
+#endif
+
 #endif /* TTRabbit_h */
