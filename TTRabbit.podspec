@@ -42,6 +42,7 @@ Pod::Spec.new do |s|
     ss.public_header_files = 'TTRabbit/Toast/*.h'
     ss.frameworks = 'UIKit', 'Foundation'
     ss.dependency 'MBProgressHUD'
+    ss.dependency 'Masonry'
     ss.resource_bundles = {
       'TTToastBundle' => ['TTRabbit/Toast/Assets/*.*']
     }
