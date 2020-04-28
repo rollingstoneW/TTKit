@@ -71,6 +71,7 @@ static NSTimeInterval const TTToastDefaultHideDelay = 1.5;
 - (UIView *)tt_showTextToast:(NSString *)toast hideAfterDelay:(NSTimeInterval)delay {
     [self tt_hideToasts];
     MBProgressHUD *hud = [self customCommonHUD];
+    hud.margin = 11;
     hud.label.text = toast;
     hud.label.numberOfLines = 0;
     hud.userInteractionEnabled = NO;
@@ -82,7 +83,7 @@ static NSTimeInterval const TTToastDefaultHideDelay = 1.5;
 - (MBProgressHUD *)customCommonHUD {
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self animated:YES];
     hud.contentColor = [UIColor whiteColor];
-    hud.bezelView.color = [[UIColor blackColor] colorWithAlphaComponent:.6];
+    hud.bezelView.color = [[UIColor blackColor] colorWithAlphaComponent:.8];
     hud.bezelView.style = MBProgressHUDBackgroundStyleSolidColor;
     hud.removeFromSuperViewOnHide = YES;
     hud.label.font = [UIFont systemFontOfSize:14];

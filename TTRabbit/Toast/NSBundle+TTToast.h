@@ -2,7 +2,7 @@
 //  NSBundle+TTToast.h
 //  TTRabbit
 //
-//  Created by 郭冰洁 on 2020/4/5.
+//  Created by Rabbit on 2020/4/5.
 //
 
 #import <Foundation/Foundation.h>

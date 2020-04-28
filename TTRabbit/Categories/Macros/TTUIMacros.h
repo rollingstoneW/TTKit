@@ -24,7 +24,7 @@
 #define kCurrentStatusBarHeight           [UIApplication sharedApplication].statusBarFrame.size.height
 #define kStatusBarHeight                  (kCurrentStatusBarHeight ?: (TTDeviceIsFullScreen ? 44 : 20))
 #define kNavigationBarBottom              (kStatusBarHeight + kNavigationBarHeight)
-#define kTabBarHeight                     ([UIDevice tt_tabBarHeight] + kWindowSafeAreaBottom)
+#define kTabBarHeight                     ([UIDevice tt_tabBarHeight])
 #define kWindowSafeAreaBottom             ({ \
 CGFloat bottom = 0; \
 if (@available(iOS 11.0, *)) { \

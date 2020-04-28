@@ -58,6 +58,7 @@ NS_ASSUME_NONNULL_BEGIN
 #define kTTColor_f2 [UIColor tt_colorWithHexString:@"0xf2f2f2"]
 #define kTTColor_33 [UIColor tt_colorWithHexString:@"0x333333"]
 #define kTTColor_66 [UIColor tt_colorWithHexString:@"0x666666"]
+#define kTTColor_88 [UIColor tt_colorWithHexString:@"0x888888"]
 #define kTTColor_99 [UIColor tt_colorWithHexString:@"0x999999"]
 #define kTTColor_aa [UIColor tt_colorWithHexString:@"0xaaaaaa"]
 #define kTTColor_bb [UIColor tt_colorWithHexString:@"0xbbbbbb"]
