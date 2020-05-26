@@ -185,9 +185,7 @@ NSString *const TTViewControllerDidDismissNotification = @"TTViewControllerDidDi
 
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer {
     if (gestureRecognizer == self.navigationController.interactivePopGestureRecognizer) {
-        if (self == self.navigationController.topViewController && self.navigationController.viewControllers.count == 1) {
-            return NO;
-        }
+        return self.navigationController.viewControllers.count > 1;
     }
     return YES;
 }
