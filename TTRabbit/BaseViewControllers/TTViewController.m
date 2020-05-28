@@ -73,7 +73,7 @@ NSString *const TTViewControllerDidDismissNotification = @"TTViewControllerDidDi
     self.isWholeAppeared = YES;
 
     self.navigationController.interactivePopGestureRecognizer.delegate = self;
-    self.navigationController.interactivePopGestureRecognizer.enabled = !self.disablesSwipeBackGesture;
+    self.navigationController.interactivePopGestureRecognizer.enabled = !self.disablesSwipeBackGesture && self.navigationController.viewControllers.count > 1;
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -183,12 +183,19 @@ NSString *const TTViewControllerDidDismissNotification = @"TTViewControllerDidDi
 
 #pragma mark UIGestureRecognizerDelegate
 
-- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer {
-    if (gestureRecognizer == self.navigationController.interactivePopGestureRecognizer) {
-        return self.navigationController.viewControllers.count > 1;
-    }
-    return YES;
-}
+//- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer {
+//    if (gestureRecognizer == self.navigationController.interactivePopGestureRecognizer) {
+//        UINavigationController *navi = self.navigationController;
+//        if (!navi) {
+//            navi = gestureRecognizer.view.viewController;
+//        }
+//        if (navi.topViewController != self) {
+//            NSLog(@"self: %@, top: %@, vcs: %@", self, navi.topViewController, navi.viewControllers);
+//        }
+//        return self.navigationController.viewControllers.count > 1;
+//    }
+//    return YES;
+//}
 
 @end
     
