@@ -75,6 +75,7 @@
 #import <TTCategories/NSArray+TTUtil.h>
 #import <TTCategories/NSDictionary+TTUtil.h>
 #import <TTCategories/NSObject+TTSingleton.h>
+#import <TTCategories/NSFileManager+TTUtil.h>
 //#import <TTCategories/NSURLComponents+TTUtil.h>
 
 #else

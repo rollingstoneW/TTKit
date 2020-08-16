@@ -40,7 +40,7 @@ typedef NS_ENUM(NSUInteger, TTNavigationBarTitleAlignment) {
 - (void)addLeftButton:(nonnull UIButton *)item;
 - (void)addRightButton:(nonnull UIButton *)item;
 
-- (void)initializer NS_REQUIRES_SUPER; // for override
+- (void)setup NS_REQUIRES_SUPER; // for override
 
 + (CGFloat)statusBarHeight;
 + (CGFloat)barHeight;

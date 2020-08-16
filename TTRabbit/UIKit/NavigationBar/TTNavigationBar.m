@@ -56,19 +56,19 @@
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     if (self = [super initWithCoder:aDecoder]) {
-        [self initializer];
+        [self setup];
     }
     return self;
 }
 
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
-        [self initializer];
+        [self setup];
     }
     return self;
 }
 
-- (void)initializer {
+- (void)setup {
     self.innerLeftButtons = [NSMutableArray array];
     self.innerRightButtons = [NSMutableArray array];
 

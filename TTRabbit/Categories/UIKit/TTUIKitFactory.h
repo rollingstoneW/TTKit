@@ -22,18 +22,18 @@ NS_ASSUME_NONNULL_BEGIN
 + (instancetype)labelWithAttributedText:(NSAttributedString *)attributedText;
 + (instancetype)labelWithFont:(UIFont *)font textColor:(UIColor *)color;
 + (instancetype)labelWithFont:(UIFont *)font textColor:(UIColor *)color alignment:(NSTextAlignment)alignment numberOfLines:(NSInteger)lines;
-+ (instancetype)labelWithText:(NSString *)text font:(UIFont *)font textColor:(UIColor *)color;
-+ (instancetype)labelWithText:(NSString *)text font:(UIFont *)font textColor:(UIColor *)color alignment:(NSTextAlignment)alignment numberOfLines:(NSInteger)lines;
++ (instancetype)labelWithText:(NSString * _Nullable)text font:(UIFont *)font textColor:(UIColor *)color;
++ (instancetype)labelWithText:(NSString * _Nullable)text font:(UIFont *)font textColor:(UIColor *)color alignment:(NSTextAlignment)alignment numberOfLines:(NSInteger)lines;
 @end
 
 @interface UIButton (TTFactory)
-+ (instancetype)buttonWithTitle:(NSString *)title font:(UIFont *)font titleColor:(UIColor *)titleColor;
-+ (instancetype)buttonWithTitle:(NSString *)title font:(UIFont *)font titleColor:(UIColor *)titleColor image:(UIImage *)image;
++ (instancetype)buttonWithTitle:(NSString * _Nullable)title font:(UIFont *)font titleColor:(UIColor *)titleColor;
++ (instancetype)buttonWithTitle:(NSString * _Nullable)title font:(UIFont *)font titleColor:(UIColor *)titleColor image:(UIImage * _Nullable)image;
 + (instancetype)buttonWithImage:(UIImage *)image target:(id)target selector:(SEL)selector;
 + (instancetype)buttonWithImage:(UIImage *)image selectedImage:(UIImage * _Nullable)selected target:(id)target selector:(SEL)selector;
 + (instancetype)buttonWithAttributedTitle:(NSAttributedString *)attributedTitle target:(id)target selector:(SEL)selector;
 + (instancetype)buttonWithBgImage:(UIImage *)image target:(id)target selector:(SEL)selector;
-+ (instancetype)buttonWithBgImage:(UIImage *)image selectedImage:(UIImage *)selected target:(id)target selector:(SEL)selector;
++ (instancetype)buttonWithBgImage:(UIImage *)image selectedImage:(UIImage * _Nullable)selected target:(id)target selector:(SEL)selector;
 - (void)setTitle:(NSString *)title font:(UIFont *)font titleColor:(UIColor *)titleColor;
 @end
 

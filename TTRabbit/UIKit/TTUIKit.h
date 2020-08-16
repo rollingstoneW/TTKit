@@ -41,7 +41,6 @@
 #import "TTNavigationBar.h"
 #import "TTAlphaNavigationBar.h"
 #import "TTLargeTitleNavigationBar.h"
-#import "TTAbstractPopupView.h"
 
 #endif
 

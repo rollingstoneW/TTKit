@@ -46,8 +46,8 @@
     }
 }
 
-- (void)initializer {
-    [super initializer];
+- (void)setup {
+    [super setup];
 
     self.showingPercent = 1;
 

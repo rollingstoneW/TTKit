@@ -13,18 +13,13 @@ NS_ASSUME_NONNULL_BEGIN
 @interface UIView (TTUtil)
 
 /**
- 获取自身所在的控制器
-*/
-- (UIViewController * _Nullable)viewController;
-
-/**
  设置layer边框
 
  @param width 边框宽度
  @param color 边框颜色
  @param cornerRadius 圆角
  */
-- (void)tt_setLayerBorder:(CGFloat)width color:(UIColor *)color cornerRadius:(CGFloat)cornerRadius;
+- (void)tt_setLayerBorder:(CGFloat)width color:(UIColor * _Nullable)color cornerRadius:(CGFloat)cornerRadius;
 
 /**
  设置layer边框
@@ -34,7 +29,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param cornerRadius 圆角
  @param masksToBounds 是否需要设置mask
  */
-- (void)tt_setLayerBorder:(CGFloat)width color:(UIColor *)color cornerRadius:(CGFloat)cornerRadius masksToBounds:(BOOL)masksToBounds;
+- (void)tt_setLayerBorder:(CGFloat)width color:(UIColor * _Nullable)color cornerRadius:(CGFloat)cornerRadius masksToBounds:(BOOL)masksToBounds;
 
 /**
  设置layer阴影

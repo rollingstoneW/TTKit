@@ -47,10 +47,10 @@
 @end
 
 @implementation UIButton (TTFactory)
-+ (instancetype)buttonWithTitle:(NSString *)title font:(UIFont *)font titleColor:(UIColor *)titleColor {
++ (instancetype)buttonWithTitle:(NSString *)title font:(nonnull UIFont *)font titleColor:(nonnull UIColor *)titleColor {
     return [self buttonWithTitle:title font:font titleColor:titleColor image:nil];
 }
-+ (instancetype)buttonWithTitle:(NSString *)title font:(UIFont *)font titleColor:(UIColor *)titleColor image:(UIImage *)image {
++ (instancetype)buttonWithTitle:(NSString *)title font:(nonnull UIFont *)font titleColor:(nonnull UIColor *)titleColor image:(UIImage * _Nullable)image {
     UIButton *button = [self buttonWithType:UIButtonTypeCustom];
     [button setTitle:title font:font titleColor:titleColor];
     [button setImage:image forState:UIControlStateNormal];

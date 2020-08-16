@@ -146,6 +146,12 @@ static const void * TTDeallocObserverAssociationKey = &TTDeallocObserverAssociat
     [_TTKVOObserver observeObject:object forKeyPath:keyPath context:context changed:changed];
 }
 
+- (void)tt_observeForKeyPath:(NSString *)keyPath context:(void *)context changed:(TTObserveChangedBlock)changed {
+    if (!keyPath.length || !changed) { return; }
+    [_TTKVOObserver observeObject:self forKeyPath:keyPath context:context changed:changed];
+}
+
+
 - (void)tt_stopObserveObject:(id)object forKeyPath:(NSString *)keyPath {
     if (!object || !keyPath.length) { return; }
     [_TTKVOObserver stopObserveObject:object forKeyPath:keyPath];

@@ -37,6 +37,7 @@ typedef void(^TTObserveChangedBlock)(NSString *keyPath, id newData, id oldData, 
  @param changed 发生变化的回掉
  */
 - (void)tt_observeObject:(id)object forKeyPath:(NSString *)keyPath context:(nullable void *)context changed:(TTObserveChangedBlock)changed;
+- (void)tt_observeForKeyPath:(NSString *)keyPath context:(nullable void *)context changed:(TTObserveChangedBlock)changed;
 
 /**
  自己停止观察对象

@@ -24,8 +24,13 @@
 }
 
 + (UIViewController *)tt_currentViewController {
-    UIViewController *viewController = [UIApplication sharedApplication].keyWindow.rootViewController;
-    return [UIViewController tt_findBestViewController:viewController];
+    UIViewController* viewController = [UIApplication sharedApplication].keyWindow.rootViewController;
+    UIViewController *current = [self tt_findBestViewController:viewController];
+    if (!current && [UIApplication sharedApplication].keyWindow != [[UIApplication sharedApplication].delegate window]) {
+        viewController = [[UIApplication sharedApplication].delegate window].rootViewController;
+        current = [self tt_findBestViewController:viewController];
+    }
+    return current;
 }
 
 + (UIViewController *)tt_findBestViewController:(UIViewController*)vc {

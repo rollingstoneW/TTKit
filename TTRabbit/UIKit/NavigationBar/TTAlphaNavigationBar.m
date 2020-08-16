@@ -14,8 +14,8 @@ const UIControlState TTNavigationBarClearState = UIControlStateSelected;
 
 @implementation TTAlphaNavigationBar
 
-- (void)initializer {
-    [super initializer];
+- (void)setup {
+    [super setup];
 
     self.isBackgroundClear = NO;
     self.showTitleWhenBackgroundClear = NO;
