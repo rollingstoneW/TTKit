@@ -13,19 +13,6 @@ typedef id _Nullable (^TTMergingConflict)(id newValue, id currentValue);
 
 @interface NSDictionary (TTUtil)
 
-- (BOOL)tt_boolValueForKeyPath:(NSString *)keyPath defaultValue:(BOOL)def;
-
-- (long long)tt_longLongValueForKeyPath:(NSString *)keyPath defaultValue:(long long)def;
-- (unsigned long long)tt_unsignedLongLongValueForKeyPath:(NSString *)keyPath defaultValue:(unsigned long long)def;
-
-- (double)tt_doubleValueForKeyPath:(NSString *)keyPath defaultValue:(double)def;
-
-- (NSInteger)tt_integerValueForKeyPath:(NSString *)keyPath defaultValue:(NSInteger)def;
-- (NSUInteger)tt_unsignedIntegerValueForKeyPath:(NSString *)keyPath defaultValue:(NSUInteger)def;
-
-- (nullable NSNumber *)tt_numberValueForKeyPath:(NSString *)keyPath defaultValue:(nullable NSNumber *)def;
-- (nullable NSString *)stringValueForKeyPath:(NSString *)keyPath defaultValue:(nullable NSString *)def;
-
 - (nullable NSDictionary *)tt_dictionaryValueForKey:(NSString *)key defaultValue:(nullable NSDictionary *)def;
 
 - (nullable NSArray *)tt_arrayValueForKey:(NSString *)key defaultValue:(nullable NSArray *)def;
