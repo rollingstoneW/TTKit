@@ -2,7 +2,7 @@
 //  UILabel+TTUtil.m
 //  TTRabbit
 //
-//  Created by ZYB on 2020/2/26.
+//  Created by rollingstoneW on 2020/2/26.
 //
 
 #import "UILabel+TTUtil.h"

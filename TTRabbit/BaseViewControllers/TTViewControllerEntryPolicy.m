@@ -2,7 +2,7 @@
 //  TTViewControllerEntryPolicy.m
 //  TTRabbit
 //
-//  Created by ZYB on 2020/2/29.
+//  Created by rollingstoneW on 2020/2/29.
 //
 
 #import "TTViewControllerEntryPolicy.h"

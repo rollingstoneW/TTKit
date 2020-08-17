@@ -2,7 +2,7 @@
 //  NSAttributedString+TTUtil.h
 //  TTRabbit
 //
-//  Created by ZYB on 2019/11/14.
+//  Created by rollingstoneW on 2019/11/14.
 //
 
 #import <UIKit/UIKit.h>
