@@ -53,7 +53,7 @@
     if (CGSizeEqualToSize(size, CGSizeZero)) {
         size = [self systemLayoutSizeFittingSize:UILayoutFittingCompressedSize];
     }
-    [self tt_setLayerRoundingCorners:corners cornerRadii:cornerRadii selfSize:self.frame.size];
+    [self tt_setLayerRoundingCorners:corners cornerRadii:cornerRadii selfSize:size];
 }
 
 - (void)tt_setLayerRoundingCorners:(UIRectCorner)corners cornerRadii:(CGSize)cornerRadii selfSize:(CGSize)size {
