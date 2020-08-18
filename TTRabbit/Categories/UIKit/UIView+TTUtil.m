@@ -50,7 +50,9 @@
 
 - (void)tt_setLayerRoundingCorners:(UIRectCorner)corners cornerRadii:(CGSize)cornerRadii {
     CGSize size = self.frame.size;
-    if (CGSizeEqualToSize(size, CGSizeZero) || [self needsUpdateConstraints]) {
+    if (CGSizeEqualToSize(size, CGSizeZero) ||
+        // 使用约束布局，且需要更新约束，取布局后的frame
+        (!self.translatesAutoresizingMaskIntoConstraints) && [self needsUpdateConstraints]) {
         size = [self systemLayoutSizeFittingSize:UILayoutFittingCompressedSize];
     }
     [self tt_setLayerRoundingCorners:corners cornerRadii:cornerRadii selfSize:size];
