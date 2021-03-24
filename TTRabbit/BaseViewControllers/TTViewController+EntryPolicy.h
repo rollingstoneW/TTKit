@@ -1,11 +1,11 @@
 //
-//  TTViewControllerEntryPolicy.h
+//  TTViewController+EntryPolicy.h
 //  TTRabbit
 //
-//  Created by rollingstoneW on 2020/2/29.
+//  Created by Rabbit on 2021/3/23.
 //
 
-#import <Foundation/Foundation.h>
+#import "TTViewController.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -22,11 +22,11 @@ typedef void(^TTEntryPolicyCompletion)(BOOL isDenied);
 
 @end
 
-@interface UIViewController (TTEntryPolicy)
+@interface TTViewController (EntryPolicy)
 
-@property (nonatomic, strong, nullable) NSArray *tt_entryPolicies; // 能够进入的条件
+@property (nonatomic, copy, nullable) NSArray *entryPolicies; // 能够进入的条件
 
-- (void)tt_tryPoliciesWithCompletion:(TTEntryPolicyCompletion)completion;
+- (void)tryPoliciesWithCompletion:(TTEntryPolicyCompletion)completion;
 
 @end
 

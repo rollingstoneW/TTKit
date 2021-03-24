@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef void(^TTAlertHandler)(NSInteger index);
+typedef void(^TNAlertHandler)(NSInteger index);
 
 @interface UIViewController (TTUtil)
 
@@ -111,7 +111,7 @@ typedef void(^TTAlertHandler)(NSInteger index);
  */
 - (UIAlertController *)tt_showCancelableAlertWithTitle:(NSString * _Nullable)title
                                                message:(NSString * _Nullable)message
-                                               handler:(TTAlertHandler)handler;
+                                               handler:(TNAlertHandler)handler;
 
 /**
  展示只有确定按钮的系统弹窗
@@ -127,7 +127,7 @@ typedef void(^TTAlertHandler)(NSInteger index);
                                                message:(NSString * _Nullable)message
                                            cancelTitle:(NSString *)cancelTitle
                                                OKTitle:(NSString *)OKTitle
-                                               handler:(TTAlertHandler)handler;
+                                               handler:(TNAlertHandler)handler;
 
 /**
  展示系统列表选择器
@@ -141,7 +141,7 @@ typedef void(^TTAlertHandler)(NSInteger index);
 - (UIAlertController *)tt_showActionSheetWithTitle:(NSString * _Nullable)title
                                            message:(NSString * _Nullable)message
                                            actions:(NSArray *)actions
-                                           handler:(TTAlertHandler)handler;
+                                           handler:(TNAlertHandler)handler;
 
 @end
 

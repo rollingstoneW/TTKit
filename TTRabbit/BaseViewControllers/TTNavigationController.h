@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef id<UIViewControllerAnimatedTransitioning>(^NavAnimatedTransitionBlock)(UINavigationControllerOperation operation, UIViewController *fromVC, UIViewController *toVC);
+typedef id<UIViewControllerAnimatedTransitioning>_Nullable(^NavAnimatedTransitionBlock)(UINavigationControllerOperation operation, UIViewController *fromVC, UIViewController *toVC);
 
 @interface TTNavigationController : UINavigationController <UINavigationControllerDelegate, UINavigationBarDelegate>
 

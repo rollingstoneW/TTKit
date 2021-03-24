@@ -192,7 +192,7 @@
     return alert;
 }
 
-- (UIAlertController *)tt_showCancelableAlertWithTitle:(NSString *)title message:(NSString *)message handler:(TTAlertHandler)handler {
+- (UIAlertController *)tt_showCancelableAlertWithTitle:(NSString *)title message:(NSString *)message handler:(TNAlertHandler)handler {
     return [self tt_showCancelableAlertWithTitle:title message:message cancelTitle:@"取消" OKTitle:@"确定" handler:handler];
 }
 
@@ -200,7 +200,7 @@
                                                message:(NSString *)message
                                            cancelTitle:(NSString *)cancel
                                                OKTitle:(NSString *)OKTitle
-                                               handler:(TTAlertHandler)handler {
+                                               handler:(TNAlertHandler)handler {
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
     [alert addAction:[UIAlertAction actionWithTitle:cancel style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         TTSafeBlock(handler, 0);
@@ -215,7 +215,7 @@
 - (UIAlertController *)tt_showActionSheetWithTitle:(NSString *)title
                                            message:(NSString *)message
                                            actions:(NSArray *)actions
-                                           handler:(TTAlertHandler)handler {
+                                           handler:(TNAlertHandler)handler {
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleActionSheet];
     for (NSInteger i = 0; i < actions.count; i++) {
         [alert addAction:[UIAlertAction actionWithTitle:actions[i] style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {

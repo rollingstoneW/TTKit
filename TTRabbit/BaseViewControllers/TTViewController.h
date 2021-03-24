@@ -12,9 +12,6 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-// 页面已经消失的通知
-UIKIT_EXTERN NSString *const TTViewControllerDidDismissNotification;
-
 @interface TTViewController : UIViewController
 
 @property (nonatomic, assign) BOOL hasAppeared; // 是否已经展示过
@@ -50,6 +47,7 @@ UIKIT_EXTERN NSString *const TTViewControllerDidDismissNotification;
 - (void)setupDefaultLeftCloseBarItem; // 设置默认关闭按钮
 - (void)setupDefaultRightCloseBarItem; // 设置默认关闭按钮
 
+// 如果视图中有scrollView，给scrollView添加下拉关闭页面的header
 - (UIView *)addPulldownToGobackHeaderInScrollView:(UIScrollView *)scrollView;
 
 @end

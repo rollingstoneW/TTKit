@@ -24,7 +24,6 @@
 #import <TTUIKit/TTNavigationBar.h>
 #import <TTUIKit/TTAlphaNavigationBar.h>
 #import <TTUIKit/TTLargeTitleNavigationBar.h>
-#import <TTUIKit/TTAbstractPopupView.h>
 
 #else
 

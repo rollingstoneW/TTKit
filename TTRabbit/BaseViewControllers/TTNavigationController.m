@@ -8,6 +8,7 @@
 
 #import "TTNavigationController.h"
 #import "TTNavigationControllerChildProtocol.h"
+#import "TTViewController+EntryPolicy.h"
 #import "TTCategories.h"
 #import <objc/runtime.h>
 
@@ -95,6 +96,25 @@
 }
 
 - (void)pushViewController:(UIViewController *)viewController animated:(BOOL)animated {
+    if (!self.viewControllers.count) {
+        [super pushViewController:viewController animated:animated];
+        return;
+    }
+    if ([viewController isKindOfClass:[TTViewController class]]) {
+        TTViewController *vc = (TTViewController *)viewController;
+        if (vc.entryPolicies.count) {
+            [vc tryPoliciesWithCompletion:^(BOOL isDenied) {
+                if (!isDenied) {
+                    if (self.viewControllers.count) {
+                        vc.hidesBottomBarWhenPushed = YES;
+                    }
+                    vc.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStyleDone target:nil action:nil];
+                    [super pushViewController:vc animated:animated];
+                }
+            }];
+            return;
+        }
+    }
     if (self.viewControllers.count) {
         viewController.hidesBottomBarWhenPushed = YES;
     }
