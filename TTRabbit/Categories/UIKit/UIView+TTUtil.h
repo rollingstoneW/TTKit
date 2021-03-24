@@ -148,6 +148,12 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (CGFloat)tt_layoutConstantForAttribute:(NSLayoutAttribute)attribute relatedView:(UIView *)view relatedAttribute:(NSLayoutAttribute)related;
 
+/**
+ 监听size的变化
+ @param change 接受新size的block
+ */
+- (void)tt_observesSizeDidChange:(void(^)(CGSize newSize))change;
+
 @end
 
 NS_ASSUME_NONNULL_END

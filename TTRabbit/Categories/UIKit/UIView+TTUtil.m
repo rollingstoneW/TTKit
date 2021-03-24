@@ -9,6 +9,7 @@
 #import "UIView+TTUtil.h"
 #import <OpenGLES/ES2/gl.h>
 #import "TTMacros.h"
+#import "NSObject+TTUtil.h"
 
 #if __has_include (<YYKit/YYKit.h>)
 #import <YYKit/YYKit.h>
@@ -52,7 +53,7 @@
     CGSize size = self.frame.size;
     if (CGSizeEqualToSize(size, CGSizeZero) ||
         // 使用约束布局，且需要更新约束，取布局后的frame
-        (!self.translatesAutoresizingMaskIntoConstraints) && [self needsUpdateConstraints]) {
+        ((!self.translatesAutoresizingMaskIntoConstraints) && [self needsUpdateConstraints])) {
         size = [self systemLayoutSizeFittingSize:UILayoutFittingCompressedSize];
     }
     [self tt_setLayerRoundingCorners:corners cornerRadii:cornerRadii selfSize:size];
@@ -246,6 +247,21 @@
         }
     }
     return 0;
+}
+
+- (void)tt_observesSizeDidChange:(void (^)(CGSize))change {
+    if (!change) { return; }
+    
+    __block CGSize oldSize = self.frame.size;
+    [self tt_observeForKeyPath:@"bounds"
+                       context:nil
+                       changed:^(NSString * _Nonnull keyPath, id  _Nonnull newData, id  _Nonnull oldData, void * _Nullable context) {
+        CGSize newSize = [newData CGRectValue].size;
+        if (!CGSizeEqualToSize(oldSize, newSize)) {
+            oldSize = newSize;
+            change(newSize);
+        }
+    }];
 }
 
 @end
