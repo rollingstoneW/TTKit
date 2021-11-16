@@ -55,6 +55,9 @@ NSInteger const TTDefaultPageSize = 20;
     tableView.estimatedRowHeight = UITableViewAutomaticDimension;
     tableView.rowHeight = UITableViewAutomaticDimension;
     tableView.tableFooterView = [UIView new];
+    if (@available(iOS 15.0, *)) {
+        tableView.sectionHeaderTopPadding = 0;
+    }
     [self.view addSubview:tableView];
     self.tableView = tableView;
 }
