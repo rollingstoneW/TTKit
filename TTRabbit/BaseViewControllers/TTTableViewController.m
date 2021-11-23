@@ -55,7 +55,7 @@ NSInteger const TTDefaultPageSize = 20;
     tableView.estimatedRowHeight = UITableViewAutomaticDimension;
     tableView.rowHeight = UITableViewAutomaticDimension;
     tableView.tableFooterView = [UIView new];
-#if __IPHONE_OS_VERSION_MAX_ALLOWED > __IPHONE_15_0//新增属性版本判断，适配xcode13以下版本
+#ifdef __IPHONE_15_0//新增属性版本判断，适配xcode13以下版本
     if (@available(iOS 15.0, *)) {
         tableView.sectionHeaderTopPadding = 0;
     }
