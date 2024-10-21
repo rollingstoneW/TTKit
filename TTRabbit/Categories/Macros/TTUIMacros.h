@@ -8,6 +8,8 @@
 #ifndef TTUIMacros_h
 #define TTUIMacros_h
 
+#import "UIDevice+TTUtil.h"
+
 #pragma mark - Constants
 
 #ifndef kScreenWidth
@@ -21,8 +23,7 @@
 #define kScreenLongSide                   MAX(kScreenWidth, kScreenHeight)
 
 #define kNavigationBarHeight              [UIDevice tt_navigationBarHeight]
-#define kCurrentStatusBarHeight           [UIApplication sharedApplication].statusBarFrame.size.height
-#define kStatusBarHeight                  (kCurrentStatusBarHeight ?: (TTDeviceIsFullScreen ? 44 : 20))
+#define kStatusBarHeight                  [UIDevice tt_statusBarHeight]
 #define kNavigationBarBottom              (kStatusBarHeight + kNavigationBarHeight)
 #define kTabBarHeight                     ([UIDevice tt_tabBarHeight])
 #define kWindowSafeAreaBottom             ({ \

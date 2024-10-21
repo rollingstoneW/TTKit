@@ -11,8 +11,13 @@
 @implementation UIDevice (TTUtil)
 
 + (CGFloat)tt_statusBarHeight {
-    CGFloat height = [UIApplication sharedApplication].statusBarFrame.size.height;
-    return height ?: ([self tt_isFullScreen] ? 44 : 20);
+    CGFloat height = 0;
+    if(@available(iOS 13.0, *)) {
+        height = UIApplication.sharedApplication.windows.firstObject.windowScene.statusBarManager.statusBarFrame.size.height;
+    } else {
+        height = UIApplication.sharedApplication.statusBarFrame.size.height;
+    }
+    return height > 0 ? height : ([self tt_isFullScreen] ? 44 : 20);
 }
 
 + (CGFloat)tt_navigationBarHeight {
